@@ -1,1 +1,1 @@
-# seminar-paper
+# PyKing
