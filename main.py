@@ -1,8 +1,24 @@
 from tkinter import *
 from tkinter import ttk
+import os
+import sys
+
+#https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
 root = Tk()
-frm = ttk.Frame(root, padding=10)
-frm.grid()
-ttk.Label(frm, text="Hello World!").grid(column=0, row=0)
-ttk.Button(frm, text="Quit", command=root.destroy).grid(column=1, row=0)
+root.title("PyKing")
+
+root.iconbitmap(resource_path(".\\dist\\Assets\\Icon.ico"))
+
+frame = ttk.Frame(root, padding=10)
+frame.grid()
+
+
 root.mainloop()
