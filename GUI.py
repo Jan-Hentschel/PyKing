@@ -3,7 +3,9 @@ from tkinter import *
 from tkinter import ttk
 import os
 import sys
+from ctypes import windll
 
+windll.shcore.SetProcessDpiAwareness(2)
 
 
 def resource_path(relative_path):
@@ -34,14 +36,13 @@ verticallyPainedWindow = PanedWindow(horizontallyPanedWindow, orient=tk.VERTICAL
 horizontallyPanedWindow.add(verticallyPainedWindow)  # Add the vertical PanedWindow to the horizontal one
 
 # Create the third pane (top-right) for the playing grid
-grid_frame = Frame(verticallyPainedWindow, bg="green", width=300, height=300)  # A placeholder frame for the playing grid
-verticallyPainedWindow.add(grid_frame)  # Add the playing grid to the vertical PanedWindow
+GridFrame = Frame(verticallyPainedWindow, bg="green", width=300, height=300)  # A placeholder frame for the playing grid
+verticallyPainedWindow.add(GridFrame)  # Add the playing grid to the vertical PanedWindow
 
 # Create the second pane (bottom-right) for the terminal
 terminalWidget = Text(verticallyPainedWindow, width=40, height=10, bg="black", fg="white")  # Create a Text widget as a terminal
 terminalWidget.insert(tk.END, "Terminal output here...\n")
 verticallyPainedWindow.add(terminalWidget)  # Add the terminal to the vertical PanedWindow
 
-# Example content in the grid (can be replaced with your actual game grid)
-grid_label = Label(grid_frame, text="Game Grid", bg="lightblue")
+grid_label = Label(GridFrame, text="Game Grid", bg="lightblue")
 grid_label.pack(expand=True)
