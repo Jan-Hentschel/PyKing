@@ -19,8 +19,6 @@ def resource_path(relative_path):
 root = Tk()
 root.title("PyKing")
 root.iconbitmap(resource_path(".\\dist\\Assets\\Icon.ico"))
-frame = ttk.Frame(root, padding=100)
-
 
 
 # Create a PanedWindow with horizontal orientation
@@ -39,7 +37,7 @@ horizontallyPanedWindow.add(verticallyPainedWindow)  # Add the vertical PanedWin
 grid_frame = Frame(verticallyPainedWindow, bg="green", width=300, height=300)  # A placeholder frame for the playing grid
 verticallyPainedWindow.add(grid_frame)  # Add the playing grid to the vertical PanedWindow
 
-# Create the second pane (botto,-right) for the terminal
+# Create the second pane (bottom-right) for the terminal
 terminalWidget = Text(verticallyPainedWindow, width=40, height=10, bg="black", fg="white")  # Create a Text widget as a terminal
 terminalWidget.insert(tk.END, "Terminal output here...\n")
 verticallyPainedWindow.add(terminalWidget)  # Add the terminal to the vertical PanedWindow
