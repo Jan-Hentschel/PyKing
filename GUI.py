@@ -33,9 +33,14 @@ root.configure(background='black')
 # print(screenHeight)
 # print(screenWidth)
 
+# alle modules importieren nachdem root erstellt wurde (sonst circular dependency)
+from toolbar import *
 
 
-toolbar = Frame(root, height=68)
+
+
+
+#toolbar in das window packen
 toolbar.pack(fill="x")
 
 
@@ -44,13 +49,10 @@ horizontally_paned_window = PanedWindow(root, orient=tk.HORIZONTAL)
 horizontally_paned_window.pack(fill="both", expand=1)
 
 
-# Frame für den Filetree erstellen (links)
-file_tree_widget = Frame(horizontally_paned_window, bg="blue")
+from filetree import *
 horizontally_paned_window.add(file_tree_widget)
 
-
-# Text-Feld für den Code Editor erstellen (mitte)
-code_editor_widget = Text(horizontally_paned_window)  
+from code_editor import *  
 horizontally_paned_window.add(code_editor_widget)  
 
 
@@ -58,14 +60,10 @@ horizontally_paned_window.add(code_editor_widget)
 vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERTICAL)
 horizontally_paned_window.add(vertically_pained_window)  
 
-
-# Das Virtual Environment erstellen (oben rechts)
-virtual_environment_widget = Frame(vertically_pained_window, bg="green")  
+from virtual_environment import *
 vertically_pained_window.add(virtual_environment_widget)  
 
-
-# Terminal Textfeld erstellen (unten rechts)
-terminal_widget = Text(vertically_pained_window, bg="black")
+from terminal import *
 vertically_pained_window.add(terminal_widget)  
 
 
