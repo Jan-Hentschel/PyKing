@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk
 import os
 import sys
-from GUI import root
+from gui import root
 
 
 
