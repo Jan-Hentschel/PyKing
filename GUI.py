@@ -23,16 +23,15 @@ root = Tk()
 root.title("PyKing")
 root.iconbitmap(resource_path(".\\dist\\Assets\\Icon.ico"))
 
-screenHeight = root.winfo_screenheight()
-screenWidth = root.winfo_screenwidth()
-root.geometry(f"{screenWidth}x{screenHeight}")
+screen_height = root.winfo_screenheight()
+screen_width = root.winfo_screenwidth()
+root.geometry(f"{screen_width}x{screen_height}")
 
 root.state('zoomed')
 
 root.configure(background='black')
 # print(screenHeight)
 # print(screenWidth)
-totalWidthPadding = 8
 
 
 
@@ -41,53 +40,52 @@ toolbar.pack(fill="x")
 
 
 
-# Create a PanedWindow with horizontal orientation
-horizontallyPanedWindow = PanedWindow(root, orient=tk.HORIZONTAL)
-horizontallyPanedWindow.pack(fill="both", expand=1)
+# Horizontales Pained Window erstellen
+horizontally_paned_window = PanedWindow(root, orient=tk.HORIZONTAL)
+horizontally_paned_window.pack(fill="both", expand=1)
+
+
+# Frame für den Filetree erstellen (links)
+file_tree_widget = Frame(horizontally_paned_window, bg="blue")
+horizontally_paned_window.add(file_tree_widget)
 
 
 
-fileTreeWidget = Frame(horizontallyPanedWindow, bg="blue")
-horizontallyPanedWindow.add(fileTreeWidget)
+
+# Text-Feld für den Code Editor erstellen (mitte)
+code_editor_widget = Text(horizontally_paned_window)  
+horizontally_paned_window.add(code_editor_widget)  
 
 
 
-
-# Create the first pane (left) for the code editor
-codeEditorWidget = Text(horizontallyPanedWindow)  # Create a Text widget as a code editor
-horizontallyPanedWindow.add(codeEditorWidget)  # Add the code editor to the horizontal PanedWindow
-
-
-
-# Create another PanedWindow inside the right pane (this time vertical)
-verticallyPainedWindow = PanedWindow(horizontallyPanedWindow, orient=tk.VERTICAL)
-horizontallyPanedWindow.add(verticallyPainedWindow)  # Add the vertical PanedWindow to the horizontal one
+# Vertikales Pained Window im Horizontalen Pained Window erstellen (rechts)
+vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERTICAL)
+horizontally_paned_window.add(vertically_pained_window)  
 
 
 
-# Create the third pane (top-right) for the playing grid
-gridFrame = Frame(verticallyPainedWindow, bg="green")  # A placeholder frame for the playing grid
-verticallyPainedWindow.add(gridFrame)  # Add the playing grid to the vertical PanedWindow
-grid_label = Label(gridFrame, text="Game Grid", bg="lightblue")
+# Das Grid erstellen (oben rechts)
+grid_widget = Frame(vertically_pained_window, bg="green")  
+vertically_pained_window.add(grid_widget)  
+grid_label = Label(grid_widget, text="Game Grid", bg="lightblue")
 grid_label.pack(expand=True)
 
 
-# Create the second pane (bottom-right) for the terminal
-terminalWidget = Text(verticallyPainedWindow, bg="black", fg="white")  # Create a Text widget as a terminal
-terminalWidget.insert(tk.END, "Terminal output here...\n")
-verticallyPainedWindow.add(terminalWidget)  # Add the terminal to the vertical PanedWindow
+# Terminal Textfeld erstellen (unten rechts)
+terminal_widget = Text(vertically_pained_window, bg="black", fg="white")  # Create a Text widget as a terminal
+terminal_widget.insert(tk.END, "Terminal output here...\n")
+vertically_pained_window.add(terminal_widget)  # Add the terminal to the vertical PanedWindow
 
+
+# Alle widgets updaten, um die screen_width/screen_height zu updaten
 root.update_idletasks()
 
-horizontallyPanedWindow.sash_place(0, int(screenWidth*.125), 0)
-horizontallyPanedWindow.sash_place(1, int(screenWidth*0.5625), 0)
-verticallyPainedWindow.sash_place(0, 2000, int((verticallyPainedWindow.winfo_height())/2)-1)
+# Seperatoren von den Pained Windows placen
+horizontally_paned_window.sash_place(0, int(screen_width*.125), 0)
+horizontally_paned_window.sash_place(1, int(screen_width*0.5625), 0)
+vertically_pained_window.sash_place(0, 2000, int((vertically_pained_window.winfo_height())/2)-1)
 
 
 
-# root.update_idletasks()
-# print(verticallyPainedWindow.winfo_height())
-# print(gridFrame.winfo_height())
-# print(terminalWidget.winfo_height())
-# print(fileTreeWidget.winfo_width()+codeEditorWidget.winfo_width()+verticallyPainedWindow.winfo_width())
+
 
