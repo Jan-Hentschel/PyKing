@@ -7,7 +7,7 @@ from ctypes import windll
 
 windll.shcore.SetProcessDpiAwareness(2)
 
-
+#vor jeden relative path diese funktion setzen um pyinstaller zu helfen alle dateien zu finden
 def resource_path(relative_path):
     try:
         base_path = sys._MEIPASS
@@ -18,7 +18,7 @@ def resource_path(relative_path):
 
 
 
-# Initialisierung des Windows
+# Initialisierung des Windows als root
 root = Tk()
 root.title("PyKing")
 root.iconbitmap(resource_path(".\\dist\\Assets\\Icon.ico"))
@@ -30,17 +30,10 @@ root.geometry(f"{screen_width}x{screen_height}")
 root.state('zoomed')
 
 root.configure(background='black')
-# print(screenHeight)
-# print(screenWidth)
 
-# alle modules importieren nachdem root erstellt wurde (sonst circular dependency)
+
+# toolbar importieren und in das window packen
 from toolbar import *
-
-
-
-
-
-#toolbar in das window packen
 toolbar.pack(fill="x")
 
 
@@ -49,9 +42,11 @@ horizontally_paned_window = PanedWindow(root, orient=tk.HORIZONTAL)
 horizontally_paned_window.pack(fill="both", expand=1)
 
 
+# filetree importieren und in das paned window einfügen
 from filetree import *
 horizontally_paned_window.add(file_tree_widget)
 
+# code editor importieren und in das paned window einfügen
 from code_editor import *  
 horizontally_paned_window.add(code_editor_widget)  
 
@@ -60,9 +55,12 @@ horizontally_paned_window.add(code_editor_widget)
 vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERTICAL)
 horizontally_paned_window.add(vertically_pained_window)  
 
+
+# virtual environment importieren und in das paned window einfügen
 from virtual_environment import *
 vertically_pained_window.add(virtual_environment_widget)  
 
+# terminal importieren und in das paned window einfügen
 from terminal import *
 vertically_pained_window.add(terminal_widget)  
 
