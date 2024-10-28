@@ -29,7 +29,7 @@ root.geometry(f"{screen_width}x{screen_height}")
 
 root.state('zoomed')
 
-root.configure(background='black')
+root.configure(bg="#333333")
 
 
 # toolbar importieren und in das window packen
@@ -38,7 +38,7 @@ toolbar.pack(fill="x")
 
 
 # Horizontales Pained Window erstellen
-horizontally_paned_window = PanedWindow(root, orient=tk.HORIZONTAL)
+horizontally_paned_window = PanedWindow(root, orient=tk.HORIZONTAL, bg="#333333", sashwidth = 10)
 horizontally_paned_window.pack(fill="both", expand=1)
 
 
@@ -52,7 +52,7 @@ horizontally_paned_window.add(code_editor_widget)
 
 
 # Vertikales Pained Window im Horizontalen Pained Window erstellen (rechts)
-vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERTICAL)
+vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERTICAL, bg="#333333", sashwidth=10)
 horizontally_paned_window.add(vertically_pained_window)  
 
 
