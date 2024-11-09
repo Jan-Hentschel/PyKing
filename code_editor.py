@@ -30,4 +30,5 @@ vertical_scrollbar.config(command = code_editor_widget.yview)
 code_editor_widget["xscrollcommand"] = horizontal_scrollbar.set
 code_editor_widget["yscrollcommand"] = vertical_scrollbar.set
 
-code_editor_widget.insert(tk.END, "Code Editor")
+
+

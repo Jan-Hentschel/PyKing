@@ -5,3 +5,7 @@ def debugPrints():
     root.update_idletasks()
     print(f"screen width: {screen_width}")
     print(f"screen height: {screen_height}")
+
+    
+#x = "wooow"
+#print(f"Hello {x}  world" + str(123))

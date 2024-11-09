@@ -27,4 +27,3 @@ horizontal_scrollbar.config(command = terminal_widget.xview)
 terminal_widget["xscrollcommand"] = horizontal_scrollbar.set
 terminal_widget["yscrollcommand"] = vertical_scrollbar.set
 
-terminal_widget.insert(tk.END, "Terminal")

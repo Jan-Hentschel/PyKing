@@ -5,8 +5,12 @@ import os
 import sys
 from gui import root
 from tests_and_debugging import debugPrints
+from code_execution import executeCode
+
 
 
 if __name__ == "__main__":
-    debugPrints()
+    root.bind("z", executeCode)
+    #debugPrints()
     root.mainloop()
+
