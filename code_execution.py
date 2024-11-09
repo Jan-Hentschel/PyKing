@@ -6,7 +6,7 @@ from terminal import terminal_widget
 
 #chatgpt
 def print_to_terminal_widget(*args):
-    output = " ".join(map(str, args))
+    output = " ".join(map(str, args)) + "\n"
     terminal_widget.insert(tk.END, output)
 
 
