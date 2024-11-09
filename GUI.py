@@ -48,7 +48,7 @@ horizontally_paned_window.add(file_tree_widget)
 
 # code editor importieren und in das paned window einfügen
 from code_editor import *  
-horizontally_paned_window.add(code_editor_widget)  
+horizontally_paned_window.add(code_editor_frame)  
 
 
 # Vertikales Pained Window im Horizontalen Pained Window erstellen (rechts)
@@ -62,7 +62,7 @@ vertically_pained_window.add(virtual_environment_widget)
 
 # terminal importieren und in das paned window einfügen
 from terminal import *
-vertically_pained_window.add(terminal_widget)  
+vertically_pained_window.add(terminal_frame)  
 
 
 
