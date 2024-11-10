@@ -5,4 +5,4 @@ from tkinter import ttk
 from gui import vertically_pained_window
  
 # Das Virtual Environment erstellen (oben rechts)
-virtual_environment_widget = Frame(vertically_pained_window, bg="#3F3F3F")
+virtual_environment_frame = Frame(vertically_pained_window, bg="#3F3F3F")

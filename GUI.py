@@ -62,7 +62,7 @@ horizontally_paned_window.add(vertically_pained_window)
 
 # virtual environment importieren und in das paned window einfügen
 from virtual_environment import *
-vertically_pained_window.add(virtual_environment_widget)  
+vertically_pained_window.add(virtual_environment_frame)  
 
 # terminal importieren und in das paned window einfügen
 from terminal import *
