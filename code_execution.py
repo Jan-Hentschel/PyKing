@@ -4,7 +4,7 @@ from tkinter import *
 from code_editor import code_editor_widget
 from terminal import terminal_widget
 
-#chatgpt
+#help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
     output = " ".join(map(str, args)) + "\n"
     terminal_widget.insert(tk.END, output)
@@ -13,6 +13,9 @@ def print_to_terminal_widget(*args):
 PyKing_functions = {
     "print": print_to_terminal_widget
 }
+
+
+
 def executeCode(event):
     try:
         terminal_widget.delete('1.0', END)

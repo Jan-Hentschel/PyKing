@@ -10,7 +10,7 @@ from tkinter.font import Font
 class autoHiddenScrollbar(Scrollbar):
     def __init__(self, master, target_widget, **kwargs):
         super().__init__(master, **kwargs)
-        self.target_widget = target_widget  # Target widget for overflow checking
+        self.target_widget = target_widget  
 
         
     def set(self, low, high):
@@ -26,6 +26,7 @@ class autoHiddenScrollbar(Scrollbar):
                 self.pack(side = RIGHT, fill=Y)
         Scrollbar.set(self, low, high)
 
+    #hilfe von Chatgpt klappt aber immernoch nicht so wie gewollt
     def has_horizontal_overflow(self):
         
         widget_width = self.target_widget.winfo_width()

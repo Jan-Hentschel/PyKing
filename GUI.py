@@ -5,8 +5,11 @@ import os
 import sys
 from ctypes import windll
 
+#damit text nicht blurry ist
 windll.shcore.SetProcessDpiAwareness(2)
 
+#https://www.youtube.com/watch?v=p3tSLatmGvU
+#https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
 #vor jeden relative path diese funktion setzen um pyinstaller zu helfen alle dateien zu finden
 def resource_path(relative_path):
     try:
@@ -17,7 +20,8 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
-
+#https://tkdocs.com/
+#https://www.geeksforgeeks.org/python-gui-tkinter/
 # Initialisierung des Windows als root
 root = Tk()
 root.title("PyKing")
