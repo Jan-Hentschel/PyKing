@@ -1,5 +1,5 @@
 import tkinter as tk
-from gui import root
+from gui import root, resource_path
 from tkinter import *
 from tkinter.font import Font
 

@@ -33,9 +33,9 @@ def debugPrints():
     print(f"screen width: {screen_width}")
     print(f"screen height: {screen_height}")
 
-    
-#x = "wooow"
-#print(f"Hello {x}  world" + str(123))
+
+# x = "wooow"
+# print(f"Hello {x}  world" + str(123))
 
 # print("hello")
 # print("hi")
