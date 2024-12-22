@@ -7,7 +7,7 @@ from gui import vertically_pained_window, resource_path
 # Das Virtual Environment erstellen (oben rechts)
 virtual_environment_frame = Frame(vertically_pained_window, bg="#333333")
 grid_frame = Frame(virtual_environment_frame, bg="#333333")
-grid_frame.pack(expand=True, anchor=CENTER)
+grid_frame.pack(anchor=NE)
 
 
 logo = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\LogoV1.3.png'))
@@ -40,7 +40,7 @@ class GridCell:
 
     def add_to_grid(self):
         self.canvas.create_text(50, 50, text=f"x={self.x}, y={self.y}", fill="white")
-        self.canvas.grid(row=grid_man.grid_height - self.y, column=self.x, padx=5, pady=5, sticky=SW)
+        self.canvas.grid(row=grid_man.grid_height - self.y, column=self.x, padx=5, pady=5, sticky=N+E+S+W)
 
     def append_to_cells(self):
         grid_man.cells.append(self)

@@ -72,11 +72,10 @@ vertically_pained_window.add(terminal_frame)
 
 # Alle widgets updaten, um die screen_width/screen_height zu updaten
 root.update_idletasks()
-
 # Seperatoren von den Pained Windows placen
 horizontally_paned_window.sash_place(0, int(screen_width*.125), 0)
 horizontally_paned_window.sash_place(1, int(screen_width*0.5625), 0)
-vertically_pained_window.sash_place(0, 2000, int((vertically_pained_window.winfo_height())/2)-1)
+vertically_pained_window.sash_place(0, 0, int((vertically_pained_window.winfo_height())/2)-1)
 
 
 
