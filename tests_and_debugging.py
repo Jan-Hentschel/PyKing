@@ -39,3 +39,5 @@ def debugPrints():
 
 # print("hello")
 # print("hi")
+# wilhelm = Snake(0, 0, "N")
+# wilhelm.forward()
