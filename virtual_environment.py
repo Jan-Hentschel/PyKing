@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk
 
 from terminal import terminal_widget
-from gui import vertically_pained_window, resource_path
+from gui import vertically_pained_window, resource_path, root
  
 # Das Virtual Environment erstellen (oben rechts)
 virtual_environment_frame = Frame(vertically_pained_window, bg="#333333")
@@ -24,16 +24,19 @@ class GridManager:
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.cells = []
+        self.create_cells()
+        self.add_cells_to_grid()
     
     def create_cells(self):
         for y in range(self.grid_height):
             for x in range(self.grid_width):
-                current_cell = GridCell(x, y, "empty")
-                current_cell.append_to_cells()
+                self.cells.append(GridCell(x, y, "empty"))
+                
 
     def add_cells_to_grid(self):
         for cell in self.cells:
-            cell.add_to_grid()
+            #cell.canvas.create_text(50, 50, text=f"x={self.x}, y={self.y}", fill="white")
+            cell.canvas.grid(row=self.grid_height - cell.y, column=cell.x, padx=5, pady=5, sticky=N+E+S+W)
 
     def display_image_at_position(self, image, x, y):
         for cell in self.cells:
@@ -44,19 +47,16 @@ class GridManager:
         for cell in self.cells:
             cell.clear_cell()
 
+    def forget_all_cells(self):
+        for cell in self.cells:
+            cell.canvas.grid_forget()
+
 class GridCell:
     def __init__(self, x, y, type):
         self.x = x
         self.y = y
         self.type = type
         self.canvas = Canvas(grid_frame, width=100, height=100, background="#3F3F3F", highlightthickness=0)
-
-    def add_to_grid(self):
-        #self.canvas.create_text(50, 50, text=f"x={self.x}, y={self.y}", fill="white")
-        self.canvas.grid(row=grid_man.grid_height - self.y, column=self.x, padx=5, pady=5, sticky=N+E+S+W)
-
-    def append_to_cells(self):
-        grid_man.cells.append(self)
 
     def display_image(self, image):
         self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)
@@ -171,8 +171,13 @@ class Snake:
 
 
 grid_man = GridManager(10, 4)
-grid_man.create_cells()
-grid_man.add_cells_to_grid()
+
+def change_grid_man(event):
+    global grid_man
+    grid_man.forget_all_cells()
+    del grid_man
+    grid_man = GridManager(9, 5)
+    root.update_idletasks()
 
 #snake = Snake(0, 0, "N")
 
