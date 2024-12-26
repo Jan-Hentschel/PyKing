@@ -40,10 +40,10 @@ class GridManager:
             #cell.canvas.create_text(50, 50, text=f"x={self.x}, y={self.y}", fill="white")
             cell.canvas.grid(row=self.grid_height - cell.y, column=cell.x, padx=5, pady=5, sticky=N+E+S+W)
 
-    def display_image_at_position(self, image, x, y):
-        for cell in self.cells:
-            if cell.x==x and cell.y == y:
-                cell.display_image(image)
+    # def display_image_at_position(self, image, x, y):
+    #     for cell in self.cells:
+    #         if cell.x==x and cell.y == y:
+    #             cell.display_image(image)
 
     def clear_all_cells(self):
         for cell in self.cells:
@@ -63,6 +63,7 @@ class GridCell:
         self.y = y
         self.type = type
         self.canvas = Canvas(grid_frame, width=100, height=100, background="#3F3F3F", highlightthickness=0)
+        self.hamsters = 0
 
     def display_image(self, image):
         self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)
@@ -71,9 +72,16 @@ class GridCell:
         self.type = "wall"
         self.canvas.configure(background="#333333")
 
-    def change_to_hamster(self):
+    def add_hamster(self):
         self.type = "hamster"
         self.display_image(hamster_image)
+        self.hamsters += 1
+
+    def subtract_hamster(self):
+        self.hamsters -= 1
+        if self.hamsters < 1:
+            self.type = "empty"
+            self.clear_cell()
 
     def clear_cell(self):
         self.canvas.delete("all")
@@ -83,23 +91,12 @@ class GridCell:
         if self.type == "empty":
             self.clear_cell()
         
-    def change_cell_type(self, new_type):
-        self.type = new_type
+    # def change_cell_type(self, new_type):
+    #     self.type = new_type
 
 
 
 class Snake:
-
-    def is_outside_grid(self, x, y):
-        if y < grid_man.grid_height and x < grid_man.grid_width and y >= 0 and x >= 0:
-            return False
-        else:
-            return True
-        
-    def update_cell(self):
-        for cell in grid_man.cells:
-            if cell.x == self.x and cell.y == self.y:
-                self.cell = cell
 
     def __init__(self, x, y, direction):
         self.x = x
@@ -127,6 +124,38 @@ class Snake:
         
         self.hamsters = 0 #Einfügen dass man das voreinstellen kann
 
+    def is_outside_grid(self, x, y):
+        if y < grid_man.grid_height and x < grid_man.grid_width and y >= 0 and x >= 0:
+            return False
+        else:
+            return True
+        
+    def update_cell(self):
+        for cell in grid_man.cells:
+            if cell.x == self.x and cell.y == self.y:
+                self.cell = cell
+
+    def turn_right(self):
+        self.delete_snake_image()
+
+        match self.direction:
+            case "N":
+                self.direction="E"
+                self.image = right_image
+            case "E":
+                self.direction="S"
+                self.image = down_image
+
+            case "S":
+                self.direction="W"
+                self.image = left_image
+
+            case "W":
+                self.direction="N"
+                self.image = up_image
+
+        self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image)
+        self.show_snake()
 
     def move(self):
         self.delete_snake_image()
@@ -163,35 +192,24 @@ class Snake:
         self.show_snake()
 
 
-
-    def turn_right(self):
-        self.delete_snake_image()
-
-        match self.direction:
-            case "N":
-                self.direction="E"
-                self.image = right_image
-            case "E":
-                self.direction="S"
-                self.image = down_image
-
-            case "S":
-                self.direction="W"
-                self.image = left_image
-
-            case "W":
-                self.direction="N"
-                self.image = up_image
-                
-        self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image)
-        self.show_snake()
-
-
     def eat(self):
-        terminal_widget.insert(tk.END, "ate")
+        if self.can_eat():
+            self.hamsters += 1
+            self.update_cell()
+            self.cell.subtract_hamster()
+            self.update_cell()
+            self.show_snake()
+        else:
+            throw_error_to_terminal("what are you trying to eat dumbass?")
+
+        
 
     def spit(self):
-        terminal_widget.insert(tk.END, "spat")
+        if self.can_spit():
+            self.update_cell()
+            self.cell.add_hamster()
+        else:
+            throw_error_to_terminal("spit what? your mouth is empty!")
 
     def can_move(self):
 
@@ -223,6 +241,15 @@ class Snake:
         else: 
             return False
 
+    def can_spit(self):
+        self.update_cell()
+        if self.hamsters > 0:
+            return True
+        else:
+            return False
+        
+        
+
     def show_snake(self):
         self.cell.display_image(self.image)
     
@@ -245,7 +272,7 @@ def change(event):
     for i in range(5):
         grid_man.cells[i+2].change_to_wall()
         grid_man.cells[i+11].change_to_wall()
-        grid_man.cells[i+20].change_to_hamster()
+        grid_man.cells[i+20].add_hamster()
 
 
 
