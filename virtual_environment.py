@@ -47,6 +47,10 @@ class GridManager:
         for cell in self.cells:
             cell.clear_cell()
 
+    def reset_grid_to_start(self):
+        for cell in self.cells:
+            cell.reset_cell()
+
     def forget_all_cells(self):
         for cell in self.cells:
             cell.canvas.grid_forget()
@@ -61,8 +65,17 @@ class GridCell:
     def display_image(self, image):
         self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)
 
+    def change_to_wall(self):
+        self.type = "wall"
+        self.canvas.configure(background="#333333")
+
     def clear_cell(self):
         self.canvas.delete("all")
+        self.canvas.configure(background="#3F3F3F")
+
+    def reset_cell(self):
+        if self.type != "wall":
+            self.clear_cell()
 
     def change_cell_type(self, new_type):
         self.type = new_type
@@ -71,8 +84,8 @@ class GridCell:
 
 class Snake:
 
-    def is_outside_grid(self):
-        if self.y < grid_man.grid_height and self.x < grid_man.grid_width and self.y >= 0 and self.x >= 0:
+    def is_outside_grid(self, x, y):
+        if y < grid_man.grid_height and x < grid_man.grid_width and y >= 0 and x >= 0:
             return False
         else:
             return True
@@ -85,7 +98,7 @@ class Snake:
     def __init__(self, x, y, direction):
         self.x = x
         self.y = y
-        if self.is_outside_grid():
+        if self.is_outside_grid(self.x, self.y):
             del self
             raise Exception("you tried to put a snake outside of the grid... fucking looser, now it killed itself")
 
@@ -108,31 +121,43 @@ class Snake:
 
 
 
-    def forward(self):
+    def move(self):
         self.delete_snake_image()
+        if not(self.can_move()):
+            print("hi")
+            throw_error_to_terminal("you ran into a wall... fucking idiot")
+            self.update_cell()
+            self.show_snake()
+            return
         match self.direction:
             case "N":
                 if self.y+1 < grid_man.grid_height:
                     self.y +=1
                 else:
-                    throw_error_to_terminal("your ran into a wall... fucking idiot")                  
+                    throw_error_to_terminal("you ran into a wall... fucking idiot")
+        
             case "E":
                 if self.x+1 < grid_man.grid_width:
                     self.x +=1
                 else:
-                    throw_error_to_terminal("your ran into a wall... fucking idiot")   
+                    throw_error_to_terminal("you ran into a wall... fucking idiot")
+
             case "S":
                 if self.y-1 >= 0:
                     self.y -=1
                 else:
-                    throw_error_to_terminal("your ran into a wall... fucking idiot")                   
+                    throw_error_to_terminal("you ran into a wall... fucking idiot")
+                
             case "W":
                 if self.x-1 >= 0:
                     self.x -=1
                 else:
-                    throw_error_to_terminal("your ran into a wall... fucking idiot")                    
+                    throw_error_to_terminal("you ran into a wall... fucking idiot")
+                
         self.update_cell()
         self.show_snake()
+
+
 
     def turn_right(self):
         self.delete_snake_image()
@@ -161,6 +186,29 @@ class Snake:
     def spit(self):
         terminal_widget.insert(tk.END, "spat")
 
+    def can_move(self):
+
+        new_x = self.x
+        new_y = self.y
+
+        match self.direction:
+            case "N":
+                new_y+=1                 
+            case "E":
+                new_x+=1 
+            case "S":
+                new_y-=1  
+            case "W":
+                new_x-=1 
+        
+        for cell in grid_man.cells:
+            if cell.x == new_x and cell.y == new_y:
+                if cell.type == "wall":
+                    return False
+        if self.is_outside_grid(new_x, new_y):
+            return False
+        return True
+
     def show_snake(self):
         self.cell.display_image(self.image)
     
@@ -178,6 +226,14 @@ def change_grid_man(event):
     del grid_man
     grid_man = GridManager(9, 5)
     root.update_idletasks()
+
+def change(event):
+    for i in range(5):
+        grid_man.cells[i+2].change_to_wall()
+        grid_man.cells[i+11].change_to_wall()
+
+
+
 
 #snake = Snake(0, 0, "N")
 

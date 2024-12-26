@@ -20,7 +20,7 @@ PyKing_functions = {
 
 def executeCode(event):
     try:
-        grid_man.clear_all_cells()
+        grid_man.reset_grid_to_start()
         terminal_widget.delete('1.0', END)
         root.update_idletasks()
         code = code_editor_widget.get("1.0", END)
