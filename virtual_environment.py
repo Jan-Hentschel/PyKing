@@ -18,6 +18,8 @@ up_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Up.png'))
 down_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Down.png'))
 left_image= tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Left.png'))
 right_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Right.png'))
+hamster_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Hamster.png'))
+
 
 class GridManager:
     def __init__(self, grid_width, grid_height):
@@ -69,14 +71,18 @@ class GridCell:
         self.type = "wall"
         self.canvas.configure(background="#333333")
 
+    def change_to_hamster(self):
+        self.type = "hamster"
+        self.display_image(hamster_image)
+
     def clear_cell(self):
         self.canvas.delete("all")
         self.canvas.configure(background="#3F3F3F")
 
     def reset_cell(self):
-        if self.type != "wall":
+        if self.type == "empty":
             self.clear_cell()
-
+        
     def change_cell_type(self, new_type):
         self.type = new_type
 
@@ -118,36 +124,35 @@ class Snake:
                 self.image = left_image
 
         self.cell.display_image(self.image)
-
+        
+        self.hamsters = 0 #Einfügen dass man das voreinstellen kann
 
 
     def move(self):
         self.delete_snake_image()
+
         if not(self.can_move()):
-            print("hi")
             throw_error_to_terminal("you ran into a wall... fucking idiot")
             self.update_cell()
             self.show_snake()
             return
+        
         match self.direction:
             case "N":
                 if self.y+1 < grid_man.grid_height:
                     self.y +=1
                 else:
                     throw_error_to_terminal("you ran into a wall... fucking idiot")
-        
             case "E":
                 if self.x+1 < grid_man.grid_width:
                     self.x +=1
                 else:
                     throw_error_to_terminal("you ran into a wall... fucking idiot")
-
             case "S":
                 if self.y-1 >= 0:
                     self.y -=1
                 else:
                     throw_error_to_terminal("you ran into a wall... fucking idiot")
-                
             case "W":
                 if self.x-1 >= 0:
                     self.x -=1
@@ -161,6 +166,7 @@ class Snake:
 
     def turn_right(self):
         self.delete_snake_image()
+
         match self.direction:
             case "N":
                 self.direction="E"
@@ -176,6 +182,7 @@ class Snake:
             case "W":
                 self.direction="N"
                 self.image = up_image
+                
         self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image)
         self.show_snake()
 
@@ -209,6 +216,13 @@ class Snake:
             return False
         return True
 
+    def can_eat(self):
+        self.update_cell()
+        if self.cell.type == "hamster":
+            return True
+        else: 
+            return False
+
     def show_snake(self):
         self.cell.display_image(self.image)
     
@@ -231,6 +245,7 @@ def change(event):
     for i in range(5):
         grid_man.cells[i+2].change_to_wall()
         grid_man.cells[i+11].change_to_wall()
+        grid_man.cells[i+20].change_to_hamster()
 
 
 
