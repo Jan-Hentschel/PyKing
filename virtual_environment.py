@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
-
+import time
 from terminal import terminal_widget
 from gui import vertically_pained_window, resource_path, root
  
@@ -268,7 +268,7 @@ def change_grid_man(event):
     grid_man = GridManager(9, 5)
     root.update_idletasks()
 
-def change(event):
+def spawn_grid_elements(event):
     for i in range(5):
         grid_man.cells[i+2].change_to_wall()
         grid_man.cells[i+11].change_to_wall()

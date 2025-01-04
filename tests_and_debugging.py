@@ -41,3 +41,12 @@ def debugPrints():
 # print("hi")
 # wilhelm = Snake(0, 0, "N")
 # wilhelm.move()
+
+# paul = Snake(0,0, "N")
+# paul.move()
+# paul.move()
+# paul.eat()
+# paul.move()
+# paul.turn_right()
+# paul.move()
+# paul.spit()
