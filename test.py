@@ -1,7 +1,7 @@
 import os
 import sys
-from tkinter import *
-import tkinter as tk
+
+
 def resource_path(relative_path):
     try:
         base_path = sys._MEIPASS
@@ -9,9 +9,22 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
 
     return os.path.join(base_path, relative_path)
-root = Tk()
-canvas = Canvas(root, width = 300, height = 300)
-canvas.pack()
-img = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\LogoV1.3.png'))
-canvas.create_image(0,0, anchor=NW, image=img)
-mainloop()
+
+
+
+
+test_file_path = resource_path("dist\\Files\\file.py")
+
+def saveContentToFile(content, directory):
+
+    with open(directory, "w", encoding="utf-8") as file:
+        file.write(content)
+
+
+def getContentFromFile(directory):
+    with open(directory, "r", encoding="utf-8") as file:
+        return file.read()
+    
+saveContentToFile("dumb", test_file_path)
+
+print(getContentFromFile(test_file_path))
