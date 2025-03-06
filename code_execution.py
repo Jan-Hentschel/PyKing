@@ -25,5 +25,6 @@ def executeCode(event):
         root.update_idletasks()
         code = code_editor_widget.get("1.0", END)
         exec(code, PyKing_functions)
+        #runMovie()
     except Exception as error:
         print_to_terminal_widget(error)

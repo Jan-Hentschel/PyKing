@@ -4,7 +4,9 @@ from tkinter import ttk
 import time
 from terminal import terminal_widget
 from gui import vertically_pained_window, resource_path, root
- 
+import time
+
+
 # Das Virtual Environment erstellen (oben rechts)
 virtual_environment_frame = Frame(vertically_pained_window, bg="#333333")
 grid_frame = Frame(virtual_environment_frame, bg="#333333")
@@ -19,7 +21,6 @@ down_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Down.png'))
 left_image= tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Left.png'))
 right_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Right.png'))
 hamster_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Hamster.png'))
-
 
 class GridManager:
     def __init__(self, grid_width, grid_height):
@@ -66,6 +67,7 @@ class GridCell:
         self.hamsters = 0
 
     def display_image(self, image):
+        print(self.x, self.y)
         self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)
 
     def change_to_wall(self):
@@ -91,10 +93,7 @@ class GridCell:
         if self.type == "empty":
             self.clear_cell()
         
-    # def change_cell_type(self, new_type):
-    #     self.type = new_type
-
-
+# snakes = []
 
 class Snake:
 
@@ -104,7 +103,8 @@ class Snake:
         if self.is_outside_grid(self.x, self.y):
             del self
             raise Exception("you tried to put a snake outside of the grid... fucking looser, now it killed itself")
-
+        self.hamsters = 0 #Einfügen dass man das voreinstellen kann
+        #self.moves = []
         
         self.update_cell()
 
@@ -121,8 +121,11 @@ class Snake:
                 self.image = left_image
 
         self.cell.display_image(self.image)
+        root.update_idletasks()
+        time.sleep(1)
+        # snakes.append(self)
+        # self.moves.append((self.x,self.y,self.direction))
         
-        self.hamsters = 0 #Einfügen dass man das voreinstellen kann
 
     def is_outside_grid(self, x, y):
         if y < grid_man.grid_height and x < grid_man.grid_width and y >= 0 and x >= 0:
@@ -156,6 +159,8 @@ class Snake:
 
         self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image)
         self.show_snake()
+        root.update_idletasks()
+        time.sleep(1)
 
     def move(self):
         self.delete_snake_image()
@@ -190,6 +195,8 @@ class Snake:
                 
         self.update_cell()
         self.show_snake()
+        root.update_idletasks()
+        time.sleep(1)
 
 
     def eat(self):
@@ -201,6 +208,7 @@ class Snake:
             self.show_snake()
         else:
             throw_error_to_terminal("what are you trying to eat dumbass?")
+        root.update_idletasks()
 
         
 
@@ -210,6 +218,7 @@ class Snake:
             self.cell.add_hamster()
         else:
             throw_error_to_terminal("spit what? your mouth is empty!")
+            root.update_idletasks()
 
     def can_move(self):
 
@@ -274,21 +283,23 @@ def spawn_grid_elements(event):
         grid_man.cells[i+11].change_to_wall()
         grid_man.cells[i+20].add_hamster()
 
+# tick_rate = 1 #amount of moves performed per second
+# def runMovie():
+#     for snake in snakes:
+#         print(snake.moves)
+#         for move in snake.moves:
+#             for cell in grid_man.cells:
+#                 if cell.x == move[0] and cell.y == move[1]:
+#                     match move[2]:
+#                         case "N":
+#                             cell.display_image(up_image)
+#                         case "E":
+#                             cell.display_image(right_image)
+#                         case "S":
+#                             cell.display_image(down_image) 
+#                         case "W":
+#                             cell.display_image(left_image) 
+#                     root.update_idletasks()
+#                     time.sleep(1)
+                    
 
-
-
-#snake = Snake(0, 0, "N")
-
-
-
-# def forward_test(event):
-#     snake.forward()
-
-# def turn_right_test(event):
-#     snake.turn_right()
-
-# def eat_test(event):
-#     snake.eat()
-
-# def spit_test(event):
-#     snake.spit()
