@@ -22,6 +22,9 @@ left_image= tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Left.png'))
 right_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Right.png'))
 hamster_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Hamster.png'))
 
+tick_rate = 5 #amount of actions per second
+wait_time = 1/tick_rate
+
 class GridManager:
     def __init__(self, grid_width, grid_height):
         self.grid_width = grid_width
@@ -38,13 +41,8 @@ class GridManager:
 
     def add_cells_to_grid(self):
         for cell in self.cells:
-            #cell.canvas.create_text(50, 50, text=f"x={self.x}, y={self.y}", fill="white")
             cell.canvas.grid(row=self.grid_height - cell.y, column=cell.x, padx=5, pady=5, sticky=N+E+S+W)
 
-    # def display_image_at_position(self, image, x, y):
-    #     for cell in self.cells:
-    #         if cell.x==x and cell.y == y:
-    #             cell.display_image(image)
 
     def clear_all_cells(self):
         for cell in self.cells:
@@ -67,7 +65,6 @@ class GridCell:
         self.hamsters = 0
 
     def display_image(self, image):
-        print(self.x, self.y)
         self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)
 
     def change_to_wall(self):
@@ -93,7 +90,6 @@ class GridCell:
         if self.type == "empty":
             self.clear_cell()
         
-# snakes = []
 
 class Snake:
 
@@ -104,8 +100,7 @@ class Snake:
             del self
             raise Exception("you tried to put a snake outside of the grid... fucking looser, now it killed itself")
         self.hamsters = 0 #Einfügen dass man das voreinstellen kann
-        #self.moves = []
-        
+
         self.update_cell()
 
         self.direction = direction
@@ -122,10 +117,8 @@ class Snake:
 
         self.cell.display_image(self.image)
         root.update_idletasks()
-        time.sleep(1)
-        # snakes.append(self)
-        # self.moves.append((self.x,self.y,self.direction))
-        
+        time.sleep(wait_time)
+
 
     def is_outside_grid(self, x, y):
         if y < grid_man.grid_height and x < grid_man.grid_width and y >= 0 and x >= 0:
@@ -160,7 +153,7 @@ class Snake:
         self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image)
         self.show_snake()
         root.update_idletasks()
-        time.sleep(1)
+        time.sleep(wait_time)
 
     def move(self):
         self.delete_snake_image()
@@ -196,7 +189,7 @@ class Snake:
         self.update_cell()
         self.show_snake()
         root.update_idletasks()
-        time.sleep(1)
+        time.sleep(wait_time)
 
 
     def eat(self):
@@ -283,23 +276,4 @@ def spawn_grid_elements(event):
         grid_man.cells[i+11].change_to_wall()
         grid_man.cells[i+20].add_hamster()
 
-# tick_rate = 1 #amount of moves performed per second
-# def runMovie():
-#     for snake in snakes:
-#         print(snake.moves)
-#         for move in snake.moves:
-#             for cell in grid_man.cells:
-#                 if cell.x == move[0] and cell.y == move[1]:
-#                     match move[2]:
-#                         case "N":
-#                             cell.display_image(up_image)
-#                         case "E":
-#                             cell.display_image(right_image)
-#                         case "S":
-#                             cell.display_image(down_image) 
-#                         case "W":
-#                             cell.display_image(left_image) 
-#                     root.update_idletasks()
-#                     time.sleep(1)
-                    
 
