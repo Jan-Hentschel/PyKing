@@ -4,7 +4,9 @@ from tkinter import ttk
 import os
 import sys
 
+
 from gui import horizontally_paned_window
+from code_editor import loadIntoEditor, getStringFromEditor
 
 # Frame für den Filetree erstellen (links)
 file_tree_widget = Frame(horizontally_paned_window, bg="#333333")
@@ -24,16 +26,20 @@ def resource_path(relative_path):
 
 test_file_path = resource_path("dist\\Files\\file.py")
 
-def saveContentToFile(content, directory):
-
+def saveContentToFile(directory):
     with open(directory, "w", encoding="utf-8") as file:
-        file.write(content)
+        file.write(getStringFromEditor())
 
 
 def getContentFromFile(directory):
     with open(directory, "r", encoding="utf-8") as file:
         return file.read()
-    
-saveContentToFile("dumb", test_file_path)
 
-print(getContentFromFile(test_file_path))
+def loadFile(directory):
+    loadIntoEditor(getContentFromFile(directory))
+
+def loadTestFile(event):
+    loadFile(test_file_path)
+
+def saveTestFile(event):
+    saveContentToFile(test_file_path)

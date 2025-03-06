@@ -30,5 +30,9 @@ vertical_scrollbar.config(command = code_editor_widget.yview)
 code_editor_widget["xscrollcommand"] = horizontal_scrollbar.set
 code_editor_widget["yscrollcommand"] = vertical_scrollbar.set
 
+def loadIntoEditor(content):
+    code_editor_widget.delete(1.0,END)
+    code_editor_widget.insert(tk.END, content)
 
-
+def getStringFromEditor():
+    return code_editor_widget.get("1.0",END)
