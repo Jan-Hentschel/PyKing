@@ -39,7 +39,6 @@ def loadFile(directory):
     loadIntoEditor(getContentFromFile(directory))
 
 def loadTestFile():
-    print("hewp")
     loadFile(test_file_path)
 
 def saveTestFile():

@@ -18,7 +18,7 @@ PyKing_functions = {
 
 
 
-def executeCode(event):
+def executeCode():
     try:
         grid_man.reset_grid_to_start()
         terminal_widget.delete('1.0', END)

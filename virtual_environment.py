@@ -22,8 +22,13 @@ left_image= tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Left.png'))
 right_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Right.png'))
 hamster_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Hamster.png'))
 
+
 tick_rate = 5 #amount of actions per second
-wait_time = 1/tick_rate
+
+def wait_time():
+    from toolbar import tick_rate_slider
+    return 1/tick_rate_slider.get()
+
 
 class GridManager:
     def __init__(self, grid_width, grid_height):
@@ -117,7 +122,7 @@ class Snake:
 
         self.cell.display_image(self.image)
         root.update_idletasks()
-        time.sleep(wait_time)
+        time.sleep(wait_time())
 
 
     def is_outside_grid(self, x, y):
@@ -153,7 +158,7 @@ class Snake:
         self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image)
         self.show_snake()
         root.update_idletasks()
-        time.sleep(wait_time)
+        time.sleep(wait_time())
 
     def move(self):
         self.delete_snake_image()
@@ -189,7 +194,7 @@ class Snake:
         self.update_cell()
         self.show_snake()
         root.update_idletasks()
-        time.sleep(wait_time)
+        time.sleep(wait_time())
 
 
     def eat(self):
