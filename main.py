@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
-from gui import root
+import gui
+
 
 from code_execution import executeCode
 from virtual_environment import *

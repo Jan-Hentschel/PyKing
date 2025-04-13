@@ -35,15 +35,16 @@ root.state('zoomed')
 
 root.configure(bg="#333333")
 
-
-# toolbar importieren und in das window packen
-from toolbar import *
-toolbar.pack(fill="x")
-
-
 # Horizontales Pained Window erstellen
 horizontally_paned_window = PanedWindow(root, orient=tk.HORIZONTAL, bg="#333333", sashwidth = 10)
-horizontally_paned_window.pack(fill="both", expand=1)
+horizontally_paned_window.pack(side="bottom", fill="both", expand=1)
+
+# toolbar importieren und in das window packen
+from toolbar import toolbar_frame
+toolbar_frame.pack(side="top", fill="x")
+
+
+
 
 
 # filetree importieren und in das paned window einfügen

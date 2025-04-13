@@ -1,9 +1,6 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk
-
-
-from gui import horizontally_paned_window, root
+from gui import horizontally_paned_window
 
 
 code_editor_frame = Frame(horizontally_paned_window, bg="#3F3F3F", bd=0,)

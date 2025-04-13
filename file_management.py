@@ -1,16 +1,8 @@
-import tkinter as tk
-from tkinter import *
-from tkinter import ttk
 import os
 import sys
 
 
-import gui
 from code_editor import loadIntoEditor, getStringFromEditor
-
-# Frame für den Filetree erstellen (links)
-file_tree_widget = Frame(gui.horizontally_paned_window, bg="#333333")
-
 
 
 def resource_path(relative_path):
