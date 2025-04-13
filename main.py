@@ -12,7 +12,5 @@ if __name__ == "__main__":
     root.bind("<Control-z>", executeCode)
     root.bind("<Control-x>", change_grid_man)
     root.bind("<Control-w>", spawn_grid_elements)
-    root.bind("<Control-b>", loadTestFile)
-    root.bind("<Control-s>", saveTestFile)
     root.mainloop()
 

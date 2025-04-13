@@ -38,8 +38,9 @@ def getContentFromFile(directory):
 def loadFile(directory):
     loadIntoEditor(getContentFromFile(directory))
 
-def loadTestFile(event):
+def loadTestFile():
+    print("hewp")
     loadFile(test_file_path)
 
-def saveTestFile(event):
+def saveTestFile():
     saveContentToFile(test_file_path)
