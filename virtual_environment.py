@@ -289,10 +289,3 @@ def change_grid(columns, rows, new_cells):
 
 
 
-def spawn_grid_elements(event):
-    for i in range(5):
-        grid_man.cells[i].change_to_wall()
-        grid_man.cells[i+11].change_to_wall()
-        grid_man.cells[i+20].add_hamster()
-
-

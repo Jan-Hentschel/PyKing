@@ -1,8 +1,4 @@
-import gui
-
-from virtual_environment import *
-
+from gui import root
 if __name__ == "__main__":
-    root.bind("<Control-w>", spawn_grid_elements)
     root.mainloop()
 
