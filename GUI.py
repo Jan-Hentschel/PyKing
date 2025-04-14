@@ -39,6 +39,22 @@ root.configure(bg="#333333")
 horizontally_paned_window = PanedWindow(root, orient=tk.HORIZONTAL, bg="#333333", sashwidth = 10)
 horizontally_paned_window.pack(side="bottom", fill="both", expand=1)
 
+# Vertikales Pained Window im Horizontalen Pained Window erstellen (rechts)
+vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERTICAL, bg="#333333", sashwidth=10)
+
+# toolbar importieren und in das window packen
+
+# virtual environment importieren und in das paned window einfügen
+from virtual_environment import virtual_environment_frame
+
+
+# terminal importieren und in das paned window einfügen
+from terminal import *
+
+
+from toolbar import toolbar_frame
+toolbar_frame.pack(side="top", fill="x")
+
 # filetree importieren und in das paned window einfügen
 from filetree import *
 horizontally_paned_window.add(file_tree_widget)
@@ -47,23 +63,9 @@ horizontally_paned_window.add(file_tree_widget)
 from code_editor import *  
 horizontally_paned_window.add(code_editor_frame)  
 
-
-# Vertikales Pained Window im Horizontalen Pained Window erstellen (rechts)
-vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERTICAL, bg="#333333", sashwidth=10)
 horizontally_paned_window.add(vertically_pained_window)  
-# toolbar importieren und in das window packen
-
-# virtual environment importieren und in das paned window einfügen
-from virtual_environment import virtual_environment_frame
 vertically_pained_window.add(virtual_environment_frame)  
-
-# terminal importieren und in das paned window einfügen
-from terminal import *
 vertically_pained_window.add(terminal_frame)  
-
-from toolbar import toolbar_frame
-toolbar_frame.pack(side="top", fill="x")
-
 
 
 # Alle widgets updaten, um die screen_width/screen_height zu updaten

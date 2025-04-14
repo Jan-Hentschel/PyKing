@@ -14,13 +14,15 @@ file_tree_widget = Frame(gui.horizontally_paned_window, bg="#333333")
 
 
 def resource_path(relative_path):
+
     base_path = os.path.abspath(".")
+
     return os.path.join(base_path, relative_path)
 
 
 
 
-test_file_path = resource_path("dist\\Files\\file.py")
+test_file_path = resource_path("Files\\file.py")
 
 def save_content_to_directory(directory):
     with open(directory, "w", encoding="utf-8") as file:
@@ -34,11 +36,20 @@ def get_content_from_directory(directory):
 def load_directory(directory):
     loadIntoEditor(get_content_from_directory(directory))
 
+from virtual_environment import throw_error_to_terminal
 def load_test_file():
-    load_directory(test_file_path)
+    throw_error_to_terminal(test_file_path)
+    try:
+        load_directory(test_file_path)
+    except:
+        throw_error_to_terminal(Exception)
 
 def save_test_file():
-    save_content_to_directory(test_file_path)
+    throw_error_to_terminal(test_file_path)
+    try:
+        save_content_to_directory(test_file_path)
+    except:
+        throw_error_to_terminal(Exception)
 
 def save_test_grid():
     pass
