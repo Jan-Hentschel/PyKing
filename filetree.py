@@ -22,7 +22,7 @@ def resource_path(relative_path):
 
 
 
-test_file_path = resource_path("Files\\file.py")
+test_file_path = resource_path("Files\\testfile.py")
 
 def save_content_to_directory(directory):
     with open(directory, "w", encoding="utf-8") as file:
