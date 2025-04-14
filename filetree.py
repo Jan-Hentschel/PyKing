@@ -52,8 +52,13 @@ def save_test_file():
         throw_error_to_terminal(Exception)
 
 def load_file():
-    directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file")
+    directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     load_directory(directory)
+
+def save_file():
+    directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
+    save_content_to_directory(directory)
+
 def save_test_grid():
     pass
 def load_test_grid():
