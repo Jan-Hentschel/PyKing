@@ -3,7 +3,7 @@ from tkinter import *
 from tkinter import ttk
 import os
 import sys
-
+from tkinter import filedialog
 
 import gui
 from code_editor import loadIntoEditor, getStringFromEditor
@@ -51,6 +51,9 @@ def save_test_file():
     except:
         throw_error_to_terminal(Exception)
 
+def load_file():
+    directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file")
+    load_directory(directory)
 def save_test_grid():
     pass
 def load_test_grid():
