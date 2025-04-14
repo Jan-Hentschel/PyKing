@@ -5,6 +5,8 @@ import os
 import sys
 from tkinter import filedialog
 
+import json
+
 import gui
 from code_editor import loadIntoEditor, getStringFromEditor
 
@@ -59,7 +61,17 @@ def save_file():
     directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     save_content_to_directory(directory)
 
-def save_test_grid():
+def save_grid():
     pass
-def load_test_grid():
-    pass
+
+from virtual_environment import change_grid
+
+def load_grid():
+    directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
+    with open(directory, "r", encoding="utf-8") as file:
+        content = file.read()
+        dict = json.loads(content)
+        columns = dict["columns"]
+        rows = dict["rows"]
+        new_cells = dict["cells"]
+        change_grid(columns, rows, new_cells)

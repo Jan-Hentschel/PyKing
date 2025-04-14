@@ -10,17 +10,17 @@ from gui import root
 toolbar_frame = Frame(root, height=68, bg="#333333")
 
 
-from filetree import save_file, load_file, load_test_grid, save_test_grid
+from filetree import save_file, load_file, load_grid, save_grid
 save_button = Button(toolbar_frame, text ="Save", command = save_file)
 save_button.pack(side="left")
 
 load_button = Button(toolbar_frame, text ="Load", command = load_file)
 load_button.pack(side="left")
 
-save_grid_button = Button(toolbar_frame, text ="Save Grid", command = save_test_grid)
+save_grid_button = Button(toolbar_frame, text ="Save Grid", command = save_grid)
 save_grid_button.pack(side="left")
 
-load_grid_button = Button(toolbar_frame, text ="Load Grid", command = load_test_grid)
+load_grid_button = Button(toolbar_frame, text ="Load Grid", command = load_grid)
 load_grid_button.pack(side="left")
 
 

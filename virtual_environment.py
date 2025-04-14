@@ -264,18 +264,34 @@ class Snake:
 
 
 
-grid_man = GridManager(10, 4)
+grid_man = GridManager(9, 5)
 
-def change_grid_man(event):
+def change_grid_man(columns, rows):
     global grid_man
     grid_man.forget_all_cells()
     del grid_man
-    grid_man = GridManager(9, 5)
+    grid_man = GridManager(columns, rows)
     root.update_idletasks()
+
+def change_grid(columns, rows, new_cells):
+    change_grid_man(columns, rows)
+    for i in range(len(new_cells)):
+        old_cell = grid_man.cells[i]
+        new_cell = new_cells[i]
+        if new_cell == "empty":
+            pass
+        elif new_cell == "wall":
+            old_cell.change_to_wall()
+        else:
+            cell_type, num_hamsters = new_cell.split()
+            for i in range(int(num_hamsters)):
+                old_cell.add_hamster()
+
+
 
 def spawn_grid_elements(event):
     for i in range(5):
-        grid_man.cells[i+2].change_to_wall()
+        grid_man.cells[i].change_to_wall()
         grid_man.cells[i+11].change_to_wall()
         grid_man.cells[i+20].add_hamster()
 
