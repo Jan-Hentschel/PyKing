@@ -43,3 +43,9 @@ def load_test_file():
 
 def save_test_file():
     save_content_to_directory(test_file_path)
+
+def save_test_grid():
+    print("save")
+
+def load_test_grid():
+    print("load")

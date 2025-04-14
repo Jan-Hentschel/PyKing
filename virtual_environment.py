@@ -23,8 +23,6 @@ right_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Right.png'))
 hamster_image = tk.PhotoImage(file=resource_path('.\\dist\\Assets\\Hamster.png'))
 
 
-tick_rate = 5 #amount of actions per second
-
 def wait_time():
     from toolbar import tick_rate_slider
     return 1/tick_rate_slider.get()

@@ -18,5 +18,5 @@ def get_variable(name):
                 split_line = line.split("=")
                 return split_line[1]
         print(f"could not find {name} in options.txt")
-    return None
-print(get_variable("default_tick_rate"))
+        return None
+    

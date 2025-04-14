@@ -1,12 +1,7 @@
-import tkinter as tk
-from tkinter import *
-from tkinter import ttk
 import gui
 
-
-from code_execution import executeCode
 from virtual_environment import *
-from filetree import load_test_file, save_test_file
+
 
 if __name__ == "__main__":
     root.bind("<Control-x>", change_grid_man)
