@@ -25,7 +25,7 @@ def resource_path(relative_path):
 # Initialisierung des Windows als root
 root = Tk()
 root.title("PyKing")
-root.iconbitmap(resource_path(".\\dist\\Assets\\Icon.ico"))
+root.iconbitmap(resource_path("Assets\\Icon.ico"))
 
 screen_height = root.winfo_screenheight()
 screen_width = root.winfo_screenwidth()

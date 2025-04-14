@@ -5,7 +5,7 @@ def resource_path(relative_path):
     base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-directory = resource_path("dist\\options.txt")
+directory = resource_path("options.txt")
 
 def get_variable(name):
     with open(directory, "r", encoding="utf-8") as file:
