@@ -10,11 +10,11 @@ from gui import root
 toolbar_frame = Frame(root, height=68, bg="#333333")
 
 
-from filetree import saveTestFile, loadTestFile
-save_button = Button(toolbar_frame, text ="Save", command = saveTestFile)
+from filetree import save_test_file, load_test_file
+save_button = Button(toolbar_frame, text ="Save", command = save_test_file)
 save_button.pack(side="left")
 
-load_button = Button(toolbar_frame, text ="Load", command = loadTestFile)
+load_button = Button(toolbar_frame, text ="Load", command = load_test_file)
 load_button.pack(side="left")
 
 
@@ -24,7 +24,7 @@ excecute_code_button = Button(toolbar_frame, text ="Excecute Code", command = ex
 excecute_code_button.pack(side="left")
 
 
-from virtual_environment import tick_rate
+from options_handler import get_variable
 tick_rate_slider = Scale(toolbar_frame, from_=1, to=100, orient=HORIZONTAL, length=200)
-tick_rate_slider.set(tick_rate)
+tick_rate_slider.set(get_variable("default_tick_rate"))
 tick_rate_slider.pack(side="left")

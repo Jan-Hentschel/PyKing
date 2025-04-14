@@ -26,20 +26,20 @@ def resource_path(relative_path):
 
 test_file_path = resource_path("dist\\Files\\file.py")
 
-def saveContentToFile(directory):
+def save_content_to_directory(directory):
     with open(directory, "w", encoding="utf-8") as file:
         file.write(getStringFromEditor())
 
 
-def getContentFromFile(directory):
+def get_content_from_directory(directory):
     with open(directory, "r", encoding="utf-8") as file:
         return file.read()
 
-def loadFile(directory):
-    loadIntoEditor(getContentFromFile(directory))
+def load_directory(directory):
+    loadIntoEditor(get_content_from_directory(directory))
 
-def loadTestFile():
-    loadFile(test_file_path)
+def load_test_file():
+    load_directory(test_file_path)
 
-def saveTestFile():
-    saveContentToFile(test_file_path)
+def save_test_file():
+    save_content_to_directory(test_file_path)
