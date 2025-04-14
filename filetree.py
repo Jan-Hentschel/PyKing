@@ -14,11 +14,7 @@ file_tree_widget = Frame(gui.horizontally_paned_window, bg="#333333")
 
 
 def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
+    base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
 
@@ -45,7 +41,6 @@ def save_test_file():
     save_content_to_directory(test_file_path)
 
 def save_test_grid():
-    print("save")
-
+    pass
 def load_test_grid():
-    print("load")
+    pass
