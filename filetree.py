@@ -61,10 +61,9 @@ def save_file():
     directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     save_content_to_directory(directory)
 
-def save_grid():
-    pass
 
-from virtual_environment import change_grid
+
+from virtual_environment import change_grid, get_grid_dict
 
 def load_grid():
     directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
@@ -75,3 +74,16 @@ def load_grid():
         rows = dict["rows"]
         new_cells = dict["cells"]
         change_grid(columns, rows, new_cells)
+
+def save_grid():
+    directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
+    json_dict = json.dumps(get_grid_dict())
+    with open(directory, "w", encoding="utf-8") as file:
+        file.write(json_dict)
+
+    
+def new_file():
+    pass
+
+def new_grid():
+    pass

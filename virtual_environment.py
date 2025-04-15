@@ -287,5 +287,23 @@ def change_grid(columns, rows, new_cells):
             for i in range(int(num_hamsters)):
                 old_cell.add_hamster()
 
+def get_grid_dict():
+    new_cells = []
+    for cell in grid_man.cells:
+        if cell.type == "wall":
+            new_cells.append("wall")
+        elif cell.type == "empty": 
+            new_cells.append("empty")
+        else:
+            new_cells.append(f"hamster {cell.hamsters}")
 
+
+    columns = grid_man.grid_width
+    rows = grid_man.grid_height
+    dictionary = {
+        "columns": columns,
+        "rows": rows,
+        "cells": new_cells
+    }
+    return dictionary
 
