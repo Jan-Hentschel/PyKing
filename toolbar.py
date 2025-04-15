@@ -42,3 +42,30 @@ tick_rate_slider = Scale(toolbar_frame, from_=1, to=100, orient=HORIZONTAL, leng
 tick_rate_slider.set(get_variable("default_tick_rate"))
 tick_rate_slider.pack(side="left")
 
+def place_holder():
+    print("yes")
+
+editing = None
+
+def pick_add_hamster():
+    print("add hamster")
+
+
+
+pick_add_hamster_button = Button(toolbar_frame, text ="Add Hamster", command = pick_add_hamster)
+pick_add_hamster_button.pack(side="left")
+
+pick_subtract_hamster_button = Button(toolbar_frame, text ="Subtract Hamster", command = place_holder)
+pick_subtract_hamster_button.pack(side="left")
+
+pick_change_wall_button = Button(toolbar_frame, text ="Make Wall", command = place_holder)
+pick_change_wall_button.pack(side="left")
+
+pick_clear_cell_button = Button(toolbar_frame, text ="Clear Cell", command = place_holder)
+pick_clear_cell_button.pack(side="left")
+
+pick_clear_all_cells_button = Button(toolbar_frame, text ="Clear All Cells", command = place_holder)
+pick_clear_all_cells_button.pack(side="left")
+
+cancel_editing_grid_button = Button(toolbar_frame, text ="Cancel Editing Grid", command = place_holder)
+cancel_editing_grid_button.pack(side="left")

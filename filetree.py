@@ -87,12 +87,13 @@ def new_file():
     file = filedialog.asksaveasfile(initialdir=resource_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     file.close()
     
+
+    
 def create_grid(popup):
     columns = popup.column_entry.get()
     rows = popup.row_entry.get()
     change_grid_man(int(columns), int(rows))
     popup.destroy()
-    
 
 
 
