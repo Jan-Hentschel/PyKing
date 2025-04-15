@@ -35,12 +35,21 @@ class GridManager:
         self.cells = []
         self.create_cells()
         self.add_cells_to_grid()
-    
+
     def create_cells(self):
         for y in range(self.grid_height):
             for x in range(self.grid_width):
                 self.cells.append(GridCell(x, y, "empty"))
                 
+    def add_all_clickables(self):
+        for cell in self.cells:
+            cell.add_clickable()
+
+    def delete_all_clickables(self):
+        for cell in self.cells:
+            if cell.type != "hamster":
+                cell.canvas.delete(tk.ALL)
+
 
     def add_cells_to_grid(self):
         for cell in self.cells:
@@ -68,6 +77,39 @@ class GridCell:
         self.canvas = Canvas(grid_frame, width=100, height=100, background="#3F3F3F", highlightthickness=0)
         self.hamsters = 0
 
+    def edit(self):
+        from toolbar import editing
+        print(editing)
+        if editing == "add_hamster":
+            self.add_hamster()
+            self.add_clickable()
+            print(self.hamsters)
+        elif editing == "subtract_hamster":
+            if self.hamsters > 0:
+                self.subtract_hamster()
+                self.add_clickable()
+            print(self.hamsters)
+        elif editing == "make_wall":
+            self.change_to_wall()
+            self.canvas.delete(tk.ALL)
+            self.add_clickable
+        elif editing == "clear_cell":
+            self.clear_cell()
+            self.canvas.delete(tk.ALL)
+            self.add_clickable
+
+
+
+
+    def add_clickable(self):
+        if self.type == "empty":
+            id = self.canvas.create_rectangle((0, 0, 101, 101), fill="#3F3F3F", outline="")
+        elif self.type == "wall":
+            id = self.canvas.create_rectangle((0, 0, 101, 101), fill="#333333", outline="")
+        else:
+            id = self.canvas_image
+        self.canvas.tag_bind(id, "<Button-1>", lambda _: self.edit())
+
     def display_image(self, image):
         self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)
 
@@ -87,6 +129,7 @@ class GridCell:
             self.clear_cell()
 
     def clear_cell(self):
+        self.type = "empty"
         self.canvas.delete("all")
         self.canvas.configure(background="#3F3F3F")
 
@@ -286,6 +329,8 @@ def change_grid(columns, rows, new_cells):
             cell_type, num_hamsters = new_cell.split()
             for i in range(int(num_hamsters)):
                 old_cell.add_hamster()
+        grid_man.delete_all_clickables()
+
 
 def get_grid_dict():
     new_cells = []

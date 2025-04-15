@@ -42,30 +42,61 @@ tick_rate_slider = Scale(toolbar_frame, from_=1, to=100, orient=HORIZONTAL, leng
 tick_rate_slider.set(get_variable("default_tick_rate"))
 tick_rate_slider.pack(side="left")
 
-def place_holder():
-    print("yes")
 
 editing = None
 
 def pick_add_hamster():
-    print("add hamster")
+    from virtual_environment import grid_man
+    global editing 
+    editing = "add_hamster"
+    grid_man.add_all_clickables()
+    
 
+def pick_subtract_hamster():
+    from virtual_environment import grid_man
+    global editing 
+    editing = "subtract_hamster"
+    grid_man.add_all_clickables()
 
+def pick_make_wall():
+    from virtual_environment import grid_man
+    global editing 
+    editing = "make_wall"
+    grid_man.add_all_clickables()
+
+def clear_cell():
+    from virtual_environment import grid_man
+    global editing 
+    editing = "clear_cell"
+    grid_man.add_all_clickables()
+
+def clear_all_cells():
+    from virtual_environment import grid_man
+    grid_man.clear_all_cells()
+    global editing 
+    editing = None
+    grid_man.delete_all_clickables()
+
+def cancel_editing_grid():
+    from virtual_environment import grid_man
+    global editing 
+    editing = None
+    grid_man.delete_all_clickables()
 
 pick_add_hamster_button = Button(toolbar_frame, text ="Add Hamster", command = pick_add_hamster)
 pick_add_hamster_button.pack(side="left")
 
-pick_subtract_hamster_button = Button(toolbar_frame, text ="Subtract Hamster", command = place_holder)
+pick_subtract_hamster_button = Button(toolbar_frame, text ="Subtract Hamster", command = pick_subtract_hamster)
 pick_subtract_hamster_button.pack(side="left")
 
-pick_change_wall_button = Button(toolbar_frame, text ="Make Wall", command = place_holder)
-pick_change_wall_button.pack(side="left")
+pick_make_wall_button = Button(toolbar_frame, text ="Make Wall", command = pick_make_wall)
+pick_make_wall_button.pack(side="left")
 
-pick_clear_cell_button = Button(toolbar_frame, text ="Clear Cell", command = place_holder)
+pick_clear_cell_button = Button(toolbar_frame, text ="Clear Cell", command = clear_cell)
 pick_clear_cell_button.pack(side="left")
 
-pick_clear_all_cells_button = Button(toolbar_frame, text ="Clear All Cells", command = place_holder)
+pick_clear_all_cells_button = Button(toolbar_frame, text ="Clear All Cells", command = clear_all_cells)
 pick_clear_all_cells_button.pack(side="left")
 
-cancel_editing_grid_button = Button(toolbar_frame, text ="Cancel Editing Grid", command = place_holder)
+cancel_editing_grid_button = Button(toolbar_frame, text ="Cancel Editing Grid", command = cancel_editing_grid)
 cancel_editing_grid_button.pack(side="left")
