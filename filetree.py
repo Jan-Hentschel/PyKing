@@ -4,6 +4,7 @@ from tkinter import ttk
 import os
 import sys
 from tkinter import filedialog
+from tkinter import simpledialog
 
 import json
 
@@ -63,7 +64,7 @@ def save_file():
 
 
 
-from virtual_environment import change_grid, get_grid_dict
+from virtual_environment import change_grid, get_grid_dict, change_grid_man
 
 def load_grid():
     directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
@@ -83,7 +84,36 @@ def save_grid():
 
     
 def new_file():
-    pass
+    file = filedialog.asksaveasfile(initialdir=resource_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
+    file.close()
+    
+def create_grid(popup):
+    columns = popup.column_entry.get()
+    rows = popup.row_entry.get()
+    change_grid_man(int(columns), int(rows))
+    popup.destroy()
+    
+
+
 
 def new_grid():
-    pass
+    from gui import root
+    popup = Toplevel(root)
+    popup.geometry("400x200")
+    popup.title("Input Grid Height and Width")
+
+    column_label = Label(popup, text="Columns:")
+    column_label.pack()
+    popup.column_entry = Entry(popup)
+    popup.column_entry.pack()
+
+    row_label = Label(popup, text="Rows:")
+    row_label.pack()
+    popup.row_entry = Entry(popup)
+    popup.row_entry.pack()
+    
+    ok_button = Button(popup, text="OK", command=lambda: create_grid(popup))
+    ok_button.pack(side="left")
+
+    cancel_button = Button(popup, text="Cancel", command= lambda: popup.destroy())
+    cancel_button.pack(side="right")

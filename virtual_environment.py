@@ -59,6 +59,7 @@ class GridManager:
         for cell in self.cells:
             cell.canvas.grid_forget()
 
+
 class GridCell:
     def __init__(self, x, y, type):
         self.x = x
@@ -263,7 +264,6 @@ class Snake:
 
 
 
-
 grid_man = GridManager(9, 5)
 
 def change_grid_man(columns, rows):
@@ -306,4 +306,3 @@ def get_grid_dict():
         "cells": new_cells
     }
     return dictionary
-
