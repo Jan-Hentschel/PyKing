@@ -5,6 +5,11 @@ from utility import autoHiddenScrollbar
 
 from gui import vertically_pained_window
 
+from options_handler import get_variable
+def show_current_directories():
+    terminal_widget.delete('1.0', END)
+    terminal_widget.insert(tk.END, f"Excecuting\nFile: {get_variable("current_file_directory")}Grid: {get_variable("current_grid_directory")}")
+
 terminal_frame = Frame(vertically_pained_window, bg="#3F3F3F", bd=0,)
 terminal_frame.pack(fill=BOTH, expand=True)
 

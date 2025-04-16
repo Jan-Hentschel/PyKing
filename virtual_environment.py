@@ -64,6 +64,10 @@ class GridManager:
         for cell in self.cells:
             if cell.type == "empty":
                 cell.clear()
+            elif cell.type == "hamster":
+                cell.clear()
+                cell.type = "hamster"
+                cell.display_image(hamster_image)
 
     def remove_all_cells(self):
         for cell in self.cells:
@@ -231,11 +235,11 @@ class Snake:
                     self.x -=1
                 else:
                     throw_error_to_terminal("you ran into a wall... fucking idiot")
-                
         self.update_cell()
         self.show_snake()
         root.update_idletasks()
         time.sleep(wait_time())
+
 
 
     def eat(self):
@@ -304,9 +308,11 @@ class Snake:
     def delete_snake_image(self):
         if self.cell.type == "hamster":
             self.cell.clear()
+            self.cell.type = "hamster"
             self.cell.display_image(hamster_image)
         else:
             self.cell.clear()
+
 
 
 
