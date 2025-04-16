@@ -58,15 +58,19 @@ class GridManager:
 
     def clear_all_cells(self):
         for cell in self.cells:
-            cell.clear_cell()
+            cell.clear()
 
     def reset_grid_to_start(self):
         for cell in self.cells:
-            cell.reset_cell()
+            if cell.type == "empty":
+                cell.clear()
 
-    def forget_all_cells(self):
+    def remove_all_cells(self):
         for cell in self.cells:
-            cell.canvas.grid_forget()
+            cell.canvas.grid_remove()
+            del cell
+        self.cells = []
+            
 
 
 class GridCell:
@@ -79,11 +83,9 @@ class GridCell:
 
     def edit(self):
         from toolbar import editing
-        print(editing)
         if editing == "add_hamster":
             self.add_hamster()
             self.add_clickable()
-            print(self.hamsters)
         elif editing == "subtract_hamster":
             if self.hamsters > 0:
                 self.subtract_hamster()
@@ -94,7 +96,7 @@ class GridCell:
             self.canvas.delete(tk.ALL)
             self.add_clickable
         elif editing == "clear_cell":
-            self.clear_cell()
+            self.clear()
             self.canvas.delete(tk.ALL)
             self.add_clickable
 
@@ -126,16 +128,13 @@ class GridCell:
         self.hamsters -= 1
         if self.hamsters < 1:
             self.type = "empty"
-            self.clear_cell()
+            self.clear()
 
-    def clear_cell(self):
+    def clear(self):
         self.type = "empty"
         self.canvas.delete("all")
         self.canvas.configure(background="#3F3F3F")
 
-    def reset_cell(self):
-        if self.type == "empty":
-            self.clear_cell()
         
 
 class Snake:
@@ -303,17 +302,18 @@ class Snake:
         self.cell.display_image(self.image)
     
     def delete_snake_image(self):
-        self.cell.clear_cell()
+        self.cell.clear()
 
 
 
 grid_man = GridManager(9, 5)
 
 def change_grid_man(columns, rows):
-    global grid_man
-    grid_man.forget_all_cells()
-    del grid_man
-    grid_man = GridManager(columns, rows)
+    grid_man.remove_all_cells()
+    grid_man.grid_width=columns
+    grid_man.grid_height=rows
+    grid_man.create_cells()
+    grid_man.add_cells_to_grid()
     root.update_idletasks()
 
 def change_grid(columns, rows, new_cells):
