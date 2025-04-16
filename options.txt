@@ -1,4 +1,4 @@
 hallo = 17
 
-default_tick_rate = 50
+default_tick_rate = 2 
 test = 0

@@ -196,7 +196,7 @@ class Snake:
                 self.direction="N"
                 self.image = up_image
 
-        self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image)
+        #self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image) <-- useless and breaks code (whyy?? just why)
         self.show_snake()
         root.update_idletasks()
         time.sleep(wait_time())
@@ -302,7 +302,11 @@ class Snake:
         self.cell.display_image(self.image)
     
     def delete_snake_image(self):
-        self.cell.clear()
+        if self.cell.type == "hamster":
+            self.cell.clear()
+            self.cell.display_image(hamster_image)
+        else:
+            self.cell.clear()
 
 
 
