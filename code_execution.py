@@ -16,12 +16,11 @@ PyKing_functions = {
     "Snake": Snake
 }
 
-from terminal import show_current_directories
-
+from filetree import load_grid_directory
+from options_handler import get_variable
 def executeCode():
     try:
-        grid_man.reset_grid_to_start()
-        show_current_directories()
+        load_grid_directory(get_variable("current_grid_directory")[1:-1])
         root.update_idletasks()
         code = code_editor_widget.get("1.0", END)
         exec(code, PyKing_functions)
