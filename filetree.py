@@ -54,6 +54,7 @@ def save_test_file():
         throw_error_to_terminal(Exception)
 
 def load_file():
+    #ask to save before
     directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     load_file_directory(directory)
     change_variable_to("current_file_directory", directory)
@@ -82,6 +83,7 @@ def load_grid_directory(directory):
     show_current_directories()
 
 def load_grid():
+    #ask to save before
     directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     load_grid_directory(directory)
   
@@ -117,7 +119,7 @@ def create_grid(popup):
     show_current_directories()
 
 
-
+from utility import toolbar_button
 def new_grid():
     from gui import root
     popup = Toplevel(root)
@@ -134,8 +136,8 @@ def new_grid():
     popup.row_entry = Entry(popup)
     popup.row_entry.pack()
     
-    ok_button = Button(popup, text="OK", command=lambda: create_grid(popup))
+    ok_button = toolbar_button(popup, text="OK", command=lambda: create_grid(popup))
     ok_button.pack(side="left")
 
-    cancel_button = Button(popup, text="Cancel", command= lambda: popup.destroy())
+    cancel_button = toolbar_button(popup, text="Cancel", command= lambda: popup.destroy())
     cancel_button.pack(side="right")

@@ -1,3 +1,3 @@
 default_tick_rate = 2 
 current_file_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/test hamster preservation.py
-current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/hamter overload.json
+current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/yeah.json

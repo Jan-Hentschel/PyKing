@@ -39,3 +39,7 @@ class autoHiddenScrollbar(Scrollbar):
             if line_width > widget_width:
                 return True
         return False
+    
+class toolbar_button(Button):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, bd=2, bg="#333333", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", **kwargs)

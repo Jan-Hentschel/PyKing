@@ -20,7 +20,7 @@ from filetree import load_grid_directory
 from options_handler import get_variable
 def executeCode():
     try:
-        load_grid_directory(get_variable("current_grid_directory")[1:-1])
+        load_grid_directory(get_variable("current_grid_directory")[1:-1]) #ask to save before
         root.update_idletasks()
         code = code_editor_widget.get("1.0", END)
         exec(code, PyKing_functions)
