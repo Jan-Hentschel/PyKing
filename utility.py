@@ -42,4 +42,4 @@ class autoHiddenScrollbar(Scrollbar):
     
 class toolbar_button(Button):
     def __init__(self, master, **kwargs):
-        super().__init__(master, bd=2, bg="#333333", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", **kwargs)
+        super().__init__(master, bd=2, bg="#3F3F3F", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", height=2, **kwargs)

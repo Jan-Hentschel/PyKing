@@ -43,12 +43,12 @@ load_grid_button.pack(side="left")
 
 from code_execution import executeCode
 excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
-excecute_code_button = toolbar_button(toolbar_frame, image=excecute_code_icon, command = executeCode)
+excecute_code_button = Button(toolbar_frame, image=excecute_code_icon, command = executeCode, bg="#333333", activebackground="#3F3F3F")
 excecute_code_button.pack(side="left")
 
 
 from options_handler import get_variable
-tick_rate_slider = Scale(toolbar_frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", fg="#FFFFFF")
+tick_rate_slider = Scale(toolbar_frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", highlightbackground="#333333",fg="#FFFFFF", troughcolor="#3F3F3F")
 tick_rate_slider.set(get_variable("default_tick_rate"))
 tick_rate_slider.pack(side="left")
 
