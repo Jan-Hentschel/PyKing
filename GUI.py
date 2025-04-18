@@ -57,7 +57,7 @@ toolbar_frame.pack(side="top", fill="x")
 
 # filetree importieren und in das paned window einfügen
 from filetree import *
-horizontally_paned_window.add(file_tree_widget)
+horizontally_paned_window.add(file_tree_frame)
 
 # code editor importieren und in das paned window einfügen
 from code_editor import *  
