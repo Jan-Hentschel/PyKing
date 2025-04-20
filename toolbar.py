@@ -14,7 +14,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 #toolbar als frame erstellen
-toolbar_frame = Frame(root, height=68, bg="#333333")
+toolbar_frame = Frame(root, height=68, bg="#333333", pady=5)
 
 from utility import toolbar_button
 

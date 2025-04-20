@@ -7,5 +7,4 @@ app = Tk()
 app.title("GUI Application of Python")
 
 
-
 app.mainloop()

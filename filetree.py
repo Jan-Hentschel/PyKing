@@ -148,14 +148,17 @@ def new_grid():
 
 #https://stackoverflow.com/questions/68078498/recursively-arrange-all-folders-and-files-in-a-hierarchical-treeview-in-tkinter
 
-ttk.Label(file_tree_frame, text="Treeview(hierarchical)").pack()
+style = ttk.Style()
+style.theme_use("default")
+style.configure("Treeview", background="#333333", foreground="#FFFFFF", fieldbackground="#333333")
+style.map("Treeview", background=[("selected", "#3F3F3F")])
 
 treeview = ttk.Treeview(file_tree_frame, show='tree')
 treeview.pack(fill='both', expand=True)
 
 
-def new_folder(parent_path, directory_entries,
-               parent_iid, f_image, d_image):
+def add_directory_to_treeview(parent_path, directory_entries,
+               parent_iid, file_image, directory_image):
     """Creates a graphical representation of the structure
     of subdirectories and files in the specified parent_path.
 
@@ -178,83 +181,37 @@ def new_folder(parent_path, directory_entries,
             #continue
         if os.path.isdir(item_path):
             # set subdirectory node
-            subdir_iid = treeview.insert(parent=parent_iid,
-                                         index='end',
-                                         text=name,
-                                         image=d_image)
+            subdir_iid = treeview.insert(parent=parent_iid, index='end', text=name, image=directory_image)
             try:
                 # pass the iid of the subdirectory as parent iid
                 # all files/folders found in this subdirectory
                 # will be attached to this subdirectory node
                 subdir_entries = os.listdir(item_path)
-                new_folder(parent_path=item_path,
-                           directory_entries=subdir_entries,
-                           parent_iid=subdir_iid,
-                           f_image=f_image,
-                           d_image=d_image)
+                add_directory_to_treeview(item_path, subdir_entries, subdir_iid, file_image, directory_image)
             except PermissionError:
                 pass
         else:
-            treeview.insert(parent=parent_iid,
-                            index='end',
-                            text=name,
-                            image=f_image)
-        print(item_path)
+            treeview.insert(parent=parent_iid, index='end', text=name, image=file_image)
+        
 
 
 # png 16x16 -> base64 strings for tkinter.PhotoImage
 file_img = """
-iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABGdB
-TUEAALGPC/xhBQAAAAlwSFlzAAAScwAAEnMBjCK5BwAAAalJREFU
-OE99kUtLAmEUhg38Af6a6he06SJIF8FFREVtqkVEkBB2IcJIRDAk
-80KrNq3CWihuuuh4GVIwM9BSa0bHUXGc8X7p1Bc6jtLLxzAwz3Pm
-nPMNcaWySCR6CYVoOgMvzWaz3W63Wq1GowFPsVg8PDIqkUjg019A
-gEOSJHAowEHAhDidzmAwGI3FEPZTXSDwafiJ3W5nWRbH8TSVGSAI
-aBDi8TiGYT6fz2QyCwU+Dc0ADanX67XfWK3W/4QOjYRqtWqxWIQC
-mhKh/NpAVyoVs/GcclwzabI7NF/odILocrnsPFwvGRcS6uUeob8T
-RDOxMGuYz2vkfsdtVxhIg1AqMqnTRUYrD+iU2Vy+R+jvBMpTN+aC
-Zi6umo2+RXouDmgkFJ4fyLNNNvUFdJFM0kfTuQOpfk9ZZLmuQBBE
-Z4Np/VrtapVSKwqf7wmlLLc/iR9vGAyGnrWCgC4ImmZpKqVbKeoV
-xK4sq5pI7kgjAfzCZBIK/PWX8jRxspRVjVPbY8FLLcdxfQKZ8vlx
-j9eLebxuzOPGMO/j/YdyJro1dWezPblc4defieF8A+ZBma193+p6
-AAAAAElFTkSuQmCC
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAASUExURQAAABwcHCoqKj8/Pzp/PAAAANrcZR8AAAAGdFJOU///////ALO/pL8AAAAJcEhZcwAADr8AAA6/ATgFUyQAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAApnYBAOgDAACmdgEA6AMAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAABsjsoPP+oYDgAAAEVJREFUKFN9jgkKACAIBMvj/19utaJNqInAGYRqXniGBuawrIM5x4WIqpwAAxTSOZhZCZqnbNi1ATiE/18JE/7pZgfCfQAADQOjIpnmOQAAAABJRU5ErkJggg==
 """
 dir_img = """
-iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAABGdB
-TUEAALGPC/xhBQAAAAlwSFlzAAAScgAAEnIBXmVb4wAAAihJREFU
-OE990vtv0kAcAPDh4wd/8w/yp5n4i4kkmizoBMKcRIfG7YepWSSZ
-MSTGSXQao8wtjIw5ZkJEJ4+O0CGvoWhSCmw0sFJaHoU+GEJbyDax
-EwMjQS+Xy30v97m7791JOF4Y+FMOBEJsj508PXD8lERyoj3Yp4ig
-XclNRSlyg0F0TFxLRbXFyAMqaarkQrXabmfO4eqdoBRWtgQnujGM
-+DRVbIYnTU3Wvrf7hcubGRToTOsFvK3V/JZyy6KeCXL7CZc3CEVj
-k7bTO85/A+FDgwr6rKNIQEtu6XnC0Ch/+j+wCSXXulke994vxh/X
-sNkGaaXTfXfYVLbEIwk2gbQBpstxz0QOmq6mdXxxmUr1A8Wg4i8o
-rLoWh2C3hvhxr5KcqhMLVMrRJ4eCX97irL/qFh6fdxkvQoAaj4yz
-iTv17KsyYu8D8t7hg+q7fXahjr50GaWQawT7OkbDN3/u6JIflQxb
-qXN8zzsQniv7tGGv9Czx/tz64gXIqcTCagoaqWxpcO/dKBzL4oTI
-uu+QBYaaBX2DeBgyDoJmKQzIMyEVE5Wz8HXMO7W29tnnD8TiiS5A
-HbIGPi1kJn3zZzdWLh2CoIKGZHRUlXJPzs29XVoy40SuC6p0lgyo
-+PS4e/aM8835GHALDWvY2LVybAxcVs881XtAUEyjC8SEGPx7bfu2
-4/mgzfwiEgSz4dcJixRxjq5YVtEM1r6oHiDGuP9RwHS1TOaP/tCj
-/d+VL1STn8NNZQAAAABJRU5ErkJggg==
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsAAAA7AAWrWiQkAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAv3YBAOgDAAC/dgEA6AMAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAADCrx1n7WSHCAAAAPNJREFUOE9jGAUMjFAaDM7MNP4Pov/+/cvw798/sJhlziUUNegALgnSbJx2BsiaBREAgzSGfd2qDL9+/QIbCMK+Dc9QDGSB0gz//wMt/zEJZD1UBAT6GZxKb0PZELCZQfo/siFwxslpBv/NQkMZGH7/Zji2Zg1UFAJ+A8X+/PkDxiA2CKC7hOH4FL3//x9U/T86SQfoGPxgcQEXOKxAgAlKQ0x+84aBjY0N4hVcGBhGMFeAANwAWKiDAozhyxfcGAhgakEAbgAo6kAAbMDXr7gxECAbgBIQW5tk/oMkQU4EGQjDID5IHIRB/PRZqPqGNGBgAAAHJ8Q7hrD1SAAAAABJRU5ErkJggg==
 """
 file_image = PhotoImage(data=file_img)
-dir_image = PhotoImage(data=dir_img)
+directory_image = PhotoImage(data=dir_img)
 
 # adds a parent item to the tree
 # and returns the item's iid value (generated automatically)
-parent_iid = treeview.insert(parent='',
-                             index='0',
-                             text='Documents',
-                             open=True,
-                             image=dir_image)
 
-start_path = os.path.expanduser(r"~\Documents")
+
+start_path = filedialog.askdirectory()
 start_dir_entries = os.listdir(start_path)
 
+parent_iid = treeview.insert(parent='', index='0', text=os.path.basename(start_path), open=True, image=directory_image)
 # inserting items to the treeview
-new_folder(parent_path=start_path,
-           directory_entries=start_dir_entries,
-           parent_iid=parent_iid,
-           f_image=file_image,
-           d_image=dir_image)
+add_directory_to_treeview(start_path, start_dir_entries, parent_iid, file_image, directory_image)

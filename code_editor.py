@@ -10,7 +10,7 @@ code_editor_and_horizontal_scrollbar_frame = Frame(code_editor_frame, bg="#3F3F3
 code_editor_and_horizontal_scrollbar_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
 # Text-Feld für den Code Editor erstellen (mitte)
-code_editor_widget = Text(code_editor_and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="white", bd=0, wrap="none")
+code_editor_widget = Text(code_editor_and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="white", bd=0, wrap="none", insertbackground="#FFFFFF", selectbackground="#6F6F6F", tabs="40")
 code_editor_widget.pack(fill=BOTH, expand=True, side=TOP, padx=5, pady=5)
 
 from utility import autoHiddenScrollbar
