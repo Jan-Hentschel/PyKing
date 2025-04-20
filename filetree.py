@@ -7,7 +7,7 @@ from tkinter import filedialog
 from tkinter import simpledialog
 from utility import toolbar_button
 import json
-
+from options_handler import get_variable, set_variable
 import gui
 from code_editor import load_into_editor, getStringFromEditor
 
@@ -21,7 +21,7 @@ def resource_path(relative_path):
 
     return os.path.join(base_path, relative_path)
 
-from options_handler import change_variable_to
+
 from terminal import show_current_directories
 
 test_file_path = resource_path("Files\\testfile.py")
@@ -57,14 +57,14 @@ def load_file():
     #ask to save before
     directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     load_file_directory(directory)
-    change_variable_to("current_file_directory", directory)
+    set_variable("current_file_directory", directory)
     show_current_directories()
 
 
 def save_file():
     directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     save_content_to_directory(directory)
-    change_variable_to("current_file_directory", directory)
+    set_variable("current_file_directory", directory)
     show_current_directories()
 
 
@@ -79,7 +79,7 @@ def load_grid_directory(directory):
         rows = dict["rows"]
         new_cells = dict["cells"]
         change_grid(columns, rows, new_cells)
-    change_variable_to("current_grid_directory", directory)
+    set_variable("current_grid_directory", directory)
     show_current_directories()
 
 def load_grid():
@@ -93,7 +93,7 @@ def save_grid():
     json_dict = json.dumps(get_grid_dict())
     with open(directory, "w", encoding="utf-8") as file:
         file.write(json_dict)
-    change_variable_to("current_grid_directory", directory)
+    set_variable("current_grid_directory", directory)
     show_current_directories()
 
     
@@ -101,7 +101,7 @@ def new_file():
     directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     with open(directory, "w", encoding="utf-8") as file:
         file.write("")    
-    change_variable_to("current_file_directory", directory)
+    set_variable("current_file_directory", directory)
     show_current_directories()
     
 
@@ -115,7 +115,7 @@ def create_grid(popup):
     json_dict = json.dumps(get_grid_dict())
     with open(directory, "w", encoding="utf-8") as file:
         file.write(json_dict)
-    change_variable_to("current_grid_directory", directory)
+    set_variable("current_grid_directory", directory)
     show_current_directories()
 
 
@@ -142,11 +142,12 @@ def new_grid():
     cancel_button = toolbar_button(popup, text="Cancel", command= lambda: popup.destroy())
     cancel_button.pack(side="right")
 
-start_path=""
+start_path=get_variable("current_filetree_directory")
 def open_directory():
     treeview.delete(*treeview.get_children())
     global start_path
-    start_path = filedialog.askdirectory()
+    start_path = filedialog.askdirectory(initialdir=resource_path("Files"), title="Open a Directory")
+    set_variable("current_filetree_directory", start_path)
     display_treeview()
 
 def display_treeview():
@@ -217,5 +218,6 @@ iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
 file_image = PhotoImage(data=file_img)
 directory_image = PhotoImage(data=dir_img)
 
+display_treeview()
 # adds a parent item to the tree
 # and returns the item's iid value (generated automatically)

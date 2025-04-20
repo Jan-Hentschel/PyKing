@@ -12,11 +12,11 @@ def get_variable(name):
         for line in file:
             if name in line:
                 split_line = line.split("=")
-                return split_line[1]
+                return split_line[1][1:-1]
         raise Exception(f"could not find {name} in options.txt")
         
     
-def change_variable_to(name, new_value):
+def set_variable(name, new_value):
     with open(directory, "r", encoding="utf-8") as file:
         old_file = file.readlines()
 
