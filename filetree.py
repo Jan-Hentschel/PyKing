@@ -5,7 +5,7 @@ import os
 import sys
 from tkinter import filedialog
 from tkinter import simpledialog
-
+from utility import toolbar_button
 import json
 
 import gui
@@ -119,7 +119,7 @@ def create_grid(popup):
     show_current_directories()
 
 
-from utility import toolbar_button
+
 def new_grid():
     from gui import root
     popup = Toplevel(root)
@@ -142,9 +142,21 @@ def new_grid():
     cancel_button = toolbar_button(popup, text="Cancel", command= lambda: popup.destroy())
     cancel_button.pack(side="right")
 
+start_path=""
+def open_directory():
+    treeview.delete(*treeview.get_children())
+    global start_path
+    start_path = filedialog.askdirectory()
+    display_treeview()
 
+def display_treeview():
+    start_dir_entries = os.listdir(start_path)
+    parent_iid = treeview.insert(parent='', index='0', text=os.path.basename(start_path), open=True, image=directory_image)
+    # inserting items to the treeview
+    add_directory_to_treeview(start_path, start_dir_entries, parent_iid, file_image, directory_image)
 
-
+open_directory_button = toolbar_button(file_tree_frame, text="Open Directory", command=open_directory)
+open_directory_button.pack()
 
 #https://stackoverflow.com/questions/68078498/recursively-arrange-all-folders-and-files-in-a-hierarchical-treeview-in-tkinter
 
@@ -207,11 +219,3 @@ directory_image = PhotoImage(data=dir_img)
 
 # adds a parent item to the tree
 # and returns the item's iid value (generated automatically)
-
-
-start_path = filedialog.askdirectory()
-start_dir_entries = os.listdir(start_path)
-
-parent_iid = treeview.insert(parent='', index='0', text=os.path.basename(start_path), open=True, image=directory_image)
-# inserting items to the treeview
-add_directory_to_treeview(start_path, start_dir_entries, parent_iid, file_image, directory_image)

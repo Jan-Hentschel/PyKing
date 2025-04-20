@@ -1,7 +1,8 @@
 import tkinter as tk
 from tkinter import *
 from gui import horizontally_paned_window
-
+from idlelib.percolator import Percolator
+from idlelib.colorizer import ColorDelegator
 
 code_editor_frame = Frame(horizontally_paned_window, bg="#3F3F3F", bd=0,)
 code_editor_frame.pack(fill=BOTH, expand=True)
