@@ -19,13 +19,16 @@ toolbar_frame = Frame(root, height=68, bg="#333333", pady=5)
 from utility import toolbar_button
 
 
-from filetree import save_file, load_file, load_grid, save_grid, new_file, new_grid
+from filetree import save_file_as, save_file, load_file, load_grid, save_grid, new_file, new_grid
 
 new_file_button = toolbar_button(toolbar_frame, text ="New File", command = new_file)
 new_file_button.pack(side="left")
 
-save_button = toolbar_button(toolbar_frame, text ="Save File", command = save_file)
-save_button.pack(side="left")
+save_file_as_button = toolbar_button(toolbar_frame, text ="Save File As", command = save_file_as)
+save_file_as_button.pack(side="left")
+
+save_file_button = toolbar_button(toolbar_frame, text ="Save File", command = save_file)
+save_file_button.pack(side="left")
 
 load_button = toolbar_button(toolbar_frame, text ="Load File", command = load_file)
 load_button.pack(side="left")

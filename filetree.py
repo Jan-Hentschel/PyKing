@@ -44,6 +44,8 @@ def get_content_from_directory(directory):
 
 def load_file_directory(directory):
     load_into_editor(get_content_from_directory(directory))
+    set_variable("current_file_directory", directory)
+    show_current_directories()
 
 from virtual_environment import throw_error_to_terminal
 def load_test_file():
@@ -64,17 +66,17 @@ def load_file():
     #ask to save before
     directory = filedialog.askopenfilename(initialdir=file_path_function("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     load_file_directory(directory)
-    set_variable("current_file_directory", directory)
-    show_current_directories()
 
 
-def save_file():
+
+def save_file_as():
     directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     save_content_to_directory(directory)
     set_variable("current_file_directory", directory)
     show_current_directories()
 
-
+def save_file(event = ""):
+    save_content_to_directory(get_variable("current_file_directory"))
 
 from virtual_environment import change_grid, get_grid_dict, change_grid_man
 
@@ -149,6 +151,38 @@ def new_grid():
     cancel_button = toolbar_button(popup, text="Cancel", command= lambda: popup.destroy())
     cancel_button.pack(side="right")
 
+
+
+def open_file_from_tree(iid):
+    name = treeview.item(iid)["text"]
+
+    added_path = f"/{name}"
+    base_path = start_path
+
+    cur_iid = iid
+    parent_names= []
+
+    while treeview.parent(cur_iid):
+
+        parent_iid=treeview.parent(cur_iid)
+        parent_name = treeview.item(parent_iid)["text"]
+
+        if parent_name not in base_path:
+            parent_names.append(parent_name)
+
+        cur_iid = parent_iid
+    for parent_name in reversed(parent_names):
+        base_path += f"/{parent_name}"
+
+    directory = base_path + added_path
+    if directory[-3:] == ".py":
+        load_file_directory(directory)
+    elif directory[-5:]==".json":
+        load_grid_directory(directory)
+    else:
+        print("cant open im sowy")
+
+
 start_path=get_variable("current_filetree_directory")
 def open_directory():
     treeview.delete(*treeview.get_children())
@@ -162,6 +196,7 @@ def display_treeview():
     parent_iid = treeview.insert(parent='', index='0', text=os.path.basename(start_path), open=True, image=folder_icon)
     # inserting items to the treeview
     add_directory_to_treeview(start_path, start_dir_entries, parent_iid)
+    
 
 open_directory_button = toolbar_button(file_tree_frame, text="Open Directory", command=open_directory)
 open_directory_button.pack()
@@ -209,7 +244,8 @@ def add_directory_to_treeview(parent_path, directory_entries,
     :param d_image: directory icon, tkinter.PhotoImage
     :return: None
     """
-    for name in directory_entries:
+    for index, name in enumerate(directory_entries):
+        tag = f"file_{index}"
         item_path = parent_path+os.sep+name
         # optional: file does not exist or broken symbolic link
         #if not os.path.exists(item_path):
@@ -217,7 +253,7 @@ def add_directory_to_treeview(parent_path, directory_entries,
             #continue
         if os.path.isdir(item_path):
             # set subdirectory node
-            subdir_iid = treeview.insert(parent=parent_iid, index='end', text=name, image=folder_icon)
+            subdir_iid = treeview.insert(parent=parent_iid, index='end', text=name, image=folder_icon, tags=tag)
             try:
                 # pass the iid of the subdirectory as parent iid
                 # all files/folders found in this subdirectory
@@ -227,13 +263,17 @@ def add_directory_to_treeview(parent_path, directory_entries,
             except PermissionError:
                 pass
         else:
-            if name[-3:]==".py":
-                treeview.insert(parent=parent_iid, index='end', text=name, image=python_file_icon)
+            if name[-3:] == ".py":
+                iid=treeview.insert(parent=parent_iid, index='end', text=name, image=python_file_icon, tags=tag)
+                treeview.tag_bind(tag, "<Double-Button-1>", lambda event, item_iid=iid: open_file_from_tree(item_iid))
+                
             elif name[-5:]==".json":
-                treeview.insert(parent=parent_iid, index='end', text=name, image=json_file_icon)
+                iid=treeview.insert(parent=parent_iid, index='end', text=name, image=json_file_icon, tags=tag)
+                treeview.tag_bind(tag, "<Double-Button-1>", lambda event, item_iid=iid: open_file_from_tree(item_iid))
             else:
-                treeview.insert(parent=parent_iid, index='end', text=name, image=file_icon)
-
+                iid=treeview.insert(parent=parent_iid, index='end', text=name, image=file_icon, tags=tag)
+        
+                
 
 
 
