@@ -15,12 +15,12 @@ grid_frame.pack(anchor=NE)
 def throw_error_to_terminal(string):
     terminal_widget.insert(tk.END, string + "\n")
 
-logo = tk.PhotoImage(file=resource_path('Assets\\LogoV1.3.png'))
-up_image = tk.PhotoImage(file=resource_path('Assets\\Up.png'))
-down_image = tk.PhotoImage(file=resource_path('Assets\\Down.png'))
-left_image= tk.PhotoImage(file=resource_path('Assets\\Left.png'))
-right_image = tk.PhotoImage(file=resource_path('Assets\\Right.png'))
-hamster_image = tk.PhotoImage(file=resource_path('Assets\\Hamster.png'))
+logo = PhotoImage(file=resource_path('Assets\\LogoV1.3.png'))
+up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
+down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
+left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
+right_image = PhotoImage(file=resource_path('Assets\\Right.png'))
+hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
 
 
 def wait_time():

@@ -14,8 +14,15 @@ from code_editor import load_into_editor, getStringFromEditor
 # Frame für den Filetree erstellen (links)
 file_tree_frame = Frame(gui.horizontally_paned_window, bg="#333333")
 
-
 def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+def file_path_function(relative_path):
 
     base_path = os.path.abspath(".")
 
@@ -24,7 +31,7 @@ def resource_path(relative_path):
 
 from terminal import show_current_directories
 
-test_file_path = resource_path("Files\\testfile.py")
+test_file_path = file_path_function("Files\\testfile.py")
 
 def save_content_to_directory(directory):
     with open(directory, "w", encoding="utf-8") as file:
@@ -55,14 +62,14 @@ def save_test_file():
 
 def load_file():
     #ask to save before
-    directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
+    directory = filedialog.askopenfilename(initialdir=file_path_function("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     load_file_directory(directory)
     set_variable("current_file_directory", directory)
     show_current_directories()
 
 
 def save_file():
-    directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
+    directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     save_content_to_directory(directory)
     set_variable("current_file_directory", directory)
     show_current_directories()
@@ -84,12 +91,12 @@ def load_grid_directory(directory):
 
 def load_grid():
     #ask to save before
-    directory = filedialog.askopenfilename(initialdir=resource_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
+    directory = filedialog.askopenfilename(initialdir=file_path_function("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     load_grid_directory(directory)
   
 
 def save_grid():
-    directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
+    directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     json_dict = json.dumps(get_grid_dict())
     with open(directory, "w", encoding="utf-8") as file:
         file.write(json_dict)
@@ -98,7 +105,7 @@ def save_grid():
 
     
 def new_file():
-    directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
+    directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     with open(directory, "w", encoding="utf-8") as file:
         file.write("")    
     set_variable("current_file_directory", directory)
@@ -111,7 +118,7 @@ def create_grid(popup):
     rows = popup.row_entry.get()
     change_grid_man(int(columns), int(rows))
     popup.destroy()
-    directory = filedialog.asksaveasfilename(initialdir=resource_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
+    directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     json_dict = json.dumps(get_grid_dict())
     with open(directory, "w", encoding="utf-8") as file:
         file.write(json_dict)
@@ -146,15 +153,15 @@ start_path=get_variable("current_filetree_directory")
 def open_directory():
     treeview.delete(*treeview.get_children())
     global start_path
-    start_path = filedialog.askdirectory(initialdir=resource_path("Files"), title="Open a Directory")
+    start_path = filedialog.askdirectory(initialdir=file_path_function("Files"), title="Open a Directory")
     set_variable("current_filetree_directory", start_path)
     display_treeview()
 
 def display_treeview():
     start_dir_entries = os.listdir(start_path)
-    parent_iid = treeview.insert(parent='', index='0', text=os.path.basename(start_path), open=True, image=directory_image)
+    parent_iid = treeview.insert(parent='', index='0', text=os.path.basename(start_path), open=True, image=folder_icon)
     # inserting items to the treeview
-    add_directory_to_treeview(start_path, start_dir_entries, parent_iid, file_image, directory_image)
+    add_directory_to_treeview(start_path, start_dir_entries, parent_iid)
 
 open_directory_button = toolbar_button(file_tree_frame, text="Open Directory", command=open_directory)
 open_directory_button.pack()
@@ -169,9 +176,25 @@ style.map("Treeview", background=[("selected", "#3F3F3F")])
 treeview = ttk.Treeview(file_tree_frame, show='tree')
 treeview.pack(fill='both', expand=True)
 
+# png 16x16 -> base64 strings for tkinter.PhotoImage
+file_img = """
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAASUExURQAAABwcHCoqKj8/Pzp/PAAAANrcZR8AAAAGdFJOU///////ALO/pL8AAAAJcEhZcwAADr8AAA6/ATgFUyQAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAApnYBAOgDAACmdgEA6AMAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAABsjsoPP+oYDgAAAEVJREFUKFN9jgkKACAIBMvj/19utaJNqInAGYRqXniGBuawrIM5x4WIqpwAAxTSOZhZCZqnbNi1ATiE/18JE/7pZgfCfQAADQOjIpnmOQAAAABJRU5ErkJggg==
+"""
+dir_img = """
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsAAAA7AAWrWiQkAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAv3YBAOgDAAC/dgEA6AMAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAADCrx1n7WSHCAAAAPNJREFUOE9jGAUMjFAaDM7MNP4Pov/+/cvw798/sJhlziUUNegALgnSbJx2BsiaBREAgzSGfd2qDL9+/QIbCMK+Dc9QDGSB0gz//wMt/zEJZD1UBAT6GZxKb0PZELCZQfo/siFwxslpBv/NQkMZGH7/Zji2Zg1UFAJ+A8X+/PkDxiA2CKC7hOH4FL3//x9U/T86SQfoGPxgcQEXOKxAgAlKQ0x+84aBjY0N4hVcGBhGMFeAANwAWKiDAozhyxfcGAhgakEAbgAo6kAAbMDXr7gxECAbgBIQW5tk/oMkQU4EGQjDID5IHIRB/PRZqPqGNGBgAAAHJ8Q7hrD1SAAAAABJRU5ErkJggg==
+"""
+
+
+file_icon = PhotoImage(file=resource_path('Assets\\file_icon.png'))
+
+python_file_icon = PhotoImage(file=resource_path('Assets\\python_file_icon.png'))
+json_file_icon = PhotoImage(file=resource_path('Assets\\json_file_icon.png'))
+
+folder_icon = PhotoImage(file=resource_path('Assets\\folder_icon.png'))
+
 
 def add_directory_to_treeview(parent_path, directory_entries,
-               parent_iid, file_image, directory_image):
+               parent_iid):
     """Creates a graphical representation of the structure
     of subdirectories and files in the specified parent_path.
 
@@ -194,29 +217,26 @@ def add_directory_to_treeview(parent_path, directory_entries,
             #continue
         if os.path.isdir(item_path):
             # set subdirectory node
-            subdir_iid = treeview.insert(parent=parent_iid, index='end', text=name, image=directory_image)
+            subdir_iid = treeview.insert(parent=parent_iid, index='end', text=name, image=folder_icon)
             try:
                 # pass the iid of the subdirectory as parent iid
                 # all files/folders found in this subdirectory
                 # will be attached to this subdirectory node
                 subdir_entries = os.listdir(item_path)
-                add_directory_to_treeview(item_path, subdir_entries, subdir_iid, file_image, directory_image)
+                add_directory_to_treeview(item_path, subdir_entries, subdir_iid)
             except PermissionError:
                 pass
         else:
-            treeview.insert(parent=parent_iid, index='end', text=name, image=file_image)
-        
+            if name[-3:]==".py":
+                treeview.insert(parent=parent_iid, index='end', text=name, image=python_file_icon)
+            elif name[-5:]==".json":
+                treeview.insert(parent=parent_iid, index='end', text=name, image=json_file_icon)
+            else:
+                treeview.insert(parent=parent_iid, index='end', text=name, image=file_icon)
 
 
-# png 16x16 -> base64 strings for tkinter.PhotoImage
-file_img = """
-iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAASUExURQAAABwcHCoqKj8/Pzp/PAAAANrcZR8AAAAGdFJOU///////ALO/pL8AAAAJcEhZcwAADr8AAA6/ATgFUyQAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAApnYBAOgDAACmdgEA6AMAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAABsjsoPP+oYDgAAAEVJREFUKFN9jgkKACAIBMvj/19utaJNqInAGYRqXniGBuawrIM5x4WIqpwAAxTSOZhZCZqnbNi1ATiE/18JE/7pZgfCfQAADQOjIpnmOQAAAABJRU5ErkJggg==
-"""
-dir_img = """
-iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsAAAA7AAWrWiQkAAAAYdEVYdFNvZnR3YXJlAFBhaW50Lk5FVCA1LjEuN4vW9zkAAAC2ZVhJZklJKgAIAAAABQAaAQUAAQAAAEoAAAAbAQUAAQAAAFIAAAAoAQMAAQAAAAIAAAAxAQIAEAAAAFoAAABphwQAAQAAAGoAAAAAAAAAv3YBAOgDAAC/dgEA6AMAAFBhaW50Lk5FVCA1LjEuNwADAACQBwAEAAAAMDIzMAGgAwABAAAAAQAAAAWgBAABAAAAlAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAADCrx1n7WSHCAAAAPNJREFUOE9jGAUMjFAaDM7MNP4Pov/+/cvw798/sJhlziUUNegALgnSbJx2BsiaBREAgzSGfd2qDL9+/QIbCMK+Dc9QDGSB0gz//wMt/zEJZD1UBAT6GZxKb0PZELCZQfo/siFwxslpBv/NQkMZGH7/Zji2Zg1UFAJ+A8X+/PkDxiA2CKC7hOH4FL3//x9U/T86SQfoGPxgcQEXOKxAgAlKQ0x+84aBjY0N4hVcGBhGMFeAANwAWKiDAozhyxfcGAhgakEAbgAo6kAAbMDXr7gxECAbgBIQW5tk/oMkQU4EGQjDID5IHIRB/PRZqPqGNGBgAAAHJ8Q7hrD1SAAAAABJRU5ErkJggg==
-"""
-file_image = PhotoImage(data=file_img)
-directory_image = PhotoImage(data=dir_img)
+
+
 
 display_treeview()
 # adds a parent item to the tree
