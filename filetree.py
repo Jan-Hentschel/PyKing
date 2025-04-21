@@ -47,20 +47,20 @@ def load_file_directory(directory):
     set_variable("current_file_directory", directory)
     show_current_directories()
 
-from virtual_environment import throw_error_to_terminal
-def load_test_file():
-    throw_error_to_terminal(test_file_path)
-    try:
-        load_file_directory(test_file_path)
-    except:
-        throw_error_to_terminal(Exception)
+# from virtual_environment import throw_error_to_terminal
+# def load_test_file():
+#     throw_error_to_terminal(test_file_path)
+#     try:
+#         load_file_directory(test_file_path)
+#     except:
+#         throw_error_to_terminal(Exception)
 
-def save_test_file():
-    throw_error_to_terminal(test_file_path)
-    try:
-        save_content_to_directory(test_file_path)
-    except:
-        throw_error_to_terminal(Exception)
+# def save_test_file():
+#     throw_error_to_terminal(test_file_path)
+#     try:
+#         save_content_to_directory(test_file_path)
+#     except:
+#         throw_error_to_terminal(Exception)
 
 def load_file():
     #ask to save before
@@ -78,9 +78,10 @@ def save_file_as():
 def save_file(event = ""):
     save_content_to_directory(get_variable("current_file_directory"))
 
-from virtual_environment import change_grid, get_grid_dict, change_grid_man
+
 
 def load_grid_directory(directory):
+    from virtual_environment import change_grid
     with open(directory, "r", encoding="utf-8") as file:
         content = file.read()
         dict = json.loads(content)
@@ -98,6 +99,7 @@ def load_grid():
   
 
 def save_grid():
+    from virtual_environment import get_grid_dict
     directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     json_dict = json.dumps(get_grid_dict())
     with open(directory, "w", encoding="utf-8") as file:
@@ -116,6 +118,7 @@ def new_file():
 
     
 def create_grid(popup):
+    from virtual_environment import change_grid_man, get_grid_dict
     columns = popup.column_entry.get()
     rows = popup.row_entry.get()
     change_grid_man(int(columns), int(rows))
