@@ -4,6 +4,7 @@ from tkinter import *
 from code_editor import code_editor_widget
 from terminal import terminal_widget
 from virtual_environment import Snake, grid_man
+import threading
 
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
@@ -18,7 +19,7 @@ PyKing_functions = {
 
 from filetree import load_grid_directory
 from options_handler import get_variable
-def executeCode():
+def execute_code():
     try:
         load_grid_directory(get_variable("current_grid_directory")) #ask to save before
         root.update_idletasks()
@@ -27,3 +28,6 @@ def executeCode():
         #runMovie()
     except Exception as error:
         print_to_terminal_widget(error)
+
+def start_execute_code_thread():
+    threading.Thread(target=execute_code).start()

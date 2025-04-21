@@ -44,9 +44,9 @@ load_grid_button.pack(side="left")
 
 
 
-from code_execution import executeCode
+from code_execution import start_execute_code_thread
 excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
-excecute_code_button = Button(toolbar_frame, image=excecute_code_icon, command = executeCode, bg="#333333", activebackground="#3F3F3F")
+excecute_code_button = Button(toolbar_frame, image=excecute_code_icon, command = start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")
 excecute_code_button.pack(side="left")
 
 
