@@ -42,7 +42,10 @@ class Root(tk.Tk):
         from file_management import FileManager # NEEDS GRID-MANAGER, code_editor, terminal
         self.file_manager = FileManager(self)
 
-        from toolbar import Toolbar # NEEDS GRID-MAN AND FILE-MANAGER
+        from code_execution import CodeExecution 
+        self.code_executor = CodeExecution(self)
+
+        from toolbar import Toolbar # NEEDS GRID-MAN AND FILE-MANAGER AND CODE-EXECUTION
         self.toolbar = Toolbar(self) 
 
         from filetree import Filetree # NEEDS FILE-MANAGER
@@ -65,7 +68,8 @@ class Root(tk.Tk):
         self.horizontally_paned_window.sash_place(1, int(self.screen_width*0.5625), 0)
         self.vertically_pained_window.sash_place(0, 0, int((self.vertically_pained_window.winfo_height())/2)-1)
 
-
+        self.file_manager.open_python_file_and_grid_from_options()        
+        self.bind("<Control-s>", lambda event: self.file_manager.save_python_file_and_grid())
         
 
 

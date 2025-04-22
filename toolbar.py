@@ -4,8 +4,6 @@ from tkinter import *
 from utility import ToolbarButton, resource_path
 from options_handler import options_handler
 
-from code_execution import start_execute_code_thread, stop_execute_code_thread
-
 class Toolbar:
     def __init__(self, root):
         
@@ -21,8 +19,8 @@ class Toolbar:
         self.new_grid_button = ToolbarButton(self.frame, text ="New Grid", command = root.file_manager.new_grid)
         self.save_grid_button = ToolbarButton(self.frame, text ="Save Grid", command = root.file_manager.save_grid_as)
         self.load_grid_button = ToolbarButton(self.frame, text ="Load Grid", command = root.file_manager.open_grid_dialog)
-        self.excecute_code_button = Button(self.frame, image=self.excecute_code_icon, command = start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")
-        self.stop_code_execution_button = ToolbarButton(self.frame, text ="Stop Execution", command = stop_execute_code_thread)
+        self.excecute_code_button = Button(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")
+        self.stop_code_execution_button = ToolbarButton(self.frame, text ="Stop Execution", command = root.code_executor.stop_execute_code_thread)
         self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", highlightbackground="#333333",fg="#FFFFFF", troughcolor="#3F3F3F")
         self.tick_rate_slider.set(options_handler.get_variable("default_tick_rate"))
         self.pick_add_hamster_button = ToolbarButton(self.frame, text ="Add Hamster", command = root.grid_manager.pick_add_hamster)

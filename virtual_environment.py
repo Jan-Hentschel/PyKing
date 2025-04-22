@@ -180,7 +180,7 @@ class GridCell:
             id = self.canvas.create_rectangle((0, 0, 101, 101), fill="#333333", outline="")
         else:
             id = self.canvas_image
-        self.canvas.tag_bind(id, "<Button-1>", lambda _: self.edit())
+        self.canvas.tag_bind(id, "<Button-1>", lambda _: self.root.grid_man.edit())
 
     def display_image(self, image):
         self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)
@@ -223,13 +223,13 @@ class Snake:
 
         match self.direction:
             case "N":
-                self.image = self.root.grid_manager.up_image                
+                self.image = root.grid_manager.up_image                
             case "E":
-                self.image = self.root.grid_manager.right_image                
+                self.image = root.grid_manager.right_image                
             case "S":
-                self.image = self.root.grid_manager.down_image
+                self.image = root.grid_manager.down_image
             case "W":
-                self.image = self.root.grid_manager.left_image
+                self.image = root.grid_manager.left_image
 
         self.cell.display_image(self.image)
         self.root.update_idletasks()
@@ -239,34 +239,37 @@ class Snake:
         return 1/self.root.toolbar.tick_rate_slider.get()
 
     def is_outside_grid(self, x, y):
-        if y < self.root.grid_manager.grid_height and x < self.root.grid_manager.grid_width and y >= 0 and x >= 0:
+        from gui import root
+        if y < root.grid_manager.grid_height and x < root.grid_manager.grid_width and y >= 0 and x >= 0:
             return False
         else:
             return True
         
     def update_cell(self):
-        for cell in self.root.grid_manager.cells:
+        from gui import root
+        for cell in root.grid_manager.cells:
             if cell.x == self.x and cell.y == self.y:
                 self.cell = cell
 
     def turn_right(self):
+        from gui import root
         self.delete_snake_image()
 
         match self.direction:
             case "N":
                 self.direction="E"
-                self.image = self.root.grid_manager.right_image
+                self.image = root.grid_manager.right_image
             case "E":
                 self.direction="S"
-                self.image = self.root.grid_manager.down_image
+                self.image = root.grid_manager.down_image
 
             case "S":
                 self.direction="W"
-                self.image = self.root.grid_manager.left_image
+                self.image = root.grid_manager.left_image
 
             case "W":
                 self.direction="N"
-                self.image = self.root.grid_manager.up_image
+                self.image = root.grid_manager.up_image
 
         #self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image) <-- useless and breaks code (whyy?? just why)
         self.show_snake()
@@ -274,6 +277,7 @@ class Snake:
         time.sleep(self.wait_time())
 
     def move(self):
+        from gui import root
         self.delete_snake_image()
 
         if not(self.can_move()):
@@ -284,12 +288,12 @@ class Snake:
         
         match self.direction:
             case "N":
-                if self.y+1 < self.root.grid_manager.grid_height:
+                if self.y+1 < root.grid_manager.grid_height:
                     self.y +=1
                 else:
                     self.root.terminal.print("you ran into a wall... fucking idiot")
             case "E":
-                if self.x+1 < self.root.grid_manager.grid_width:
+                if self.x+1 < root.grid_manager.grid_width:
                     self.x +=1
                 else:
                     self.root.terminal.print("you ran into a wall... fucking idiot")
@@ -332,6 +336,7 @@ class Snake:
             self.root.update_idletasks()
 
     def can_move(self):
+        from gui import root
         new_x = self.x
         new_y = self.y
 
@@ -345,7 +350,7 @@ class Snake:
             case "W":
                 new_x-=1 
         
-        for cell in self.root.grid_manager.cells:
+        for cell in root.grid_manager.cells:
             if cell.x == new_x and cell.y == new_y:
                 if cell.type == "wall":
                     return False
@@ -373,10 +378,11 @@ class Snake:
         self.cell.display_image(self.image)
     
     def delete_snake_image(self):
+        from gui import root
         if self.cell.type == "hamster":
             self.cell.clear()
             self.cell.type = "hamster"
-            self.cell.display_image(self.root.grid_manager.hamster_image)
+            self.cell.display_image(root.grid_manager.hamster_image)
         else:
             self.cell.clear()
 

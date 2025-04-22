@@ -35,42 +35,57 @@ class StoppableThread(threading.Thread):
     def stop_if_stopped(self):
         if self.stopped():
             self.join()
-        from gui import root
-        root.terminal.show_current_directories()
 
 
 
+class CodeExecution:
+    def __init__(self, root):
+        self.root = root
+        self.execute_code_thread = None
 
-def execute_code():
+
     
-    PyKing_functions = {
-    "print": print_to_terminal_widget,
-    "Snake": Snake
-    }
-
-    # Create an interpreter with your custom context
-    interpreter = code.InteractiveInterpreter(locals=PyKing_functions)
-
-    try:
-        from gui import root
-        root.file_manager.open_grid(options_handler.get_variable("current_grid_directory")) #ask to save before
-        root.update_idletasks()
-        code_string = root.code_editor.text_widget.get("1.0", END)
-        exec(code_string, PyKing_functions)
-
-        # buffer = ""
-        # for line in code_string.splitlines():
-        #     buffer += line + "\n"
-        #     if interpreter.runsource(buffer, symbol="exec"):
-        #         continue
-        #     else:
-        #         buffer = ""
+    def execute_code(self):
         
-    except Exception as error:
-        print_to_terminal_widget(error)
+        PyKing_functions = {
+        "print": print_to_terminal_widget,
+        "Snake": Snake
+        }
 
-    
-execute_code_thread = None
+        # Create an interpreter with your custom context
+        interpreter = code.InteractiveInterpreter(locals=PyKing_functions)
+
+        try:
+            self.root.file_manager.open_grid(options_handler.get_variable("current_grid_directory")) #ask to save before
+            self.root.update_idletasks()
+            code_string = self.root.code_editor.text_widget.get("1.0", END)
+            exec(code_string, PyKing_functions)
+
+            # buffer = ""
+            # for line in code_string.splitlines():
+            #     buffer += line + "\n"
+            #     if interpreter.runsource(buffer, symbol="exec"):
+            #         continue
+            #     else:
+            #         buffer = ""
+            
+        except Exception as error:
+            print_to_terminal_widget(error)
+
+    def start_execute_code_thread(self):
+        self.execute_code_thread = StoppableThread(target=self.execute_code)
+        self.execute_code_thread.start()
+        # idk = threading.Thread(target=wait_for)
+        # idk.start()
+        
+
+
+
+
+    def stop_execute_code_thread(self):
+        if self.execute_code_thread and self.execute_code_thread.is_alive():
+            self.execute_code_thread.stop()  
+
 
 
 # def wait_for():
@@ -81,19 +96,5 @@ execute_code_thread = None
 #     print(grid_man.cells[0].type)
 
 
-def start_execute_code_thread():
-    global execute_code_thread 
-    execute_code_thread = StoppableThread(target=execute_code)
-    execute_code_thread.start()
-    # idk = threading.Thread(target=wait_for)
-    # idk.start()
-    
 
-
-
-
-def stop_execute_code_thread():
-    global execute_code_thread
-    if execute_code_thread and execute_code_thread.is_alive():
-        execute_code_thread.stop()
 
