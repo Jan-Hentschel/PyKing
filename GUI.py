@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from ctypes import windll
+
 from utility import resource_path
 #damit text nicht blurry ist
 windll.shcore.SetProcessDpiAwareness(2)

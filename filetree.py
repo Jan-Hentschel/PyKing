@@ -4,17 +4,21 @@ import os
 from tkinter import filedialog
 from utility import toolbar_button
 import json
+
 from utility import resource_path, path_from_relative_path
+
 from options_handler import get_variable, set_variable
 import gui
 from code_editor import load_into_editor, getStringFromEditor
-
+from terminal import show_current_directories
+from virtual_environment import change_grid, get_grid_dict, change_grid_man 
+from gui import root
 
 # Frame für den Filetree erstellen (links)
 file_tree_frame = Frame(gui.horizontally_paned_window, bg="#333333")
 
 
-from terminal import show_current_directories
+
 
 test_file_path = path_from_relative_path("Files\\testfile.py")
 
@@ -66,7 +70,7 @@ def save_file(event = ""):
 
 
 def load_grid_directory(directory):
-    from virtual_environment import change_grid
+    
     with open(directory, "r", encoding="utf-8") as file:
         content = file.read()
         dict = json.loads(content)
@@ -84,7 +88,7 @@ def load_grid():
   
 
 def save_grid():
-    from virtual_environment import get_grid_dict
+    
     directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     json_dict = json.dumps(get_grid_dict())
     with open(directory, "w", encoding="utf-8") as file:
@@ -103,7 +107,7 @@ def new_file():
 
     
 def create_grid(popup):
-    from virtual_environment import change_grid_man, get_grid_dict
+    
     columns = popup.column_entry.get()
     rows = popup.row_entry.get()
     change_grid_man(int(columns), int(rows))
@@ -118,7 +122,7 @@ def create_grid(popup):
 
 
 def new_grid():
-    from gui import root
+
     popup = Toplevel(root)
     popup.geometry("400x200")
     popup.title("Input Grid Height and Width")

@@ -1,12 +1,14 @@
 import tkinter as tk
-from gui import root
 from tkinter import *
 import threading
+import code
+
+from gui import root
 from code_editor import code_editor_widget
 from terminal import terminal_widget
 from filetree import load_grid_directory
 from options_handler import get_variable
-
+from virtual_environment import Snake
 
 
 #help from chatgpt to get everything working
@@ -41,12 +43,12 @@ class StoppableThread(threading.Thread):
 
 
 def execute_code():
-    from virtual_environment import Snake
+    
     PyKing_functions = {
     "print": print_to_terminal_widget,
     "Snake": Snake
     }
-    import code
+    
 
 
 

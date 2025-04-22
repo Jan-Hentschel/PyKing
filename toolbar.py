@@ -1,18 +1,19 @@
 import tkinter as tk
 from tkinter import *
-from utility import resource_path
+
+from utility import toolbar_button, resource_path
+from options_handler import get_variable
 
 from gui import root
-
+from filetree import save_file_as, save_file, load_file, load_grid, save_grid, new_file, new_grid
+from code_execution import start_execute_code_thread, stop_execute_code_thread
 
 
 #toolbar als frame erstellen
 toolbar_frame = Frame(root, height=68, bg="#333333", pady=5)
 
-from utility import toolbar_button
 
 
-from filetree import save_file_as, save_file, load_file, load_grid, save_grid, new_file, new_grid
 
 new_file_button = toolbar_button(toolbar_frame, text ="New File", command = new_file)
 new_file_button.pack(side="left")
@@ -37,7 +38,7 @@ load_grid_button.pack(side="left")
 
 
 
-from code_execution import start_execute_code_thread, stop_execute_code_thread
+
 excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
 excecute_code_button = Button(toolbar_frame, image=excecute_code_icon, command = start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")
 excecute_code_button.pack(side="left")
@@ -45,7 +46,7 @@ excecute_code_button.pack(side="left")
 stop_code_execution_button = toolbar_button(toolbar_frame, text ="Stop Execution", command = stop_execute_code_thread)
 stop_code_execution_button.pack(side="left")
 
-from options_handler import get_variable
+
 tick_rate_slider = Scale(toolbar_frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", highlightbackground="#333333",fg="#FFFFFF", troughcolor="#3F3F3F")
 tick_rate_slider.set(get_variable("default_tick_rate"))
 tick_rate_slider.pack(side="left")

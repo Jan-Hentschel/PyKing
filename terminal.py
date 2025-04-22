@@ -3,8 +3,8 @@ from tkinter import *
 from utility import autoHiddenScrollbar
 
 from gui import vertically_pained_window
-
 from options_handler import get_variable
+
 def show_current_directories():
     terminal_widget.delete('1.0', END)
     terminal_widget.insert(tk.END, f"Excecuting\nFile: {get_variable("current_file_directory")}\nGrid: {get_variable("current_grid_directory")}\n")
