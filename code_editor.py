@@ -5,10 +5,10 @@ from idlelib.colorizer import ColorDelegator
 
 from utility import AutoHiddenScrollbar
 
-from gui import root
+
 
 class CodeEditor:
-    def __init__(self):
+    def __init__(self, root):
         self.frame = Frame(root.horizontally_paned_window, bg="#3F3F3F", bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
@@ -40,4 +40,3 @@ class CodeEditor:
     def get_text_widget_content(self):
         return self.text_widget.get("1.0",END)
     
-code_editor = CodeEditor()

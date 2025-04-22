@@ -5,12 +5,12 @@ import time
 
 from utility import resource_path
 
-from gui import root
-
 
 
 class GridManager:
-    def __init__(self, grid_width, grid_height):
+    def __init__(self, root, grid_width, grid_height):
+        self.root = root
+
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.cells = []
@@ -29,7 +29,7 @@ class GridManager:
     def create_cells(self):
         for y in range(self.grid_height):
             for x in range(self.grid_width):
-                self.cells.append(GridCell(x, y, "empty"))
+                self.cells.append(GridCell(self.root, x, y, "empty"))
                 
     def add_all_clickables(self):
         for cell in self.cells:
@@ -71,7 +71,7 @@ class GridManager:
         self.grid_height=rows
         self.create_cells()
         self.add_cells_to_grid()
-        root.update_idletasks()
+        self.root.update_idletasks()
 
     def change_grid(self, columns, rows, new_cells):
         self.change_grid_man(columns, rows)
@@ -112,40 +112,40 @@ class GridManager:
     def pick_add_hamster(self):
         self.editing = "add_hamster"
         self.add_all_clickables()
-        root.terminal.show_current_directories(f"adding hamsters...")
+        self.root.terminal.show_current_directories(f"adding hamsters...")
         
 
     def pick_subtract_hamster(self):
         self.editing = "subtract_hamster"
         self.add_all_clickables()
-        root.terminal.show_current_directories(f"subtracting hamsters...")
+        self.root.terminal.show_current_directories(f"subtracting hamsters...")
 
     def pick_make_wall(self):
         self.editing = "make_wall"
         self.add_all_clickables()
-        root.terminal.show_current_directories(f"making walls...")
+        self.root.terminal.show_current_directories(f"making walls...")
 
     def clear_cell(self):
         self.editing = "clear_cell"
         self.add_all_clickables()
-        root.terminal.show_current_directories(f"clearing cells...")
+        self.root.terminal.show_current_directories(f"clearing cells...")
 
     def edit_clear_all_cells(self):
         self.clear_all_cells()
         self.editing = None
         self.delete_all_clickables()
-        root.terminal.show_current_directories(f"cleared all cells and cancelled editing grid")
+        self.root.terminal.show_current_directories(f"cleared all cells and cancelled editing grid")
 
     def cancel_editing_grid(self):
         self.editing = None
         self.delete_all_clickables()
-        root.terminal.show_current_directories(f"cancelled editing grid")
+        self.root.terminal.show_current_directories(f"cancelled editing grid")
         
         
     
 class GridCell:
-    def __init__(self, x, y, type):
-        from gui import root
+    def __init__(self, root, x, y, type):
+        self.root = root
         self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
         self.x = x
         self.y = y
@@ -154,18 +154,18 @@ class GridCell:
         self.hamsters = 0
 
     def edit(self):
-        if grid_man.editing == "add_hamster":
+        if self.root.grid_man.editing == "add_hamster":
             self.add_hamster()
             self.add_clickable()
-        elif grid_man.editing == "subtract_hamster":
+        elif self.root.grid_man.editing == "subtract_hamster":
             if self.hamsters > 0:
                 self.subtract_hamster()
                 self.add_clickable()
-        elif grid_man.editing == "make_wall":
+        elif self.root.grid_man.editing == "make_wall":
             self.change_to_wall()
             self.canvas.delete(tk.ALL)
             self.add_clickable
-        elif grid_man.editing == "clear_cell":
+        elif self.root.grid_man.editing == "clear_cell":
             self.clear()
             self.canvas.delete(tk.ALL)
             self.add_clickable
@@ -208,6 +208,8 @@ class GridCell:
 class Snake:
 
     def __init__(self, x, y, direction):
+        from gui import root
+        self.root = root
         self.x = x
         self.y = y
         if self.is_outside_grid(self.x, self.y):
@@ -221,30 +223,29 @@ class Snake:
 
         match self.direction:
             case "N":
-                self.image = grid_man.up_image                
+                self.image = self.root.grid_man.up_image                
             case "E":
-                self.image = grid_man.right_image                
+                self.image = self.root.grid_man.right_image                
             case "S":
-                self.image = grid_man.down_image
+                self.image = self.root.grid_man.down_image
             case "W":
-                self.image = grid_man.left_image
+                self.image = self.root.grid_man.left_image
 
         self.cell.display_image(self.image)
-        root.update_idletasks()
+        self.root.update_idletasks()
         time.sleep(self.wait_time())
 
     def wait_time(self):
-        from toolbar import toolbar
-        return 1/toolbar.tick_rate_slider.get()
+        return 1/self.root.toolbar.tick_rate_slider.get()
 
     def is_outside_grid(self, x, y):
-        if y < grid_man.grid_height and x < grid_man.grid_width and y >= 0 and x >= 0:
+        if y < self.root.grid_man.grid_height and x < self.root.grid_man.grid_width and y >= 0 and x >= 0:
             return False
         else:
             return True
         
     def update_cell(self):
-        for cell in grid_man.cells:
+        for cell in self.root.grid_man.cells:
             if cell.x == self.x and cell.y == self.y:
                 self.cell = cell
 
@@ -254,57 +255,57 @@ class Snake:
         match self.direction:
             case "N":
                 self.direction="E"
-                self.image = grid_man.right_image
+                self.image = self.root.grid_man.right_image
             case "E":
                 self.direction="S"
-                self.image = grid_man.down_image
+                self.image = self.root.grid_man.down_image
 
             case "S":
                 self.direction="W"
-                self.image = grid_man.left_image
+                self.image = self.root.grid_man.left_image
 
             case "W":
                 self.direction="N"
-                self.image = grid_man.up_image
+                self.image = self.root.grid_man.up_image
 
         #self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image) <-- useless and breaks code (whyy?? just why)
         self.show_snake()
-        root.update_idletasks()
+        self.root.update_idletasks()
         time.sleep(self.wait_time())
 
     def move(self):
         self.delete_snake_image()
 
         if not(self.can_move()):
-            root.terminal.print("you ran into a wall... fucking idiot")
+            self.root.terminal.print("you ran into a wall... fucking idiot")
             self.update_cell()
             self.show_snake()
             return
         
         match self.direction:
             case "N":
-                if self.y+1 < grid_man.grid_height:
+                if self.y+1 < self.root.grid_man.grid_height:
                     self.y +=1
                 else:
-                    root.terminal.print("you ran into a wall... fucking idiot")
+                    self.root.terminal.print("you ran into a wall... fucking idiot")
             case "E":
-                if self.x+1 < grid_man.grid_width:
+                if self.x+1 < self.root.grid_man.grid_width:
                     self.x +=1
                 else:
-                    root.terminal.print("you ran into a wall... fucking idiot")
+                    self.root.terminal.print("you ran into a wall... fucking idiot")
             case "S":
                 if self.y-1 >= 0:
                     self.y -=1
                 else:
-                    root.terminal.print("you ran into a wall... fucking idiot")
+                    self.root.terminal.print("you ran into a wall... fucking idiot")
             case "W":
                 if self.x-1 >= 0:
                     self.x -=1
                 else:
-                    root.terminal.print("you ran into a wall... fucking idiot")
+                    self.root.terminal.print("you ran into a wall... fucking idiot")
         self.update_cell()
         self.show_snake()
-        root.update_idletasks()
+        self.root.update_idletasks()
         time.sleep(self.wait_time())
 
 
@@ -317,8 +318,8 @@ class Snake:
             self.update_cell()
             self.show_snake()
         else:
-            root.terminal.print("what are you trying to eat dumbass?")
-        root.update_idletasks()
+            self.root.terminal.print("what are you trying to eat dumbass?")
+        self.root.update_idletasks()
 
         
 
@@ -327,8 +328,8 @@ class Snake:
             self.update_cell()
             self.cell.add_hamster()
         else:
-            root.terminal.print("spit what? your mouth is empty!")
-            root.update_idletasks()
+            self.root.terminal.print("spit what? your mouth is empty!")
+            self.root.update_idletasks()
 
     def can_move(self):
         new_x = self.x
@@ -344,7 +345,7 @@ class Snake:
             case "W":
                 new_x-=1 
         
-        for cell in grid_man.cells:
+        for cell in self.root.grid_man.cells:
             if cell.x == new_x and cell.y == new_y:
                 if cell.type == "wall":
                     return False
@@ -375,11 +376,11 @@ class Snake:
         if self.cell.type == "hamster":
             self.cell.clear()
             self.cell.type = "hamster"
-            self.cell.display_image(grid_man.hamster_image)
+            self.cell.display_image(self.root.grid_man.hamster_image)
         else:
             self.cell.clear()
 
-grid_man = GridManager(9, 5)
+
 
 
 

@@ -2,11 +2,9 @@ import tkinter as tk
 from tkinter import *
 import threading
 import code
-import time
+
 
 from gui import root
-from code_editor import code_editor
-from file_management import file_manager
 from options_handler import options_handler
 from virtual_environment import Snake
 
@@ -53,9 +51,9 @@ def execute_code():
     interpreter = code.InteractiveInterpreter(locals=PyKing_functions)
 
     try:
-        file_manager.open_grid(options_handler.get_variable("current_grid_directory")) #ask to save before
+        root.file_manager.open_grid(options_handler.get_variable("current_grid_directory")) #ask to save before
         root.update_idletasks()
-        code_string = code_editor.text_widget.get("1.0", END)
+        code_string = root.code_editor.text_widget.get("1.0", END)
         exec(code_string, PyKing_functions)
 
         # buffer = ""

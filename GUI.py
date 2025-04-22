@@ -32,17 +32,31 @@ class Root(tk.Tk):
 
         from terminal import Terminal
         self.terminal = Terminal(self)
+
+        from code_editor import CodeEditor
+        self.code_editor = CodeEditor(self)
+
+
         
     def continue_initiating(self):
 
-        from toolbar import toolbar
-        from filetree import file_tree
-        from code_editor import code_editor
+        from virtual_environment import GridManager
+        self.grid_man = GridManager(self, 9, 5)
 
-        toolbar.frame.pack(side="top", fill="x")
+        from file_management import FileManager
+        self.file_manager = FileManager(self)
 
-        self.horizontally_paned_window.add(file_tree.frame)
-        self.horizontally_paned_window.add(code_editor.frame)  
+        from toolbar import Toolbar
+        self.toolbar = Toolbar(self) # NEEDS GRID-MAN AND FILE-MAN
+
+        from filetree import Filetree
+        self.file_tree = Filetree(self)
+        
+
+        self.toolbar.frame.pack(side="top", fill="x")
+
+        self.horizontally_paned_window.add(self.file_tree.frame)
+        self.horizontally_paned_window.add(self.code_editor.frame)  
         self.horizontally_paned_window.add(self.vertically_pained_window)
 
         self.vertically_pained_window.add(self.top_right_frame)  

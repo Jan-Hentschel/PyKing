@@ -6,12 +6,13 @@ from tkinter import filedialog
 from utility import ToolbarButton, resource_path, path_from_relative_path
 from options_handler import options_handler
 
-from gui import root
-from file_management import file_manager
+
+
 
 class Filetree:
-    def __init__(self):
-        self.frame = Frame(root.horizontally_paned_window, bg="#333333")
+    def __init__(self, root):
+        self.root = root
+        self.frame = Frame(self.root.horizontally_paned_window, bg="#333333")
         self.start_path = options_handler.get_variable("current_filetree_directory")
 
         self.file_icon = PhotoImage(file=resource_path('Assets\\file_icon.png'))
@@ -62,9 +63,9 @@ class Filetree:
 
         directory = base_path + added_path
         if directory[-3:] == ".py":
-            file_manager.open_file(directory)
+            self.root.file_manager.open_file(directory)
         elif directory[-5:]==".json":
-            file_manager.open_grid(directory)
+            self.root.file_manager.open_grid(directory)
         else:
             print("cant open im sowy")
 
@@ -118,10 +119,3 @@ class Filetree:
                     iid = self.treeview.insert(parent=parent_iid, index='end', text=name, image=self.file_icon, tags=tag)
             
                     
-
-
-
-
-    
-
-file_tree = Filetree()
