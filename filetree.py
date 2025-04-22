@@ -1,37 +1,22 @@
-import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 import os
-import sys
 from tkinter import filedialog
-from tkinter import simpledialog
 from utility import toolbar_button
 import json
+from utility import resource_path, path_from_relative_path
 from options_handler import get_variable, set_variable
 import gui
 from code_editor import load_into_editor, getStringFromEditor
 
+
 # Frame für den Filetree erstellen (links)
 file_tree_frame = Frame(gui.horizontally_paned_window, bg="#333333")
-
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
-
-def file_path_function(relative_path):
-
-    base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
 
 
 from terminal import show_current_directories
 
-test_file_path = file_path_function("Files\\testfile.py")
+test_file_path = path_from_relative_path("Files\\testfile.py")
 
 def save_content_to_directory(directory):
     with open(directory, "w", encoding="utf-8") as file:
@@ -64,13 +49,13 @@ def load_file_directory(directory):
 
 def load_file():
     #ask to save before
-    directory = filedialog.askopenfilename(initialdir=file_path_function("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
+    directory = filedialog.askopenfilename(initialdir=path_from_relative_path("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     load_file_directory(directory)
 
 
 
 def save_file_as():
-    directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
+    directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     save_content_to_directory(directory)
     set_variable("current_file_directory", directory)
     show_current_directories()
@@ -94,13 +79,13 @@ def load_grid_directory(directory):
 
 def load_grid():
     #ask to save before
-    directory = filedialog.askopenfilename(initialdir=file_path_function("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
+    directory = filedialog.askopenfilename(initialdir=path_from_relative_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     load_grid_directory(directory)
   
 
 def save_grid():
     from virtual_environment import get_grid_dict
-    directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
+    directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     json_dict = json.dumps(get_grid_dict())
     with open(directory, "w", encoding="utf-8") as file:
         file.write(json_dict)
@@ -109,7 +94,7 @@ def save_grid():
 
     
 def new_file():
-    directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
+    directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     with open(directory, "w", encoding="utf-8") as file:
         file.write("")    
     set_variable("current_file_directory", directory)
@@ -123,7 +108,7 @@ def create_grid(popup):
     rows = popup.row_entry.get()
     change_grid_man(int(columns), int(rows))
     popup.destroy()
-    directory = filedialog.asksaveasfilename(initialdir=file_path_function("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
+    directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
     json_dict = json.dumps(get_grid_dict())
     with open(directory, "w", encoding="utf-8") as file:
         file.write(json_dict)
@@ -190,7 +175,7 @@ start_path=get_variable("current_filetree_directory")
 def open_directory():
     treeview.delete(*treeview.get_children())
     global start_path
-    start_path = filedialog.askdirectory(initialdir=file_path_function("Files"), title="Open a Directory")
+    start_path = filedialog.askdirectory(initialdir=path_from_relative_path("Files"), title="Open a Directory")
     set_variable("current_filetree_directory", start_path)
     display_treeview()
 

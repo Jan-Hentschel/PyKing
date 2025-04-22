@@ -1,17 +1,11 @@
 import tkinter as tk
 from tkinter import *
 from tkinter import ttk
-import os
-import sys
+from utility import resource_path
+
 from gui import root
 
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
 
-    return os.path.join(base_path, relative_path)
 
 #toolbar als frame erstellen
 toolbar_frame = Frame(root, height=68, bg="#333333", pady=5)

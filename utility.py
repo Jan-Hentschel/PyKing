@@ -1,7 +1,9 @@
 import tkinter as tk
-from gui import root, resource_path
 from tkinter import *
 from tkinter.font import Font
+import os
+import sys
+
 
 #https://www.geeksforgeeks.org/autohiding-scrollbars-using-python-tkinter/
 #https://stackoverflow.com/questions/41095385/autohide-tkinter-canvas-scrollbar-with-pack-geometry 
@@ -43,3 +45,15 @@ class autoHiddenScrollbar(Scrollbar):
 class toolbar_button(Button):
     def __init__(self, master, **kwargs):
         super().__init__(master, bd=2, bg="#3F3F3F", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", height=2, **kwargs)
+
+def resource_path(relative_path):
+    try:
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+def path_from_relative_path(relative_path):
+    base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
