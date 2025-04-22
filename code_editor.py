@@ -3,7 +3,7 @@ from tkinter import *
 from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
 
-from utility import autoHiddenScrollbar
+from utility import AutoHiddenScrollbar
 
 from gui import horizontally_paned_window
 
@@ -21,10 +21,10 @@ class CodeEditor:
 
 
         #scrollbars
-        self.vertical_scrollbar = autoHiddenScrollbar(self.code_editor_frame, self.code_editor_widget, orient=VERTICAL, cursor="arrow")
+        self.vertical_scrollbar = AutoHiddenScrollbar(self.code_editor_frame, self.code_editor_widget, orient=VERTICAL, cursor="arrow")
         self.vertical_scrollbar.pack(side = RIGHT, fill=Y)
 
-        self.horizontal_scrollbar = autoHiddenScrollbar(self.code_editor_and_horizontal_scrollbar_frame, self.code_editor_widget, orient=HORIZONTAL, cursor="arrow")
+        self.horizontal_scrollbar = AutoHiddenScrollbar(self.code_editor_and_horizontal_scrollbar_frame, self.code_editor_widget, orient=HORIZONTAL, cursor="arrow")
         self.horizontal_scrollbar.pack(side = BOTTOM, fill=X)
 
         self.horizontal_scrollbar.config(command = self.code_editor_widget.xview)

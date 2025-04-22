@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import ttk
 import os
 from tkinter import filedialog
-from utility import toolbar_button
+from utility import ToolbarButton
 
 
 from utility import resource_path, path_from_relative_path
@@ -62,7 +62,7 @@ def display_treeview():
     add_directory_to_treeview(start_path, start_dir_entries, parent_iid)
     
 
-open_directory_button = toolbar_button(file_tree_frame, text="Open Directory", command=open_directory)
+open_directory_button = ToolbarButton(file_tree_frame, text="Open Directory", command=open_directory)
 open_directory_button.pack()
 
 #https://stackoverflow.com/questions/68078498/recursively-arrange-all-folders-and-files-in-a-hierarchical-treeview-in-tkinter

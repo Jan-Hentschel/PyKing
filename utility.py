@@ -9,7 +9,7 @@ import sys
 #https://stackoverflow.com/questions/41095385/autohide-tkinter-canvas-scrollbar-with-pack-geometry 
 
 
-class autoHiddenScrollbar(Scrollbar):
+class AutoHiddenScrollbar(Scrollbar):
     def __init__(self, master, target_widget, **kwargs):
         super().__init__(master, **kwargs)
         self.target_widget = target_widget  
@@ -42,7 +42,7 @@ class autoHiddenScrollbar(Scrollbar):
                 return True
         return False
     
-class toolbar_button(Button):
+class ToolbarButton(Button):
     def __init__(self, master, **kwargs):
         super().__init__(master, bd=2, bg="#3F3F3F", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", height=2, **kwargs)
 

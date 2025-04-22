@@ -44,8 +44,8 @@ from top_right import virtual_environment_frame
 from terminal import terminal
 
 
-from toolbar import toolbar_frame
-toolbar_frame.pack(side="top", fill="x")
+from toolbar import toolbar
+toolbar.frame.pack(side="top", fill="x")
 
 # filetree importieren und in das paned window einfügen
 from filetree import *
@@ -57,7 +57,7 @@ horizontally_paned_window.add(code_editor.code_editor_frame)
 
 horizontally_paned_window.add(vertically_pained_window)  
 vertically_pained_window.add(virtual_environment_frame)  
-vertically_pained_window.add(terminal.terminal_frame)  
+vertically_pained_window.add(terminal.frame)  
 
 
 # Alle widgets updaten, um die screen_width/screen_height zu updaten

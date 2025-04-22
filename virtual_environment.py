@@ -8,19 +8,6 @@ from utility import resource_path
 from terminal import terminal
 from gui import root
 
-logo = PhotoImage(file=resource_path('Assets\\LogoV1.3.png'))
-up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
-down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
-left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
-right_image = PhotoImage(file=resource_path('Assets\\Right.png'))
-
-
-
-
-
-
-
-
 
 
 class GridManager:
@@ -72,7 +59,6 @@ class GridManager:
             self.cells = []
 
     def change_grid_man(self, columns, rows):
-        from gui import root
         self.remove_all_cells()
         self.grid_width=columns
         self.grid_height=rows
@@ -127,20 +113,20 @@ class GridCell:
         self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
 
     def edit(self):
-        from toolbar import editing
-        if editing == "add_hamster":
+        from toolbar import toolbar
+        if toolbar.editing == "add_hamster":
             self.add_hamster()
             self.add_clickable()
-        elif editing == "subtract_hamster":
+        elif toolbar.editing == "subtract_hamster":
             if self.hamsters > 0:
                 self.subtract_hamster()
                 self.add_clickable()
             print(self.hamsters)
-        elif editing == "make_wall":
+        elif toolbar.editing == "make_wall":
             self.change_to_wall()
             self.canvas.delete(tk.ALL)
             self.add_clickable
-        elif editing == "clear_cell":
+        elif toolbar.editing == "clear_cell":
             self.clear()
             self.canvas.delete(tk.ALL)
             self.add_clickable
@@ -190,6 +176,12 @@ class Snake:
             raise Exception("you tried to put a snake outside of the grid... fucking looser, now it killed itself")
         self.hamsters = 0 #Einfügen dass man das voreinstellen kann
         self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
+        self.up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
+        self.down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
+        self.left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
+        self.right_image = PhotoImage(file=resource_path('Assets\\Right.png'))
+
+
 
         self.update_cell()
 
@@ -197,21 +189,21 @@ class Snake:
 
         match self.direction:
             case "N":
-                self.image = up_image                
+                self.image = self.up_image                
             case "E":
-                self.image = right_image                
+                self.image = self.right_image                
             case "S":
-                self.image = down_image
+                self.image = self.down_image
             case "W":
-                self.image = left_image
+                self.image = self.left_image
 
         self.cell.display_image(self.image)
         root.update_idletasks()
         time.sleep(self.wait_time())
 
     def wait_time(self):
-        from toolbar import tick_rate_slider
-        return 1/tick_rate_slider.get()
+        from toolbar import toolbar
+        return 1/toolbar.tick_rate_slider.get()
 
     def is_outside_grid(self, x, y):
         if y < grid_man.grid_height and x < grid_man.grid_width and y >= 0 and x >= 0:
@@ -230,18 +222,18 @@ class Snake:
         match self.direction:
             case "N":
                 self.direction="E"
-                self.image = right_image
+                self.image = self.right_image
             case "E":
                 self.direction="S"
-                self.image = down_image
+                self.image = self.down_image
 
             case "S":
                 self.direction="W"
-                self.image = left_image
+                self.image = self.left_image
 
             case "W":
                 self.direction="N"
-                self.image = up_image
+                self.image = self.up_image
 
         #self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image) <-- useless and breaks code (whyy?? just why)
         self.show_snake()

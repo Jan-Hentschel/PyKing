@@ -14,7 +14,7 @@ from virtual_environment import Snake
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
     output = " ".join(map(str, args)) + "\n"
-    terminal.terminal_widget.insert(tk.END, output)
+    terminal.text_widget.insert(tk.END, output)
 
 
 

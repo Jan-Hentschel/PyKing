@@ -1,6 +1,6 @@
 from tkinter import *
 from tkinter import filedialog
-from utility import toolbar_button
+from utility import ToolbarButton
 import json
 
 from utility import path_from_relative_path
@@ -115,10 +115,10 @@ class FileManager:
         popup.row_entry = Entry(popup)
         popup.row_entry.pack()
         
-        ok_button = toolbar_button(popup, text="OK", command=lambda: self.create_grid(popup))
+        ok_button = ToolbarButton(popup, text="OK", command=lambda: self.create_grid(popup))
         ok_button.pack(side="left")
 
-        cancel_button = toolbar_button(popup, text="Cancel", command= lambda: popup.destroy())
+        cancel_button = ToolbarButton(popup, text="Cancel", command= lambda: popup.destroy())
         cancel_button.pack(side="right")
 
 file_manager = FileManager()
