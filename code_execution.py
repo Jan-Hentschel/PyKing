@@ -4,7 +4,7 @@ import threading
 import code
 
 from gui import root
-from code_editor import code_editor_widget
+from code_editor import code_editor
 from terminal import terminal_widget
 from filetree import load_grid_directory
 from options_handler import get_variable
@@ -60,7 +60,7 @@ def execute_code():
     try:
         load_grid_directory(get_variable("current_grid_directory")) #ask to save before
         root.update_idletasks()
-        code_string = code_editor_widget.get("1.0", END)
+        code_string = code_editor.code_editor_widget.get("1.0", END)
         exec(code_string, PyKing_functions)
 
         # buffer = ""

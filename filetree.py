@@ -8,14 +8,14 @@ import json
 from utility import resource_path, path_from_relative_path
 
 from options_handler import get_variable, set_variable
-import gui
-from code_editor import load_into_editor, getStringFromEditor
+from gui import root, horizontally_paned_window
+from code_editor import code_editor
 from terminal import show_current_directories
 from virtual_environment import change_grid, get_grid_dict, change_grid_man 
-from gui import root
+
 
 # Frame für den Filetree erstellen (links)
-file_tree_frame = Frame(gui.horizontally_paned_window, bg="#333333")
+file_tree_frame = Frame(horizontally_paned_window, bg="#333333")
 
 
 
@@ -24,7 +24,7 @@ test_file_path = path_from_relative_path("Files\\testfile.py")
 
 def save_content_to_directory(directory):
     with open(directory, "w", encoding="utf-8") as file:
-        file.write(getStringFromEditor())
+        file.write(code_editor.getStringFromEditor())
 
 
 def get_content_from_directory(directory):
@@ -32,7 +32,7 @@ def get_content_from_directory(directory):
         return file.read()
 
 def load_file_directory(directory):
-    load_into_editor(get_content_from_directory(directory))
+    code_editor.load_into_editor(get_content_from_directory(directory))
     set_variable("current_file_directory", directory)
     show_current_directories()
 

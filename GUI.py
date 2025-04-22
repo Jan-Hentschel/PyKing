@@ -52,8 +52,8 @@ from filetree import *
 horizontally_paned_window.add(file_tree_frame)
 
 # code editor importieren und in das paned window einfügen
-from code_editor import *  
-horizontally_paned_window.add(code_editor_frame)  
+from code_editor import code_editor
+horizontally_paned_window.add(code_editor.code_editor_frame)  
 
 horizontally_paned_window.add(vertically_pained_window)  
 vertically_pained_window.add(virtual_environment_frame)  
