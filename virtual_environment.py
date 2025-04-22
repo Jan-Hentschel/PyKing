@@ -113,29 +113,36 @@ class GridManager:
     def pick_add_hamster(self):
         self.editing = "add_hamster"
         self.add_all_clickables()
+        terminal.show_current_directories(f"adding hamsters...")
         
 
     def pick_subtract_hamster(self):
         self.editing = "subtract_hamster"
         self.add_all_clickables()
+        terminal.show_current_directories(f"subtracting hamsters...")
 
     def pick_make_wall(self):
         self.editing = "make_wall"
         self.add_all_clickables()
+        terminal.show_current_directories(f"making walls...")
 
     def clear_cell(self):
         self.editing = "clear_cell"
         self.add_all_clickables()
+        terminal.show_current_directories(f"clearing cells...")
 
     def edit_clear_all_cells(self):
         self.clear_all_cells()
         self.editing = None
         self.delete_all_clickables()
+        terminal.show_current_directories(f"cleared all cells and cancelled editing grid")
 
     def cancel_editing_grid(self):
-         
         self.editing = None
         self.delete_all_clickables()
+        terminal.show_current_directories(f"cancelled editing grid")
+        
+        
     
 class GridCell:
     def __init__(self, x, y, type):

@@ -27,7 +27,7 @@ class FileManager:
     def load_file_directory(self, directory):
         code_editor.load_into_editor(self.get_content_from_directory(directory))
         options_handler.set_variable("current_file_directory", directory)
-        terminal.show_current_directories()
+        terminal.show_current_directories(f"loaded python file: {directory}")
 
 
     def load_file(self):
@@ -41,14 +41,16 @@ class FileManager:
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
         self.save_content_to_directory(directory)
         options_handler.set_variable("current_file_directory", directory)
-        terminal.show_current_directories()
+        terminal.show_current_directories(f"saved python file as: {directory}")
 
     def save_file(self, event = ""):
         self.save_content_to_directory(options_handler.get_variable("current_file_directory"))
+        terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}")
 
     def save_file_and_grid(self):
         self.save_file()
         self.save_grid()
+        terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}\nsaved grid: {options_handler.get_variable('current_grid_directory')}")
 
     def load_grid_directory(self, directory):
         with open(directory, "r", encoding="utf-8") as file:
@@ -59,40 +61,40 @@ class FileManager:
             new_cells = dict["cells"]
             grid_man.change_grid(columns, rows, new_cells)
         options_handler.set_variable("current_grid_directory", directory)
-        terminal.show_current_directories()
+        terminal.show_current_directories(f"loaded grid: {directory}")
 
     def load_grid(self):
         #ask to save before
         directory = filedialog.askopenfilename(initialdir=path_from_relative_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
         self.load_grid_directory(directory)
+        
     
 
     def save_grid_as(self):
-        
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
         json_dict = json.dumps(grid_man.get_grid_dict())
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
         options_handler.set_variable("current_grid_directory", directory)
-        terminal.show_current_directories()
+        terminal.show_current_directories(f"saved grid as: {directory}")
 
     def save_grid(self):
         directory = options_handler.get_variable("current_grid_directory")
         json_dict = json.dumps(grid_man.get_grid_dict())
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
+        terminal.show_current_directories(f"saved grid: {options_handler.get_variable('current_grid_directory')}")
 
     def new_file(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
         with open(directory, "w", encoding="utf-8") as file:
             file.write("")    
         options_handler.set_variable("current_file_directory", directory)
-        terminal.show_current_directories()
+        terminal.show_current_directories(f"created new python file as: {directory}")
         
 
         
     def create_grid(self, popup):
-        
         columns = popup.column_entry.get()
         rows = popup.row_entry.get()
         grid_man.change_grid_man(int(columns), int(rows))
@@ -102,7 +104,7 @@ class FileManager:
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
         options_handler.set_variable("current_grid_directory", directory)
-        terminal.show_current_directories()
+        terminal.show_current_directories(f"created new grid as: {directory}")
 
 
 
@@ -127,5 +129,14 @@ class FileManager:
 
         cancel_button = ToolbarButton(popup, text="Cancel", command= lambda: popup.destroy())
         cancel_button.pack(side="right")
+
+
+    def load_file_and_grid_from_options(self):
+        try:
+            self.load_file_directory(options_handler.get_variable("current_file_directory"))
+            self.load_grid_directory(options_handler.get_variable("current_grid_directory"))
+        except Exception as error:
+            print(error)
+        terminal.show_current_directories(f"loaded python file: {options_handler.get_variable('current_file_directory')}\nloaded grid: {options_handler.get_variable('current_grid_directory')}")
 
 file_manager = FileManager()

@@ -31,9 +31,9 @@ class Terminal:
         self.text_widget["xscrollcommand"] = self.horizontal_scrollbar.set
         self.text_widget["yscrollcommand"] = self.vertical_scrollbar.set
 
-    def show_current_directories(self):
+    def show_current_directories(self, status ):
         self.text_widget.delete('1.0', END)
-        self.text_widget.insert(tk.END, f"Excecuting\nFile: {options_handler.get_variable("current_file_directory")}\nGrid: {options_handler.get_variable("current_grid_directory")}\n")
+        self.text_widget.insert(tk.END, f"{status}\nFile: {options_handler.get_variable("current_file_directory")}\nGrid: {options_handler.get_variable("current_grid_directory")}\n")
 
     def print(self, string):
         self.text_widget.insert(tk.END, string + "\n")   
