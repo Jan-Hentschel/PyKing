@@ -46,7 +46,9 @@ class FileManager:
     def save_file(self, event = ""):
         self.save_content_to_directory(options_handler.get_variable("current_file_directory"))
 
-
+    def save_file_and_grid(self):
+        self.save_file()
+        self.save_grid()
 
     def load_grid_directory(self, directory):
         with open(directory, "r", encoding="utf-8") as file:
@@ -65,7 +67,7 @@ class FileManager:
         self.load_grid_directory(directory)
     
 
-    def save_grid(self):
+    def save_grid_as(self):
         
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
         json_dict = json.dumps(grid_man.get_grid_dict())
@@ -74,7 +76,12 @@ class FileManager:
         options_handler.set_variable("current_grid_directory", directory)
         terminal.show_current_directories()
 
-        
+    def save_grid(self):
+        directory = options_handler.get_variable("current_grid_directory")
+        json_dict = json.dumps(grid_man.get_grid_dict())
+        with open(directory, "w", encoding="utf-8") as file:
+            file.write(json_dict)
+
     def new_file(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
         with open(directory, "w", encoding="utf-8") as file:

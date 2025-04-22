@@ -15,13 +15,17 @@ class GridManager:
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.cells = []
-        self.create_cells()
-        self.add_cells_to_grid()
+        self.editing = None
+
         self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
         self.up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
         self.down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
         self.left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
         self.right_image = PhotoImage(file=resource_path('Assets\\Right.png'))
+
+        self.create_cells()
+        self.add_cells_to_grid()
+
 
     def create_cells(self):
         for y in range(self.grid_height):
@@ -106,9 +110,37 @@ class GridManager:
         }
         return dictionary
     
+    def pick_add_hamster(self):
+        self.editing = "add_hamster"
+        self.add_all_clickables()
+        
+
+    def pick_subtract_hamster(self):
+        self.editing = "subtract_hamster"
+        self.add_all_clickables()
+
+    def pick_make_wall(self):
+        self.editing = "make_wall"
+        self.add_all_clickables()
+
+    def clear_cell(self):
+        self.editing = "clear_cell"
+        self.add_all_clickables()
+
+    def edit_clear_all_cells(self):
+        self.clear_all_cells()
+        self.editing = None
+        self.delete_all_clickables()
+
+    def cancel_editing_grid(self):
+         
+        self.editing = None
+        self.delete_all_clickables()
+    
 class GridCell:
     def __init__(self, x, y, type):
         from gui import grid_frame
+        self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
         self.x = x
         self.y = y
         self.type = type
@@ -116,19 +148,18 @@ class GridCell:
         self.hamsters = 0
 
     def edit(self):
-        from toolbar import toolbar
-        if toolbar.editing == "add_hamster":
+        if grid_man.editing == "add_hamster":
             self.add_hamster()
             self.add_clickable()
-        elif toolbar.editing == "subtract_hamster":
+        elif grid_man.editing == "subtract_hamster":
             if self.hamsters > 0:
                 self.subtract_hamster()
                 self.add_clickable()
-        elif toolbar.editing == "make_wall":
+        elif grid_man.editing == "make_wall":
             self.change_to_wall()
             self.canvas.delete(tk.ALL)
             self.add_clickable
-        elif toolbar.editing == "clear_cell":
+        elif grid_man.editing == "clear_cell":
             self.clear()
             self.canvas.delete(tk.ALL)
             self.add_clickable
@@ -154,7 +185,7 @@ class GridCell:
 
     def add_hamster(self):
         self.type = "hamster"
-        self.display_image(grid_man.hamster_image)
+        self.display_image(self.hamster_image)
         self.hamsters += 1
 
     def subtract_hamster(self):

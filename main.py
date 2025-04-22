@@ -10,6 +10,6 @@ if __name__ == "__main__":
         file_manager.load_grid_directory(options_handler.get_variable("current_grid_directory"))
     except:
         raise Exception
-    root.bind("<Control-s>", file_manager.save_file)
+    root.bind("<Control-s>", lambda event: file_manager.save_file_and_grid())
     root.mainloop()
 
