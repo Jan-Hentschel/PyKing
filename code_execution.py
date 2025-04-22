@@ -4,13 +4,13 @@ import threading
 import code
 
 
-from gui import root
 from options_handler import options_handler
 from virtual_environment import Snake
 
 
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
+    from gui import root
     output = " ".join(map(str, args)) + "\n"
     root.terminal.print(output)
 
@@ -18,6 +18,7 @@ def print_to_terminal_widget(*args):
 
 #https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread
 class StoppableThread(threading.Thread):
+    
     """Thread class with a stop() method. The thread itself has to check
     regularly for the stopped() condition."""
 
@@ -34,7 +35,7 @@ class StoppableThread(threading.Thread):
     def stop_if_stopped(self):
         if self.stopped():
             self.join()
-
+        from gui import root
         root.terminal.show_current_directories()
 
 
@@ -51,6 +52,7 @@ def execute_code():
     interpreter = code.InteractiveInterpreter(locals=PyKing_functions)
 
     try:
+        from gui import root
         root.file_manager.open_grid(options_handler.get_variable("current_grid_directory")) #ask to save before
         root.update_idletasks()
         code_string = root.code_editor.text_widget.get("1.0", END)

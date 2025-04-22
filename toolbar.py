@@ -25,12 +25,12 @@ class Toolbar:
         self.stop_code_execution_button = ToolbarButton(self.frame, text ="Stop Execution", command = stop_execute_code_thread)
         self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", highlightbackground="#333333",fg="#FFFFFF", troughcolor="#3F3F3F")
         self.tick_rate_slider.set(options_handler.get_variable("default_tick_rate"))
-        self.pick_add_hamster_button = ToolbarButton(self.frame, text ="Add Hamster", command = root.grid_man.pick_add_hamster)
-        self.pick_subtract_hamster_button = ToolbarButton(self.frame, text ="Subtract Hamster", command = root.grid_man.pick_subtract_hamster)
-        self.pick_make_wall_button = ToolbarButton(self.frame, text ="Make Wall", command = root.grid_man.pick_make_wall)
-        self.pick_clear_cell_button = ToolbarButton(self.frame, text ="Clear Cell", command = root.grid_man.clear_cell)
-        self.pick_clear_all_cells_button = ToolbarButton(self.frame, text ="Clear All Cells", command = root.grid_man.edit_clear_all_cells)
-        self.cancel_editing_grid_button = ToolbarButton(self.frame, text ="Cancel Editing Grid", command = root.grid_man.cancel_editing_grid)
+        self.pick_add_hamster_button = ToolbarButton(self.frame, text ="Add Hamster", command = root.grid_manager.pick_add_hamster)
+        self.pick_subtract_hamster_button = ToolbarButton(self.frame, text ="Subtract Hamster", command = root.grid_manager.pick_subtract_hamster)
+        self.pick_make_wall_button = ToolbarButton(self.frame, text ="Make Wall", command = root.grid_manager.pick_make_wall)
+        self.pick_clear_cell_button = ToolbarButton(self.frame, text ="Clear Cell", command = root.grid_manager.clear_cell)
+        self.pick_clear_all_cells_button = ToolbarButton(self.frame, text ="Clear All Cells", command = root.grid_manager.edit_clear_all_cells)
+        self.cancel_editing_grid_button = ToolbarButton(self.frame, text ="Cancel Editing Grid", command = root.grid_manager.cancel_editing_grid)
 
 
         self.new_file_button.pack()

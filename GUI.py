@@ -30,28 +30,23 @@ class Root(tk.Tk):
         self.grid_frame = Frame(self.top_right_frame, bg="#333333")
         self.grid_frame.pack(anchor=NE)
 
-        from terminal import Terminal
+        from terminal import Terminal # needs nothing
         self.terminal = Terminal(self)
 
-        from code_editor import CodeEditor
+        from code_editor import CodeEditor # needs nothing
         self.code_editor = CodeEditor(self)
 
+        from virtual_environment import GridManager # NEEDS Terminal, grid_frame
+        self.grid_manager = GridManager(self, 9, 5)
 
-        
-    def continue_initiating(self):
-
-        from virtual_environment import GridManager
-        self.grid_man = GridManager(self, 9, 5)
-
-        from file_management import FileManager
+        from file_management import FileManager # NEEDS GRID-MANAGER, code_editor, terminal
         self.file_manager = FileManager(self)
 
-        from toolbar import Toolbar
-        self.toolbar = Toolbar(self) # NEEDS GRID-MAN AND FILE-MAN
+        from toolbar import Toolbar # NEEDS GRID-MAN AND FILE-MANAGER
+        self.toolbar = Toolbar(self) 
 
-        from filetree import Filetree
-        self.file_tree = Filetree(self)
-        
+        from filetree import Filetree # NEEDS FILE-MANAGER
+        self.file_tree = Filetree(self) 
 
         self.toolbar.frame.pack(side="top", fill="x")
 
@@ -70,8 +65,12 @@ class Root(tk.Tk):
         self.horizontally_paned_window.sash_place(1, int(self.screen_width*0.5625), 0)
         self.vertically_pained_window.sash_place(0, 0, int((self.vertically_pained_window.winfo_height())/2)-1)
 
+
+        
+
+
 root = Root()
-root.continue_initiating()
+
 
 
 # from terminal import terminal

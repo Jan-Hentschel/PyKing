@@ -9,7 +9,8 @@ from options_handler import options_handler
 
 
 
-from gui import root
+
+
 
 class FileManager:
     def __init__(self, root):
@@ -18,7 +19,7 @@ class FileManager:
 
     def save_text_widget_content_to_directory(self, directory):
         with open(directory, "w", encoding="utf-8") as file:
-            file.write(self.rootcode_editor.get_text_widget_content())
+            file.write(self.root.code_editor.get_text_widget_content())
 
     def read_file(self, directory):
         with open(directory, "r", encoding="utf-8") as file:
@@ -27,10 +28,10 @@ class FileManager:
     def create_grid(self, popup):
                 columns = popup.column_entry.get()
                 rows = popup.row_entry.get()
-                root.grid_man.change_grid_man(int(columns), int(rows))
+                self.root.grid_manager.change_grid_man(int(columns), int(rows))
                 popup.destroy()
                 directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
-                json_dict = json.dumps(root.grid_man.get_grid_dict())
+                json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
                 with open(directory, "w", encoding="utf-8") as file:
                     file.write(json_dict)
                 options_handler.set_variable("current_grid_directory", directory)
@@ -73,7 +74,7 @@ class FileManager:
             columns = dict["columns"]
             rows = dict["rows"]
             new_cells = dict["cells"]
-            root.grid_man.change_grid(columns, rows, new_cells)
+            self.root.grid_manager.change_grid(columns, rows, new_cells)
         options_handler.set_variable("current_grid_directory", directory)
         self.root.terminal.show_current_directories(f"loaded grid: {directory}")
 
@@ -84,7 +85,7 @@ class FileManager:
         
     def save_grid_as(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
-        json_dict = json.dumps(root.grid_man.get_grid_dict())
+        json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
         options_handler.set_variable("current_grid_directory", directory)
@@ -92,7 +93,7 @@ class FileManager:
 
     def save_grid(self):
         directory = options_handler.get_variable("current_grid_directory")
-        json_dict = json.dumps(root.grid_man.get_grid_dict())
+        json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
         self.root.terminal.show_current_directories(f"saved grid: {options_handler.get_variable('current_grid_directory')}")
