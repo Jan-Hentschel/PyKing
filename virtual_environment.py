@@ -18,6 +18,10 @@ class GridManager:
         self.create_cells()
         self.add_cells_to_grid()
         self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
+        self.up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
+        self.down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
+        self.left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
+        self.right_image = PhotoImage(file=resource_path('Assets\\Right.png'))
 
     def create_cells(self):
         for y in range(self.grid_height):
@@ -110,7 +114,6 @@ class GridCell:
         self.type = type
         self.canvas = Canvas(grid_frame, width=100, height=100, background="#3F3F3F", highlightthickness=0)
         self.hamsters = 0
-        self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
 
     def edit(self):
         from toolbar import toolbar
@@ -121,7 +124,6 @@ class GridCell:
             if self.hamsters > 0:
                 self.subtract_hamster()
                 self.add_clickable()
-            print(self.hamsters)
         elif toolbar.editing == "make_wall":
             self.change_to_wall()
             self.canvas.delete(tk.ALL)
@@ -152,7 +154,7 @@ class GridCell:
 
     def add_hamster(self):
         self.type = "hamster"
-        self.display_image(self.hamster_image)
+        self.display_image(grid_man.hamster_image)
         self.hamsters += 1
 
     def subtract_hamster(self):
@@ -175,13 +177,6 @@ class Snake:
             del self
             raise Exception("you tried to put a snake outside of the grid... fucking looser, now it killed itself")
         self.hamsters = 0 #Einfügen dass man das voreinstellen kann
-        self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
-        self.up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
-        self.down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
-        self.left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
-        self.right_image = PhotoImage(file=resource_path('Assets\\Right.png'))
-
-
 
         self.update_cell()
 
@@ -189,13 +184,13 @@ class Snake:
 
         match self.direction:
             case "N":
-                self.image = self.up_image                
+                self.image = grid_man.up_image                
             case "E":
-                self.image = self.right_image                
+                self.image = grid_man.right_image                
             case "S":
-                self.image = self.down_image
+                self.image = grid_man.down_image
             case "W":
-                self.image = self.left_image
+                self.image = grid_man.left_image
 
         self.cell.display_image(self.image)
         root.update_idletasks()
@@ -222,18 +217,18 @@ class Snake:
         match self.direction:
             case "N":
                 self.direction="E"
-                self.image = self.right_image
+                self.image = grid_man.right_image
             case "E":
                 self.direction="S"
-                self.image = self.down_image
+                self.image = grid_man.down_image
 
             case "S":
                 self.direction="W"
-                self.image = self.left_image
+                self.image = grid_man.left_image
 
             case "W":
                 self.direction="N"
-                self.image = self.up_image
+                self.image = grid_man.up_image
 
         #self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image) <-- useless and breaks code (whyy?? just why)
         self.show_snake()
@@ -343,7 +338,7 @@ class Snake:
         if self.cell.type == "hamster":
             self.cell.clear()
             self.cell.type = "hamster"
-            self.cell.display_image(self.hamster_image)
+            self.cell.display_image(grid_man.hamster_image)
         else:
             self.cell.clear()
 

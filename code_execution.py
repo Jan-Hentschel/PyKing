@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 import threading
 import code
+import time
 
 from gui import root
 from code_editor import code_editor
@@ -69,17 +70,31 @@ def execute_code():
     except Exception as error:
         print_to_terminal_widget(error)
 
+    
 execute_code_thread = None
 
 
-
+# def wait_for():
+#     while execute_code_thread.is_alive():
+#         print("still runnin")
+#         time.sleep(.1)
+#     from virtual_environment import grid_man
+#     print(grid_man.cells[0].type)
 
 
 def start_execute_code_thread():
     global execute_code_thread 
     execute_code_thread = StoppableThread(target=execute_code)
     execute_code_thread.start()
+    # idk = threading.Thread(target=wait_for)
+    # idk.start()
+    
+
+
+
 
 def stop_execute_code_thread():
     global execute_code_thread
-    execute_code_thread.stop()
+    if execute_code_thread and execute_code_thread.is_alive():
+        execute_code_thread.stop()
+
