@@ -7,12 +7,46 @@ from options_handler import get_variable
 from gui import root
 from filetree import save_file_as, save_file, load_file, load_grid, save_grid, new_file, new_grid
 from code_execution import start_execute_code_thread, stop_execute_code_thread
+from virtual_environment import grid_man
 
+excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
+
+editing = None
+
+def pick_add_hamster():
+    global editing 
+    editing = "add_hamster"
+    grid_man.add_all_clickables()
+    
+
+def pick_subtract_hamster():
+    global editing 
+    editing = "subtract_hamster"
+    grid_man.add_all_clickables()
+
+def pick_make_wall():
+    global editing 
+    editing = "make_wall"
+    grid_man.add_all_clickables()
+
+def clear_cell():
+    global editing 
+    editing = "clear_cell"
+    grid_man.add_all_clickables()
+
+def clear_all_cells():
+    grid_man.clear_all_cells()
+    global editing 
+    editing = None
+    grid_man.delete_all_clickables()
+
+def cancel_editing_grid():
+    global editing 
+    editing = None
+    grid_man.delete_all_clickables()
 
 #toolbar als frame erstellen
 toolbar_frame = Frame(root, height=68, bg="#333333", pady=5)
-
-
 
 
 new_file_button = toolbar_button(toolbar_frame, text ="New File", command = new_file)
@@ -36,10 +70,6 @@ save_grid_button.pack(side="left")
 load_grid_button = toolbar_button(toolbar_frame, text ="Load Grid", command = load_grid)
 load_grid_button.pack(side="left")
 
-
-
-
-excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
 excecute_code_button = Button(toolbar_frame, image=excecute_code_icon, command = start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")
 excecute_code_button.pack(side="left")
 
@@ -51,46 +81,6 @@ tick_rate_slider = Scale(toolbar_frame, from_=1, to=100, orient=HORIZONTAL, leng
 tick_rate_slider.set(get_variable("default_tick_rate"))
 tick_rate_slider.pack(side="left")
 
-
-editing = None
-
-def pick_add_hamster():
-    from virtual_environment import grid_man
-    global editing 
-    editing = "add_hamster"
-    grid_man.add_all_clickables()
-    
-
-def pick_subtract_hamster():
-    from virtual_environment import grid_man
-    global editing 
-    editing = "subtract_hamster"
-    grid_man.add_all_clickables()
-
-def pick_make_wall():
-    from virtual_environment import grid_man
-    global editing 
-    editing = "make_wall"
-    grid_man.add_all_clickables()
-
-def clear_cell():
-    from virtual_environment import grid_man
-    global editing 
-    editing = "clear_cell"
-    grid_man.add_all_clickables()
-
-def clear_all_cells():
-    from virtual_environment import grid_man
-    grid_man.clear_all_cells()
-    global editing 
-    editing = None
-    grid_man.delete_all_clickables()
-
-def cancel_editing_grid():
-    from virtual_environment import grid_man
-    global editing 
-    editing = None
-    grid_man.delete_all_clickables()
 
 pick_add_hamster_button = toolbar_button(toolbar_frame, text ="Add Hamster", command = pick_add_hamster)
 pick_add_hamster_button.pack(side="left")
@@ -109,3 +99,4 @@ pick_clear_all_cells_button.pack(side="left")
 
 cancel_editing_grid_button = toolbar_button(toolbar_frame, text ="Cancel Editing Grid", command = cancel_editing_grid)
 cancel_editing_grid_button.pack(side="left")
+

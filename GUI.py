@@ -41,7 +41,7 @@ from virtual_environment import virtual_environment_frame
 
 
 # terminal importieren und in das paned window einfügen
-from terminal import *
+from terminal import terminal
 
 
 from toolbar import toolbar_frame
@@ -57,7 +57,7 @@ horizontally_paned_window.add(code_editor.code_editor_frame)
 
 horizontally_paned_window.add(vertically_pained_window)  
 vertically_pained_window.add(virtual_environment_frame)  
-vertically_pained_window.add(terminal_frame)  
+vertically_pained_window.add(terminal.terminal_frame)  
 
 
 # Alle widgets updaten, um die screen_width/screen_height zu updaten

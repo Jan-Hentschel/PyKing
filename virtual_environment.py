@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import *
 import time
 
-from terminal import terminal_widget
+from terminal import terminal
 from gui import vertically_pained_window, resource_path, root
 
 
@@ -12,8 +12,7 @@ virtual_environment_frame = Frame(vertically_pained_window, bg="#333333")
 grid_frame = Frame(virtual_environment_frame, bg="#333333")
 grid_frame.pack(anchor=NE)
 
-def throw_error_to_terminal(string):
-    terminal_widget.insert(tk.END, string + "\n")
+
 
 logo = PhotoImage(file=resource_path('Assets\\LogoV1.3.png'))
 up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
@@ -210,7 +209,7 @@ class Snake:
         self.delete_snake_image()
 
         if not(self.can_move()):
-            throw_error_to_terminal("you ran into a wall... fucking idiot")
+            terminal.print("you ran into a wall... fucking idiot")
             self.update_cell()
             self.show_snake()
             return
@@ -220,22 +219,22 @@ class Snake:
                 if self.y+1 < grid_man.grid_height:
                     self.y +=1
                 else:
-                    throw_error_to_terminal("you ran into a wall... fucking idiot")
+                    terminal.print("you ran into a wall... fucking idiot")
             case "E":
                 if self.x+1 < grid_man.grid_width:
                     self.x +=1
                 else:
-                    throw_error_to_terminal("you ran into a wall... fucking idiot")
+                    terminal.print("you ran into a wall... fucking idiot")
             case "S":
                 if self.y-1 >= 0:
                     self.y -=1
                 else:
-                    throw_error_to_terminal("you ran into a wall... fucking idiot")
+                    terminal.print("you ran into a wall... fucking idiot")
             case "W":
                 if self.x-1 >= 0:
                     self.x -=1
                 else:
-                    throw_error_to_terminal("you ran into a wall... fucking idiot")
+                    terminal.print("you ran into a wall... fucking idiot")
         self.update_cell()
         self.show_snake()
         root.update_idletasks()
@@ -251,7 +250,7 @@ class Snake:
             self.update_cell()
             self.show_snake()
         else:
-            throw_error_to_terminal("what are you trying to eat dumbass?")
+            terminal.print("what are you trying to eat dumbass?")
         root.update_idletasks()
 
         
@@ -261,7 +260,7 @@ class Snake:
             self.update_cell()
             self.cell.add_hamster()
         else:
-            throw_error_to_terminal("spit what? your mouth is empty!")
+            terminal.print("spit what? your mouth is empty!")
             root.update_idletasks()
 
     def can_move(self):

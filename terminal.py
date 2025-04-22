@@ -5,29 +5,37 @@ from utility import autoHiddenScrollbar
 from gui import vertically_pained_window
 from options_handler import get_variable
 
-def show_current_directories():
-    terminal_widget.delete('1.0', END)
-    terminal_widget.insert(tk.END, f"Excecuting\nFile: {get_variable("current_file_directory")}\nGrid: {get_variable("current_grid_directory")}\n")
 
-terminal_frame = Frame(vertically_pained_window, bg="#3F3F3F", bd=0,)
-terminal_frame.pack(fill=BOTH, expand=True)
+class Terminal:
 
-terminal_and_horizontal_scrollbar_frame = Frame(terminal_frame, bg="#3F3F3F", bd=0,)
-terminal_and_horizontal_scrollbar_frame.pack(side=LEFT, fill=BOTH, expand=True)
+    def __init__(self):
+        self.terminal_frame = Frame(vertically_pained_window, bg="#3F3F3F", bd=0,)
+        self.terminal_frame.pack(fill=BOTH, expand=True)
 
-# Terminal Textfeld erstellen (unten rechts)
-terminal_widget = Text(terminal_and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="white", bd=0, wrap="none")
-terminal_widget.pack(fill=BOTH, expand=True, side=TOP, padx=5, pady=5)
-#scrollbars
-vertical_scrollbar = autoHiddenScrollbar(terminal_frame, terminal_widget, orient=VERTICAL, cursor="arrow")
-vertical_scrollbar.pack(side = RIGHT, fill=Y)
+        self.terminal_and_horizontal_scrollbar_frame = Frame(self.terminal_frame, bg="#3F3F3F", bd=0,)
+        self.terminal_and_horizontal_scrollbar_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
-horizontal_scrollbar = autoHiddenScrollbar(terminal_and_horizontal_scrollbar_frame, terminal_widget, orient=HORIZONTAL, cursor="arrow")
-horizontal_scrollbar.pack(side = BOTTOM, fill=X)
+        # Terminal Textfeld erstellen (unten rechts)
+        self.terminal_widget = Text(self.terminal_and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="white", bd=0, wrap="none")
+        self.terminal_widget.pack(fill=BOTH, expand=True, side=TOP, padx=5, pady=5)
+        #scrollbars
+        self.vertical_scrollbar = autoHiddenScrollbar(self.terminal_frame, self.terminal_widget, orient=VERTICAL, cursor="arrow")
+        self.vertical_scrollbar.pack(side = RIGHT, fill=Y)
 
-vertical_scrollbar.config(command = terminal_widget.yview)
-horizontal_scrollbar.config(command = terminal_widget.xview)
+        self.horizontal_scrollbar = autoHiddenScrollbar(self.terminal_and_horizontal_scrollbar_frame, self.terminal_widget, orient=HORIZONTAL, cursor="arrow")
+        self.horizontal_scrollbar.pack(side = BOTTOM, fill=X)
 
-terminal_widget["xscrollcommand"] = horizontal_scrollbar.set
-terminal_widget["yscrollcommand"] = vertical_scrollbar.set
+        self.vertical_scrollbar.config(command = self.terminal_widget.yview)
+        self.horizontal_scrollbar.config(command = self.terminal_widget.xview)
 
+        self.terminal_widget["xscrollcommand"] = self.horizontal_scrollbar.set
+        self.terminal_widget["yscrollcommand"] = self.vertical_scrollbar.set
+
+    def show_current_directories(self):
+        self.terminal_widget.delete('1.0', END)
+        self.terminal_widget.insert(tk.END, f"Excecuting\nFile: {get_variable("current_file_directory")}\nGrid: {get_variable("current_grid_directory")}\n")
+
+    def print(self, string):
+        self.terminal_widget.insert(tk.END, string + "\n")   
+    
+terminal = Terminal()

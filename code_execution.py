@@ -5,7 +5,7 @@ import code
 
 from gui import root
 from code_editor import code_editor
-from terminal import terminal_widget
+from terminal import terminal
 from filetree import load_grid_directory
 from options_handler import get_variable
 from virtual_environment import Snake
@@ -14,7 +14,7 @@ from virtual_environment import Snake
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
     output = " ".join(map(str, args)) + "\n"
-    terminal_widget.insert(tk.END, output)
+    terminal.terminal_widget.insert(tk.END, output)
 
 
 
@@ -36,8 +36,8 @@ class StoppableThread(threading.Thread):
     def stop_if_stopped(self):
         if self.stopped():
             self.join()
-        from terminal import show_current_directories
-        show_current_directories()
+        from terminal import terminal
+        terminal.show_current_directories()
 
 
 

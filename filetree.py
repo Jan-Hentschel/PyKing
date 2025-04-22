@@ -10,7 +10,7 @@ from utility import resource_path, path_from_relative_path
 from options_handler import get_variable, set_variable
 from gui import root, horizontally_paned_window
 from code_editor import code_editor
-from terminal import show_current_directories
+from terminal import terminal
 from virtual_environment import change_grid, get_grid_dict, change_grid_man 
 
 
@@ -34,7 +34,7 @@ def get_content_from_directory(directory):
 def load_file_directory(directory):
     code_editor.load_into_editor(get_content_from_directory(directory))
     set_variable("current_file_directory", directory)
-    show_current_directories()
+    terminal.show_current_directories()
 
 # from virtual_environment import throw_error_to_terminal
 # def load_test_file():
@@ -62,7 +62,7 @@ def save_file_as():
     directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
     save_content_to_directory(directory)
     set_variable("current_file_directory", directory)
-    show_current_directories()
+    terminal.show_current_directories()
 
 def save_file(event = ""):
     save_content_to_directory(get_variable("current_file_directory"))
@@ -79,7 +79,7 @@ def load_grid_directory(directory):
         new_cells = dict["cells"]
         change_grid(columns, rows, new_cells)
     set_variable("current_grid_directory", directory)
-    show_current_directories()
+    terminal.show_current_directories()
 
 def load_grid():
     #ask to save before
@@ -94,7 +94,7 @@ def save_grid():
     with open(directory, "w", encoding="utf-8") as file:
         file.write(json_dict)
     set_variable("current_grid_directory", directory)
-    show_current_directories()
+    terminal.show_current_directories()
 
     
 def new_file():
@@ -102,7 +102,7 @@ def new_file():
     with open(directory, "w", encoding="utf-8") as file:
         file.write("")    
     set_variable("current_file_directory", directory)
-    show_current_directories()
+    terminal.show_current_directories()
     
 
     
@@ -117,7 +117,7 @@ def create_grid(popup):
     with open(directory, "w", encoding="utf-8") as file:
         file.write(json_dict)
     set_variable("current_grid_directory", directory)
-    show_current_directories()
+    terminal.show_current_directories()
 
 
 
