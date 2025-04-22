@@ -9,35 +9,35 @@ from gui import horizontally_paned_window
 
 class CodeEditor:
     def __init__(self):
-        self.code_editor_frame = Frame(horizontally_paned_window, bg="#3F3F3F", bd=0,)
-        self.code_editor_frame.pack(fill=BOTH, expand=True)
+        self.frame = Frame(horizontally_paned_window, bg="#3F3F3F", bd=0,)
+        self.frame.pack(fill=BOTH, expand=True)
 
-        self.code_editor_and_horizontal_scrollbar_frame = Frame(self.code_editor_frame, bg="#3F3F3F", bd=0,)
+        self.code_editor_and_horizontal_scrollbar_frame = Frame(self.frame, bg="#3F3F3F", bd=0,)
         self.code_editor_and_horizontal_scrollbar_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
         # Text-Feld für den Code Editor erstellen (mitte)
-        self.code_editor_widget = Text(self.code_editor_and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="white", bd=0, wrap="none", insertbackground="#FFFFFF", selectbackground="#6F6F6F", tabs="40")
-        self.code_editor_widget.pack(fill=BOTH, expand=True, side=TOP, padx=5, pady=5)
+        self.text_widget = Text(self.code_editor_and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="white", bd=0, wrap="none", insertbackground="#FFFFFF", selectbackground="#6F6F6F", tabs="40")
+        self.text_widget.pack(fill=BOTH, expand=True, side=TOP, padx=5, pady=5)
 
 
         #scrollbars
-        self.vertical_scrollbar = AutoHiddenScrollbar(self.code_editor_frame, self.code_editor_widget, orient=VERTICAL, cursor="arrow")
+        self.vertical_scrollbar = AutoHiddenScrollbar(self.frame, self.text_widget, orient=VERTICAL, cursor="arrow")
         self.vertical_scrollbar.pack(side = RIGHT, fill=Y)
 
-        self.horizontal_scrollbar = AutoHiddenScrollbar(self.code_editor_and_horizontal_scrollbar_frame, self.code_editor_widget, orient=HORIZONTAL, cursor="arrow")
+        self.horizontal_scrollbar = AutoHiddenScrollbar(self.code_editor_and_horizontal_scrollbar_frame, self.text_widget, orient=HORIZONTAL, cursor="arrow")
         self.horizontal_scrollbar.pack(side = BOTTOM, fill=X)
 
-        self.horizontal_scrollbar.config(command = self.code_editor_widget.xview)
-        self.vertical_scrollbar.config(command = self.code_editor_widget.yview)
+        self.horizontal_scrollbar.config(command = self.text_widget.xview)
+        self.vertical_scrollbar.config(command = self.text_widget.yview)
 
-        self.code_editor_widget["xscrollcommand"] = self.horizontal_scrollbar.set
-        self.code_editor_widget["yscrollcommand"] = self.vertical_scrollbar.set
+        self.text_widget["xscrollcommand"] = self.horizontal_scrollbar.set
+        self.text_widget["yscrollcommand"] = self.vertical_scrollbar.set
 
     def load_into_editor(self, content):
-        self.code_editor_widget.delete(1.0,END)
-        self.code_editor_widget.insert(tk.END, content)
+        self.text_widget.delete(1.0,END)
+        self.text_widget.insert(tk.END, content)
 
     def getStringFromEditor(self):
-        return self.code_editor_widget.get("1.0",END)
+        return self.text_widget.get("1.0",END)
     
 code_editor = CodeEditor()

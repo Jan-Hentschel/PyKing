@@ -14,7 +14,7 @@ from virtual_environment import Snake
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
     output = " ".join(map(str, args)) + "\n"
-    terminal.text_widget.insert(tk.END, output)
+    terminal.print(output)
 
 
 
@@ -55,7 +55,7 @@ def execute_code():
     try:
         file_manager.load_grid_directory(options_handler.get_variable("current_grid_directory")) #ask to save before
         root.update_idletasks()
-        code_string = code_editor.code_editor_widget.get("1.0", END)
+        code_string = code_editor.text_widget.get("1.0", END)
         exec(code_string, PyKing_functions)
 
         # buffer = ""

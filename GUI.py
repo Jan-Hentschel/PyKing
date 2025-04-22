@@ -34,30 +34,22 @@ horizontally_paned_window.pack(side="bottom", fill="both", expand=1)
 # Vertikales Pained Window im Horizontalen Pained Window erstellen (rechts)
 vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERTICAL, bg="#333333", sashwidth=10)
 
-# toolbar importieren und in das window packen
-
-
 top_right_frame = Frame(vertically_pained_window, bg="#333333")
 grid_frame = Frame(top_right_frame, bg="#333333")
 grid_frame.pack(anchor=NE)
 
 
-# terminal importieren und in das paned window einfügen
 from terminal import terminal
-
-
 from toolbar import toolbar
+from filetree import file_tree
+from code_editor import code_editor
+
 toolbar.frame.pack(side="top", fill="x")
 
-# filetree importieren und in das paned window einfügen
-from filetree import *
-horizontally_paned_window.add(file_tree_frame)
+horizontally_paned_window.add(file_tree.frame)
+horizontally_paned_window.add(code_editor.frame)  
+horizontally_paned_window.add(vertically_pained_window)
 
-# code editor importieren und in das paned window einfügen
-from code_editor import code_editor
-horizontally_paned_window.add(code_editor.code_editor_frame)  
-
-horizontally_paned_window.add(vertically_pained_window)  
 vertically_pained_window.add(top_right_frame)  
 vertically_pained_window.add(terminal.frame)  
 
