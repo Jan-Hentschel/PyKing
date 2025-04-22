@@ -1,10 +1,10 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk
 import time
+
 from terminal import terminal_widget
 from gui import vertically_pained_window, resource_path, root
-import time
+
 
 
 # Das Virtual Environment erstellen (oben rechts)

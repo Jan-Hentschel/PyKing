@@ -6,7 +6,7 @@ from code_editor import code_editor_widget
 from terminal import terminal_widget
 from filetree import load_grid_directory
 from options_handler import get_variable
-import multiprocessing
+
 
 
 #help from chatgpt to get everything working

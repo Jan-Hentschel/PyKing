@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk
 from utility import autoHiddenScrollbar
 
 from gui import vertically_pained_window

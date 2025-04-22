@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import *
-from tkinter import ttk
 from ctypes import windll
 from utility import resource_path
 #damit text nicht blurry ist
