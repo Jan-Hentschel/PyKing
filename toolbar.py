@@ -29,7 +29,7 @@ class Toolbar:
         self.pick_clear_cell_button = DefaultButton(self.frame, text ="Clear Cell", command = root.grid_manager.clear_cell)
         self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", command = root.grid_manager.edit_clear_all_cells)
         self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", command = root.grid_manager.cancel_editing_grid)
-        self.settings_button = DefaultButton(self.frame, text ="Settings", command = lambda: print("Settings"))
+        self.settings_button = DefaultButton(self.frame, text ="Settings", command = root.settings.open_settings)
 
         self.new_file_button.pack()
         self.save_file_as_button.pack()

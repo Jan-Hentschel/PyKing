@@ -20,15 +20,18 @@ class Root(tk.Tk):
 
         self.state('zoomed')
 
-        self.configure(bg="#333333")
-        self.horizontally_paned_window = PanedWindow(self, orient=tk.HORIZONTAL, bg="#333333", sashwidth = 10)
+        self.primary_color = "#3F3F3F"
+        self.secondary_color = "#333333"
+
+        self.configure(bg=self.secondary_color)
+        self.horizontally_paned_window = PanedWindow(self, orient=tk.HORIZONTAL, bg=self.secondary_color, sashwidth = 10)
         self.horizontally_paned_window.pack(side="bottom", fill="both", expand=1)
 
 
-        self.vertically_pained_window = PanedWindow(self.horizontally_paned_window, orient=tk.VERTICAL, bg="#333333", sashwidth=10)
+        self.vertically_pained_window = PanedWindow(self.horizontally_paned_window, orient=tk.VERTICAL, bg=self.secondary_color, sashwidth=10)
 
-        self.top_right_frame = Frame(self.vertically_pained_window, bg="#333333")
-        self.grid_frame = Frame(self.top_right_frame, bg="#333333")
+        self.top_right_frame = Frame(self.vertically_pained_window, bg=self.secondary_color)
+        self.grid_frame = Frame(self.top_right_frame, bg=self.secondary_color)
         self.grid_frame.pack(anchor=NE)
 
         from terminal import Terminal # needs nothing
@@ -46,11 +49,16 @@ class Root(tk.Tk):
         from code_execution import CodeExecution 
         self.code_executor = CodeExecution(self)
 
-        from toolbar import Toolbar # NEEDS GRID-MAN AND FILE-MANAGER AND CODE-EXECUTION
+        from settings import Settings
+        self.settings = Settings(self)
+
+        from toolbar import Toolbar # NEEDS GRID-MAN AND FILE-MANAGER AND CODE-EXECUTION AND SETTINGS
         self.toolbar = Toolbar(self) 
 
         from filetree import Filetree # NEEDS FILE-MANAGER
         self.file_tree = Filetree(self) 
+
+
 
         self.toolbar.frame.pack(side="top", fill="x")
 
@@ -72,6 +80,12 @@ class Root(tk.Tk):
         self.file_manager.open_python_file_and_grid_from_options()        
         self.bind("<Control-s>", lambda event: self.file_manager.save_python_file_and_grid())
         
+    def update_colors(self):
+        self.configure(bg=self.secondary_color)
+        self.horizontally_paned_window.configure(bg=self.secondary_color)
+        self.vertically_pained_window.configure(bg=self.secondary_color)
+        self.top_right_frame.configure(bg=self.secondary_color)
+        self.grid_frame.configure(bg=self.secondary_color)
 
 
 root = Root()

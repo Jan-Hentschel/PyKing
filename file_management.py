@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import filedialog
 import json
 
-from utility import path_from_relative_path, DefaultButton, DefaultLabel, DefaultEntry
+from utility import *
 from options_handler import options_handler
 
 
@@ -98,11 +98,10 @@ class FileManager:
         self.root.terminal.show_current_directories(f"saved grid: {options_handler.get_variable('current_grid_directory')}")
 
     def new_grid(self):
-
-
-        popup = Toplevel(self.root, bg="#333333")
+        popup = DefaultToplevel(self.root)
         popup.geometry("400x200")
         popup.title("Input Grid Height and Width")
+        popup.iconbitmap(resource_path("Assets\\Icon.ico"))
 
         column_label = DefaultLabel(popup, text="Columns:")
         column_label.pack()
