@@ -6,7 +6,7 @@ import code
 from gui import root
 from code_editor import code_editor
 from terminal import terminal
-from filetree import load_grid_directory
+from file_management import file_manager
 from options_handler import get_variable
 from virtual_environment import Snake
 
@@ -58,7 +58,7 @@ def execute_code():
 
 
     try:
-        load_grid_directory(get_variable("current_grid_directory")) #ask to save before
+        file_manager.load_grid_directory(get_variable("current_grid_directory")) #ask to save before
         root.update_idletasks()
         code_string = code_editor.code_editor_widget.get("1.0", END)
         exec(code_string, PyKing_functions)

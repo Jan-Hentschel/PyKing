@@ -1,15 +1,15 @@
 from options_handler import get_variable
 
 from gui import root
-from filetree import load_file_directory, load_grid_directory, save_file
+from file_management import file_manager
 
 
 if __name__ == "__main__":
     try:
-        load_file_directory(get_variable("current_file_directory"))
-        load_grid_directory(get_variable("current_grid_directory"))
+        file_manager.load_file_directory(get_variable("current_file_directory"))
+        file_manager.load_grid_directory(get_variable("current_grid_directory"))
     except:
         raise Exception
-    root.bind("<Control-s>", save_file)
+    root.bind("<Control-s>", file_manager.save_file)
     root.mainloop()
 

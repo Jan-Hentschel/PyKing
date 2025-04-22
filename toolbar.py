@@ -5,7 +5,7 @@ from utility import toolbar_button, resource_path
 from options_handler import get_variable
 
 from gui import root
-from filetree import save_file_as, save_file, load_file, load_grid, save_grid, new_file, new_grid
+from file_management import file_manager
 from code_execution import start_execute_code_thread, stop_execute_code_thread
 from virtual_environment import grid_man
 
@@ -49,25 +49,25 @@ def cancel_editing_grid():
 toolbar_frame = Frame(root, height=68, bg="#333333", pady=5)
 
 
-new_file_button = toolbar_button(toolbar_frame, text ="New File", command = new_file)
+new_file_button = toolbar_button(toolbar_frame, text ="New File", command = file_manager.new_file)
 new_file_button.pack(side="left")
 
-save_file_as_button = toolbar_button(toolbar_frame, text ="Save File As", command = save_file_as)
+save_file_as_button = toolbar_button(toolbar_frame, text ="Save File As", command = file_manager.save_file_as)
 save_file_as_button.pack(side="left")
 
-save_file_button = toolbar_button(toolbar_frame, text ="Save File", command = save_file)
+save_file_button = toolbar_button(toolbar_frame, text ="Save File", command = file_manager.save_file)
 save_file_button.pack(side="left")
 
-load_button = toolbar_button(toolbar_frame, text ="Load File", command = load_file)
+load_button = toolbar_button(toolbar_frame, text ="Load File", command = file_manager.load_file)
 load_button.pack(side="left")
 
-new_grid_button = toolbar_button(toolbar_frame, text ="New Grid", command = new_grid)
+new_grid_button = toolbar_button(toolbar_frame, text ="New Grid", command = file_manager.new_grid)
 new_grid_button.pack(side="left")
 
-save_grid_button = toolbar_button(toolbar_frame, text ="Save Grid", command = save_grid)
+save_grid_button = toolbar_button(toolbar_frame, text ="Save Grid", command = file_manager.save_grid)
 save_grid_button.pack(side="left")
 
-load_grid_button = toolbar_button(toolbar_frame, text ="Load Grid", command = load_grid)
+load_grid_button = toolbar_button(toolbar_frame, text ="Load Grid", command = file_manager.load_grid)
 load_grid_button.pack(side="left")
 
 excecute_code_button = Button(toolbar_frame, image=excecute_code_icon, command = start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")

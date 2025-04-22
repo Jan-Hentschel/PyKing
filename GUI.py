@@ -37,7 +37,7 @@ vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERT
 # toolbar importieren und in das window packen
 
 # virtual environment importieren und in das paned window einfügen
-from virtual_environment import virtual_environment_frame
+from top_right import virtual_environment_frame
 
 
 # terminal importieren und in das paned window einfügen

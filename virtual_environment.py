@@ -1,31 +1,26 @@
-import tkinter as tk
+
 from tkinter import *
+import tkinter as tk
 import time
 
+from utility import resource_path
+
 from terminal import terminal
-from gui import vertically_pained_window, resource_path, root
-
-
-
-# Das Virtual Environment erstellen (oben rechts)
-virtual_environment_frame = Frame(vertically_pained_window, bg="#333333")
-grid_frame = Frame(virtual_environment_frame, bg="#333333")
-grid_frame.pack(anchor=NE)
-
-
+from gui import root
 
 logo = PhotoImage(file=resource_path('Assets\\LogoV1.3.png'))
 up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
 down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
 left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
 right_image = PhotoImage(file=resource_path('Assets\\Right.png'))
-hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
 
 
 
-def wait_time():
-    from toolbar import tick_rate_slider
-    return 1/tick_rate_slider.get()
+
+
+
+
+
 
 
 class GridManager:
@@ -35,6 +30,7 @@ class GridManager:
         self.cells = []
         self.create_cells()
         self.add_cells_to_grid()
+        self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
 
     def create_cells(self):
         for y in range(self.grid_height):
@@ -67,23 +63,68 @@ class GridManager:
             elif cell.type == "hamster":
                 cell.clear()
                 cell.type = "hamster"
-                cell.display_image(hamster_image)
+                cell.display_image(self.hamster_image)
 
     def remove_all_cells(self):
         for cell in self.cells:
             cell.canvas.grid_remove()
             del cell
-        self.cells = []
-            
+            self.cells = []
+
+    def change_grid_man(self, columns, rows):
+        from gui import root
+        self.remove_all_cells()
+        self.grid_width=columns
+        self.grid_height=rows
+        self.create_cells()
+        self.add_cells_to_grid()
+        root.update_idletasks()
+
+    def change_grid(self, columns, rows, new_cells):
+        self.change_grid_man(columns, rows)
+        for i in range(len(new_cells)):
+            old_cell = self.cells[i]
+            new_cell = new_cells[i]
+            if new_cell == "empty":
+                pass
+            elif new_cell == "wall":
+                old_cell.change_to_wall()
+            else:
+                cell_type, num_hamsters = new_cell.split()
+                for i in range(int(num_hamsters)):
+                    old_cell.add_hamster()
+            self.delete_all_clickables()
 
 
+    def get_grid_dict(self):
+        new_cells = []
+        for cell in self.cells:
+            if cell.type == "wall":
+                new_cells.append("wall")
+            elif cell.type == "empty": 
+                new_cells.append("empty")
+            else:
+                new_cells.append(f"hamster {cell.hamsters}")
+
+
+        columns = self.grid_width
+        rows = self.grid_height
+        dictionary = {
+            "columns": columns,
+            "rows": rows,
+            "cells": new_cells
+        }
+        return dictionary
+    
 class GridCell:
     def __init__(self, x, y, type):
+        from top_right import grid_frame
         self.x = x
         self.y = y
         self.type = type
         self.canvas = Canvas(grid_frame, width=100, height=100, background="#3F3F3F", highlightthickness=0)
         self.hamsters = 0
+        self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
 
     def edit(self):
         from toolbar import editing
@@ -125,7 +166,7 @@ class GridCell:
 
     def add_hamster(self):
         self.type = "hamster"
-        self.display_image(hamster_image)
+        self.display_image(self.hamster_image)
         self.hamsters += 1
 
     def subtract_hamster(self):
@@ -139,8 +180,6 @@ class GridCell:
         self.canvas.delete("all")
         self.canvas.configure(background="#3F3F3F")
 
-        
-
 class Snake:
 
     def __init__(self, x, y, direction):
@@ -150,6 +189,7 @@ class Snake:
             del self
             raise Exception("you tried to put a snake outside of the grid... fucking looser, now it killed itself")
         self.hamsters = 0 #Einfügen dass man das voreinstellen kann
+        self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
 
         self.update_cell()
 
@@ -167,8 +207,11 @@ class Snake:
 
         self.cell.display_image(self.image)
         root.update_idletasks()
-        time.sleep(wait_time())
+        time.sleep(self.wait_time())
 
+    def wait_time(self):
+        from toolbar import tick_rate_slider
+        return 1/tick_rate_slider.get()
 
     def is_outside_grid(self, x, y):
         if y < grid_man.grid_height and x < grid_man.grid_width and y >= 0 and x >= 0:
@@ -203,7 +246,7 @@ class Snake:
         #self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image) <-- useless and breaks code (whyy?? just why)
         self.show_snake()
         root.update_idletasks()
-        time.sleep(wait_time())
+        time.sleep(self.wait_time())
 
     def move(self):
         self.delete_snake_image()
@@ -238,7 +281,7 @@ class Snake:
         self.update_cell()
         self.show_snake()
         root.update_idletasks()
-        time.sleep(wait_time())
+        time.sleep(self.wait_time())
 
 
 
@@ -308,55 +351,20 @@ class Snake:
         if self.cell.type == "hamster":
             self.cell.clear()
             self.cell.type = "hamster"
-            self.cell.display_image(hamster_image)
+            self.cell.display_image(self.hamster_image)
         else:
             self.cell.clear()
 
-
-
-
 grid_man = GridManager(9, 5)
 
-def change_grid_man(columns, rows):
-    grid_man.remove_all_cells()
-    grid_man.grid_width=columns
-    grid_man.grid_height=rows
-    grid_man.create_cells()
-    grid_man.add_cells_to_grid()
-    root.update_idletasks()
-
-def change_grid(columns, rows, new_cells):
-    change_grid_man(columns, rows)
-    for i in range(len(new_cells)):
-        old_cell = grid_man.cells[i]
-        new_cell = new_cells[i]
-        if new_cell == "empty":
-            pass
-        elif new_cell == "wall":
-            old_cell.change_to_wall()
-        else:
-            cell_type, num_hamsters = new_cell.split()
-            for i in range(int(num_hamsters)):
-                old_cell.add_hamster()
-        grid_man.delete_all_clickables()
 
 
-def get_grid_dict():
-    new_cells = []
-    for cell in grid_man.cells:
-        if cell.type == "wall":
-            new_cells.append("wall")
-        elif cell.type == "empty": 
-            new_cells.append("empty")
-        else:
-            new_cells.append(f"hamster {cell.hamsters}")
 
 
-    columns = grid_man.grid_width
-    rows = grid_man.grid_height
-    dictionary = {
-        "columns": columns,
-        "rows": rows,
-        "cells": new_cells
-    }
-    return dictionary
+
+
+
+
+
+
+
