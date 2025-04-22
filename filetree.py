@@ -62,9 +62,9 @@ class Filetree:
 
         directory = base_path + added_path
         if directory[-3:] == ".py":
-            file_manager.load_file_directory(directory)
+            file_manager.open_file(directory)
         elif directory[-5:]==".json":
-            file_manager.load_grid_directory(directory)
+            file_manager.open_grid(directory)
         else:
             print("cant open im sowy")
 

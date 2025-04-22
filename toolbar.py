@@ -17,13 +17,13 @@ class Toolbar:
         self.frame = Frame(root, height=68, bg="#333333", pady=5)
 
 
-        self.new_file_button = ToolbarButton(self.frame, text ="New File", command = file_manager.new_file)
-        self.save_file_as_button = ToolbarButton(self.frame, text ="Save File As", command = file_manager.save_file_as)
-        self.save_file_button = ToolbarButton(self.frame, text ="Save File", command = file_manager.save_file)
-        self.load_button = ToolbarButton(self.frame, text ="Load File", command = file_manager.load_file)
+        self.new_file_button = ToolbarButton(self.frame, text ="New File", command = file_manager.new_python_file)
+        self.save_file_as_button = ToolbarButton(self.frame, text ="Save File As", command = file_manager.save_python_file_as)
+        self.save_file_button = ToolbarButton(self.frame, text ="Save File", command = file_manager.save_python_file)
+        self.load_button = ToolbarButton(self.frame, text ="Load File", command = file_manager.open_python_file_dialog)
         self.new_grid_button = ToolbarButton(self.frame, text ="New Grid", command = file_manager.new_grid)
         self.save_grid_button = ToolbarButton(self.frame, text ="Save Grid", command = file_manager.save_grid_as)
-        self.load_grid_button = ToolbarButton(self.frame, text ="Load Grid", command = file_manager.load_grid)
+        self.load_grid_button = ToolbarButton(self.frame, text ="Load Grid", command = file_manager.open_grid_dialog)
         self.excecute_code_button = Button(self.frame, image=self.excecute_code_icon, command = start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")
         self.stop_code_execution_button = ToolbarButton(self.frame, text ="Stop Execution", command = stop_execute_code_thread)
         self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", highlightbackground="#333333",fg="#FFFFFF", troughcolor="#3F3F3F")

@@ -54,7 +54,7 @@ def execute_code():
     interpreter = code.InteractiveInterpreter(locals=PyKing_functions)
 
     try:
-        file_manager.load_grid_directory(options_handler.get_variable("current_grid_directory")) #ask to save before
+        file_manager.open_grid(options_handler.get_variable("current_grid_directory")) #ask to save before
         root.update_idletasks()
         code_string = code_editor.text_widget.get("1.0", END)
         exec(code_string, PyKing_functions)

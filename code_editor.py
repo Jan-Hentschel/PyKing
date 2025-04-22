@@ -37,7 +37,7 @@ class CodeEditor:
         self.text_widget.delete(1.0,END)
         self.text_widget.insert(tk.END, content)
 
-    def getStringFromEditor(self):
+    def get_text_widget_content(self):
         return self.text_widget.get("1.0",END)
     
 code_editor = CodeEditor()
