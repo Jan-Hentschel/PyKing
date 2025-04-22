@@ -2,10 +2,8 @@ from tkinter import *
 from tkinter import ttk
 import os
 from tkinter import filedialog
-from utility import ToolbarButton
 
-
-from utility import resource_path, path_from_relative_path
+from utility import ToolbarButton, resource_path, path_from_relative_path
 from options_handler import options_handler
 
 from gui import horizontally_paned_window
@@ -22,7 +20,7 @@ class Filetree:
         self.folder_icon = PhotoImage(file=resource_path('Assets\\folder_icon.png'))
 
         self.open_directory_button = ToolbarButton(self.frame, text="Open Directory", command=self.open_directory)
-        self.open_directory_button.pack()
+        self.open_directory_button.pack(side="top", fill="x")
 
         #https://stackoverflow.com/questions/68078498/recursively-arrange-all-folders-and-files-in-a-hierarchical-treeview-in-tkinter
 

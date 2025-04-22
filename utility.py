@@ -46,6 +46,10 @@ class ToolbarButton(Button):
     def __init__(self, master, **kwargs):
         super().__init__(master, bd=2, bg="#3F3F3F", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", height=2, **kwargs)
 
+    def pack(self, side="left", **kwargs):
+        super().pack(side=side, **kwargs)
+
+
 def resource_path(relative_path):
     try:
         base_path = sys._MEIPASS

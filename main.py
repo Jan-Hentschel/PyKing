@@ -1,5 +1,3 @@
-from options_handler import options_handler
-
 from gui import root
 from file_management import file_manager
 
