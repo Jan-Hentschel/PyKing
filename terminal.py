@@ -8,6 +8,7 @@ from options_handler import options_handler
 class Terminal:
 
     def __init__(self, root):
+        self.status_seperator = "_"
         self.frame = Frame(root.vertically_pained_window, bg="#3F3F3F", bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
@@ -30,9 +31,24 @@ class Terminal:
         self.text_widget["xscrollcommand"] = self.horizontal_scrollbar.set
         self.text_widget["yscrollcommand"] = self.vertical_scrollbar.set
 
+    def calculate_seperator_length(self, status):
+        longest_line = len(status)
+        if len(status.splitlines()) > 1:
+            longest_line = max(len(line) for line in status.splitlines())
+
+        longest_line = max(longest_line, len(f"File: {options_handler.get_variable("current_file_directory")} "), len(f"Grid: {options_handler.get_variable("current_grid_directory")} "))
+
+        return longest_line
+
     def show_current_directories(self, status ):
+        seperator = self.status_seperator * self.calculate_seperator_length(status)
         self.text_widget.delete('1.0', END)
-        self.text_widget.insert(tk.END, f"{status}\nFile: {options_handler.get_variable("current_file_directory")}\nGrid: {options_handler.get_variable("current_grid_directory")}\n")
+        self.text_widget.insert(tk.END, 
+                    f"{status}\n"
+                    f"{seperator}\n\n"
+                    f"File: {options_handler.get_variable('current_file_directory')}\n"
+                    f"Grid: {options_handler.get_variable('current_grid_directory')}\n"
+                    f"{seperator}\n\n")
 
     def print(self, string):
         self.text_widget.insert(tk.END, string + "\n")   

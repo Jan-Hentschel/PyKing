@@ -33,6 +33,15 @@ class CodeEditor:
         self.text_widget["xscrollcommand"] = self.horizontal_scrollbar.set
         self.text_widget["yscrollcommand"] = self.vertical_scrollbar.set
 
+        color_delegator = ColorDelegator()
+        color_delegator.tagdefs['COMMENT'] = {'foreground': '#AAAAAA', 'background': '#3F3F3F'} #example: #, """, '''
+        color_delegator.tagdefs['KEYWORD'] = {'foreground': '#D67CBC', 'background': '#3F3F3F'} #example: def, class, if, else, etc.
+        color_delegator.tagdefs['BUILTIN'] = {'foreground': '#71BFFF', 'background': '#3F3F3F'} #example: print, len, etc.
+        color_delegator.tagdefs['STRING'] = {'foreground': '#A8D37E', 'background': '#3F3F3F'} #example: "string", 'string', """string""", '''string'''
+        color_delegator.tagdefs['DEFINITION'] = {'foreground': '#71BFFF', 'background': '#3F3F3F'} #example: def function_name, class ClassName, etc.
+        
+        Percolator(self.text_widget).insertfilter(color_delegator)
+
     def load_into_editor(self, content):
         self.text_widget.delete(1.0,END)
         self.text_widget.insert(tk.END, content)
