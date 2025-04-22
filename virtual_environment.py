@@ -104,7 +104,7 @@ class GridManager:
     
 class GridCell:
     def __init__(self, x, y, type):
-        from top_right import grid_frame
+        from gui import grid_frame
         self.x = x
         self.y = y
         self.type = type

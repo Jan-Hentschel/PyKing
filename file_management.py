@@ -4,7 +4,7 @@ from utility import ToolbarButton
 import json
 
 from utility import path_from_relative_path
-from options_handler import get_variable, set_variable
+from options_handler import options_handler
 
 from gui import root
 from code_editor import code_editor
@@ -26,7 +26,7 @@ class FileManager:
 
     def load_file_directory(self, directory):
         code_editor.load_into_editor(self.get_content_from_directory(directory))
-        set_variable("current_file_directory", directory)
+        options_handler.set_variable("current_file_directory", directory)
         terminal.show_current_directories()
 
 
@@ -40,11 +40,11 @@ class FileManager:
     def save_file_as(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
         self.save_content_to_directory(directory)
-        set_variable("current_file_directory", directory)
+        options_handler.set_variable("current_file_directory", directory)
         terminal.show_current_directories()
 
     def save_file(self, event = ""):
-        self.save_content_to_directory(get_variable("current_file_directory"))
+        self.save_content_to_directory(options_handler.get_variable("current_file_directory"))
 
 
 
@@ -56,7 +56,7 @@ class FileManager:
             rows = dict["rows"]
             new_cells = dict["cells"]
             grid_man.change_grid(columns, rows, new_cells)
-        set_variable("current_grid_directory", directory)
+        options_handler.set_variable("current_grid_directory", directory)
         terminal.show_current_directories()
 
     def load_grid(self):
@@ -71,7 +71,7 @@ class FileManager:
         json_dict = json.dumps(grid_man.get_grid_dict())
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
-        set_variable("current_grid_directory", directory)
+        options_handler.set_variable("current_grid_directory", directory)
         terminal.show_current_directories()
 
         
@@ -79,7 +79,7 @@ class FileManager:
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
         with open(directory, "w", encoding="utf-8") as file:
             file.write("")    
-        set_variable("current_file_directory", directory)
+        options_handler.set_variable("current_file_directory", directory)
         terminal.show_current_directories()
         
 
@@ -94,7 +94,7 @@ class FileManager:
         json_dict = json.dumps(grid_man.get_grid_dict())
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
-        set_variable("current_grid_directory", directory)
+        options_handler.set_variable("current_grid_directory", directory)
         terminal.show_current_directories()
 
 

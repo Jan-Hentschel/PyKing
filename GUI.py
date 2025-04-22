@@ -36,8 +36,10 @@ vertically_pained_window = PanedWindow(horizontally_paned_window, orient=tk.VERT
 
 # toolbar importieren und in das window packen
 
-# virtual environment importieren und in das paned window einfügen
-from top_right import virtual_environment_frame
+
+top_right_frame = Frame(vertically_pained_window, bg="#333333")
+grid_frame = Frame(top_right_frame, bg="#333333")
+grid_frame.pack(anchor=NE)
 
 
 # terminal importieren und in das paned window einfügen
@@ -56,7 +58,7 @@ from code_editor import code_editor
 horizontally_paned_window.add(code_editor.code_editor_frame)  
 
 horizontally_paned_window.add(vertically_pained_window)  
-vertically_pained_window.add(virtual_environment_frame)  
+vertically_pained_window.add(top_right_frame)  
 vertically_pained_window.add(terminal.frame)  
 
 

@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import *
 
 from utility import ToolbarButton, resource_path
-from options_handler import get_variable
+from options_handler import options_handler
 
 from gui import root
 from file_management import file_manager
@@ -46,7 +46,7 @@ class Toolbar:
 
 
         self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", highlightbackground="#333333",fg="#FFFFFF", troughcolor="#3F3F3F")
-        self.tick_rate_slider.set(get_variable("default_tick_rate"))
+        self.tick_rate_slider.set(options_handler.get_variable("default_tick_rate"))
         self.tick_rate_slider.pack(side="left")
 
 

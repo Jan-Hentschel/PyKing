@@ -6,7 +6,7 @@ from utility import ToolbarButton
 
 
 from utility import resource_path, path_from_relative_path
-from options_handler import get_variable, set_variable
+from options_handler import options_handler
 
 from gui import horizontally_paned_window
 from file_management import file_manager
@@ -47,12 +47,12 @@ def open_file_from_tree(iid):
         print("cant open im sowy")
 
 
-start_path=get_variable("current_filetree_directory")
+start_path = options_handler.get_variable("current_filetree_directory")
 def open_directory():
     treeview.delete(*treeview.get_children())
     global start_path
     start_path = filedialog.askdirectory(initialdir=path_from_relative_path("Files"), title="Open a Directory")
-    set_variable("current_filetree_directory", start_path)
+    options_handler.set_variable("current_filetree_directory", start_path)
     display_treeview()
 
 def display_treeview():
