@@ -6,7 +6,6 @@ import time
 
 from gui import root
 from code_editor import code_editor
-from terminal import terminal
 from file_management import file_manager
 from options_handler import options_handler
 from virtual_environment import Snake
@@ -15,7 +14,7 @@ from virtual_environment import Snake
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
     output = " ".join(map(str, args)) + "\n"
-    terminal.print(output)
+    root.terminal.print(output)
 
 
 
@@ -37,8 +36,8 @@ class StoppableThread(threading.Thread):
     def stop_if_stopped(self):
         if self.stopped():
             self.join()
-        from terminal import terminal
-        terminal.show_current_directories()
+
+        root.terminal.show_current_directories()
 
 
 

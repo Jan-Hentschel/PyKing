@@ -49,6 +49,10 @@ class ToolbarButton(Button):
     def pack(self, side="left", **kwargs):
         super().pack(side=side, **kwargs)
 
+#https://www.youtube.com/watch?v=p3tSLatmGvU
+#https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
+#vor jeden relative path diese funktion setzen um pyinstaller zu helfen alle dateien zu finden
+
 
 def resource_path(relative_path):
     try:

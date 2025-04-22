@@ -2,14 +2,13 @@ import tkinter as tk
 from tkinter import *
 from utility import AutoHiddenScrollbar
 
-from gui import vertically_pained_window
 from options_handler import options_handler
 
 
 class Terminal:
 
-    def __init__(self):
-        self.frame = Frame(vertically_pained_window, bg="#3F3F3F", bd=0,)
+    def __init__(self, root):
+        self.frame = Frame(root.vertically_pained_window, bg="#3F3F3F", bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
         self.terminal_and_horizontal_scrollbar_frame = Frame(self.frame, bg="#3F3F3F", bd=0,)
@@ -37,5 +36,3 @@ class Terminal:
 
     def print(self, string):
         self.text_widget.insert(tk.END, string + "\n")   
-    
-terminal = Terminal()

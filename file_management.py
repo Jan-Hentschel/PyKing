@@ -8,7 +8,7 @@ from options_handler import options_handler
 
 from gui import root
 from code_editor import code_editor
-from terminal import terminal
+
 from virtual_environment import grid_man
 
 class FileManager:
@@ -33,14 +33,14 @@ class FileManager:
                 with open(directory, "w", encoding="utf-8") as file:
                     file.write(json_dict)
                 options_handler.set_variable("current_grid_directory", directory)
-                terminal.show_current_directories(f"created new grid as: {directory}")
+                root.terminal.show_current_directories(f"created new grid as: {directory}")
 
 
 
     def open_file(self, directory):
         code_editor.load_into_editor(self.read_file(directory))
         options_handler.set_variable("current_file_directory", directory)
-        terminal.show_current_directories(f"loaded python file: {directory}")
+        root.terminal.show_current_directories(f"loaded python file: {directory}")
 
     def open_python_file_dialog(self):
         #ask to save before
@@ -51,18 +51,18 @@ class FileManager:
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
         self.save_text_widget_content_to_directory(directory)
         options_handler.set_variable("current_file_directory", directory)
-        terminal.show_current_directories(f"saved python file as: {directory}")
+        root.terminal.show_current_directories(f"saved python file as: {directory}")
 
     def save_python_file(self):
         self.save_text_widget_content_to_directory(options_handler.get_variable("current_file_directory"))
-        terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}")
+        root.terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}")
     
     def new_python_file(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
         with open(directory, "w", encoding="utf-8") as file:
             file.write("")    
         options_handler.set_variable("current_file_directory", directory)
-        terminal.show_current_directories(f"created new python file as: {directory}")
+        root.terminal.show_current_directories(f"created new python file as: {directory}")
               
 
     def open_grid(self, directory):
@@ -74,7 +74,7 @@ class FileManager:
             new_cells = dict["cells"]
             grid_man.change_grid(columns, rows, new_cells)
         options_handler.set_variable("current_grid_directory", directory)
-        terminal.show_current_directories(f"loaded grid: {directory}")
+        root.terminal.show_current_directories(f"loaded grid: {directory}")
 
     def open_grid_dialog(self):
         #ask to save before
@@ -87,14 +87,14 @@ class FileManager:
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
         options_handler.set_variable("current_grid_directory", directory)
-        terminal.show_current_directories(f"saved grid as: {directory}")
+        root.terminal.show_current_directories(f"saved grid as: {directory}")
 
     def save_grid(self):
         directory = options_handler.get_variable("current_grid_directory")
         json_dict = json.dumps(grid_man.get_grid_dict())
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json_dict)
-        terminal.show_current_directories(f"saved grid: {options_handler.get_variable('current_grid_directory')}")
+        root.terminal.show_current_directories(f"saved grid: {options_handler.get_variable('current_grid_directory')}")
 
     def new_grid(self):
 
@@ -123,7 +123,7 @@ class FileManager:
     def save_python_file_and_grid(self):
         self.save_python_file()
         self.save_grid()
-        terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}\nsaved grid: {options_handler.get_variable('current_grid_directory')}")
+        root.terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}\nsaved grid: {options_handler.get_variable('current_grid_directory')}")
         
     def open_python_file_and_grid_from_options(self):
         try:
@@ -131,6 +131,6 @@ class FileManager:
             self.open_grid(options_handler.get_variable("current_grid_directory"))
         except Exception as error:
             print(error)
-        terminal.show_current_directories(f"loaded python file: {options_handler.get_variable('current_file_directory')}\nloaded grid: {options_handler.get_variable('current_grid_directory')}")
+        root.terminal.show_current_directories(f"loaded python file: {options_handler.get_variable('current_file_directory')}\nloaded grid: {options_handler.get_variable('current_grid_directory')}")
 
 file_manager = FileManager()

@@ -6,12 +6,12 @@ from tkinter import filedialog
 from utility import ToolbarButton, resource_path, path_from_relative_path
 from options_handler import options_handler
 
-from gui import horizontally_paned_window
+from gui import root
 from file_management import file_manager
 
 class Filetree:
     def __init__(self):
-        self.frame = Frame(horizontally_paned_window, bg="#333333")
+        self.frame = Frame(root.horizontally_paned_window, bg="#333333")
         self.start_path = options_handler.get_variable("current_filetree_directory")
 
         self.file_icon = PhotoImage(file=resource_path('Assets\\file_icon.png'))

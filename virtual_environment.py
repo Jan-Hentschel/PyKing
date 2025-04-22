@@ -5,7 +5,6 @@ import time
 
 from utility import resource_path
 
-from terminal import terminal
 from gui import root
 
 
@@ -113,45 +112,45 @@ class GridManager:
     def pick_add_hamster(self):
         self.editing = "add_hamster"
         self.add_all_clickables()
-        terminal.show_current_directories(f"adding hamsters...")
+        root.terminal.show_current_directories(f"adding hamsters...")
         
 
     def pick_subtract_hamster(self):
         self.editing = "subtract_hamster"
         self.add_all_clickables()
-        terminal.show_current_directories(f"subtracting hamsters...")
+        root.terminal.show_current_directories(f"subtracting hamsters...")
 
     def pick_make_wall(self):
         self.editing = "make_wall"
         self.add_all_clickables()
-        terminal.show_current_directories(f"making walls...")
+        root.terminal.show_current_directories(f"making walls...")
 
     def clear_cell(self):
         self.editing = "clear_cell"
         self.add_all_clickables()
-        terminal.show_current_directories(f"clearing cells...")
+        root.terminal.show_current_directories(f"clearing cells...")
 
     def edit_clear_all_cells(self):
         self.clear_all_cells()
         self.editing = None
         self.delete_all_clickables()
-        terminal.show_current_directories(f"cleared all cells and cancelled editing grid")
+        root.terminal.show_current_directories(f"cleared all cells and cancelled editing grid")
 
     def cancel_editing_grid(self):
         self.editing = None
         self.delete_all_clickables()
-        terminal.show_current_directories(f"cancelled editing grid")
+        root.terminal.show_current_directories(f"cancelled editing grid")
         
         
     
 class GridCell:
     def __init__(self, x, y, type):
-        from gui import grid_frame
+        from gui import root
         self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
         self.x = x
         self.y = y
         self.type = type
-        self.canvas = Canvas(grid_frame, width=100, height=100, background="#3F3F3F", highlightthickness=0)
+        self.canvas = Canvas(root.grid_frame, width=100, height=100, background="#3F3F3F", highlightthickness=0)
         self.hamsters = 0
 
     def edit(self):
@@ -277,7 +276,7 @@ class Snake:
         self.delete_snake_image()
 
         if not(self.can_move()):
-            terminal.print("you ran into a wall... fucking idiot")
+            root.terminal.print("you ran into a wall... fucking idiot")
             self.update_cell()
             self.show_snake()
             return
@@ -287,22 +286,22 @@ class Snake:
                 if self.y+1 < grid_man.grid_height:
                     self.y +=1
                 else:
-                    terminal.print("you ran into a wall... fucking idiot")
+                    root.terminal.print("you ran into a wall... fucking idiot")
             case "E":
                 if self.x+1 < grid_man.grid_width:
                     self.x +=1
                 else:
-                    terminal.print("you ran into a wall... fucking idiot")
+                    root.terminal.print("you ran into a wall... fucking idiot")
             case "S":
                 if self.y-1 >= 0:
                     self.y -=1
                 else:
-                    terminal.print("you ran into a wall... fucking idiot")
+                    root.terminal.print("you ran into a wall... fucking idiot")
             case "W":
                 if self.x-1 >= 0:
                     self.x -=1
                 else:
-                    terminal.print("you ran into a wall... fucking idiot")
+                    root.terminal.print("you ran into a wall... fucking idiot")
         self.update_cell()
         self.show_snake()
         root.update_idletasks()
@@ -318,7 +317,7 @@ class Snake:
             self.update_cell()
             self.show_snake()
         else:
-            terminal.print("what are you trying to eat dumbass?")
+            root.terminal.print("what are you trying to eat dumbass?")
         root.update_idletasks()
 
         
@@ -328,7 +327,7 @@ class Snake:
             self.update_cell()
             self.cell.add_hamster()
         else:
-            terminal.print("spit what? your mouth is empty!")
+            root.terminal.print("spit what? your mouth is empty!")
             root.update_idletasks()
 
     def can_move(self):

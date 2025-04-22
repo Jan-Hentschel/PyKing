@@ -5,11 +5,11 @@ from idlelib.colorizer import ColorDelegator
 
 from utility import AutoHiddenScrollbar
 
-from gui import horizontally_paned_window
+from gui import root
 
 class CodeEditor:
     def __init__(self):
-        self.frame = Frame(horizontally_paned_window, bg="#3F3F3F", bd=0,)
+        self.frame = Frame(root.horizontally_paned_window, bg="#3F3F3F", bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
         self.code_editor_and_horizontal_scrollbar_frame = Frame(self.frame, bg="#3F3F3F", bd=0,)
