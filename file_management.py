@@ -1,9 +1,8 @@
 from tkinter import *
 from tkinter import filedialog
-from utility import ToolbarButton
 import json
 
-from utility import path_from_relative_path
+from utility import path_from_relative_path, DefaultButton, DefaultLabel, DefaultEntry
 from options_handler import options_handler
 
 
@@ -101,24 +100,24 @@ class FileManager:
     def new_grid(self):
 
 
-        popup = Toplevel(self.root)
+        popup = Toplevel(self.root, bg="#333333")
         popup.geometry("400x200")
         popup.title("Input Grid Height and Width")
 
-        column_label = Label(popup, text="Columns:")
+        column_label = DefaultLabel(popup, text="Columns:")
         column_label.pack()
-        popup.column_entry = Entry(popup)
+        popup.column_entry = DefaultEntry(popup)
         popup.column_entry.pack()
 
-        row_label = Label(popup, text="Rows:")
+        row_label = DefaultLabel(popup, text="Rows:")
         row_label.pack()
-        popup.row_entry = Entry(popup)
+        popup.row_entry = DefaultEntry(popup)
         popup.row_entry.pack()
         
-        ok_button = ToolbarButton(popup, text="OK", command=lambda: self.create_grid(popup))
+        ok_button = DefaultButton(popup, text="OK", command=lambda: self.create_grid(popup))
         ok_button.pack(side="left")
 
-        cancel_button = ToolbarButton(popup, text="Cancel", command= lambda: popup.destroy())
+        cancel_button = DefaultButton(popup, text="Cancel", command= lambda: popup.destroy())
         cancel_button.pack(side="right")
    
 

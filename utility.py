@@ -42,12 +42,21 @@ class AutoHiddenScrollbar(Scrollbar):
                 return True
         return False
     
-class ToolbarButton(Button):
+class DefaultButton(Button):
     def __init__(self, master, **kwargs):
         super().__init__(master, bd=2, bg="#3F3F3F", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", height=2, **kwargs)
 
     def pack(self, side="left", **kwargs):
         super().pack(side=side, **kwargs)
+
+class DefaultLabel(Label):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, bg="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", **kwargs)
+
+class DefaultEntry(Entry):
+    def __init__(self, master, **kwargs):
+        super().__init__(master, bg="#3F3F3F", fg="#FFFFFF", **kwargs)
+
 
 #https://www.youtube.com/watch?v=p3tSLatmGvU
 #https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file

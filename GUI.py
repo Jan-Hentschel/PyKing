@@ -5,10 +5,11 @@ from ctypes import windll
 from utility import resource_path
 #damit text nicht blurry ist
 
-windll.shcore.SetProcessDpiAwareness(2)
+
 
 class Root(tk.Tk):
     def __init__(self, *args, **kwargs):
+        windll.shcore.SetProcessDpiAwareness(2)
         super().__init__(*args, **kwargs)
         self.title("PyKing")
         self.iconbitmap(resource_path("Assets\\Icon.ico"))

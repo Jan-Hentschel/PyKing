@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import *
 
-from utility import ToolbarButton, resource_path
+from utility import DefaultButton, resource_path
 from options_handler import options_handler
 
 class Toolbar:
@@ -12,24 +12,24 @@ class Toolbar:
         self.frame = Frame(root, height=68, bg="#333333", pady=5)
 
 
-        self.new_file_button = ToolbarButton(self.frame, text ="New File", command = root.file_manager.new_python_file)
-        self.save_file_as_button = ToolbarButton(self.frame, text ="Save File As", command = root.file_manager.save_python_file_as)
-        self.save_file_button = ToolbarButton(self.frame, text ="Save File", command = root.file_manager.save_python_file)
-        self.load_button = ToolbarButton(self.frame, text ="Load File", command = root.file_manager.open_python_file_dialog)
-        self.new_grid_button = ToolbarButton(self.frame, text ="New Grid", command = root.file_manager.new_grid)
-        self.save_grid_button = ToolbarButton(self.frame, text ="Save Grid", command = root.file_manager.save_grid_as)
-        self.load_grid_button = ToolbarButton(self.frame, text ="Load Grid", command = root.file_manager.open_grid_dialog)
+        self.new_file_button = DefaultButton(self.frame, text ="New File", command = root.file_manager.new_python_file)
+        self.save_file_as_button = DefaultButton(self.frame, text ="Save File As", command = root.file_manager.save_python_file_as)
+        self.save_file_button = DefaultButton(self.frame, text ="Save File", command = root.file_manager.save_python_file)
+        self.load_button = DefaultButton(self.frame, text ="Load File", command = root.file_manager.open_python_file_dialog)
+        self.new_grid_button = DefaultButton(self.frame, text ="New Grid", command = root.file_manager.new_grid)
+        self.save_grid_button = DefaultButton(self.frame, text ="Save Grid", command = root.file_manager.save_grid_as)
+        self.load_grid_button = DefaultButton(self.frame, text ="Load Grid", command = root.file_manager.open_grid_dialog)
         self.excecute_code_button = Button(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")
-        self.stop_code_execution_button = ToolbarButton(self.frame, text ="Stop Execution", command = root.code_executor.stop_execute_code_thread)
+        self.stop_code_execution_button = DefaultButton(self.frame, text ="Stop Execution", command = root.code_executor.stop_execute_code_thread)
         self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", highlightbackground="#333333",fg="#FFFFFF", troughcolor="#3F3F3F")
         self.tick_rate_slider.set(options_handler.get_variable("default_tick_rate"))
-        self.pick_add_hamster_button = ToolbarButton(self.frame, text ="Add Hamster", command = root.grid_manager.pick_add_hamster)
-        self.pick_subtract_hamster_button = ToolbarButton(self.frame, text ="Subtract Hamster", command = root.grid_manager.pick_subtract_hamster)
-        self.pick_make_wall_button = ToolbarButton(self.frame, text ="Make Wall", command = root.grid_manager.pick_make_wall)
-        self.pick_clear_cell_button = ToolbarButton(self.frame, text ="Clear Cell", command = root.grid_manager.clear_cell)
-        self.pick_clear_all_cells_button = ToolbarButton(self.frame, text ="Clear All Cells", command = root.grid_manager.edit_clear_all_cells)
-        self.cancel_editing_grid_button = ToolbarButton(self.frame, text ="Cancel Editing Grid", command = root.grid_manager.cancel_editing_grid)
-
+        self.pick_add_hamster_button = DefaultButton(self.frame, text ="Add Hamster", command = root.grid_manager.pick_add_hamster)
+        self.pick_subtract_hamster_button = DefaultButton(self.frame, text ="Subtract Hamster", command = root.grid_manager.pick_subtract_hamster)
+        self.pick_make_wall_button = DefaultButton(self.frame, text ="Make Wall", command = root.grid_manager.pick_make_wall)
+        self.pick_clear_cell_button = DefaultButton(self.frame, text ="Clear Cell", command = root.grid_manager.clear_cell)
+        self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", command = root.grid_manager.edit_clear_all_cells)
+        self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", command = root.grid_manager.cancel_editing_grid)
+        self.settings_button = DefaultButton(self.frame, text ="Settings", command = lambda: print("Settings"))
 
         self.new_file_button.pack()
         self.save_file_as_button.pack()
@@ -47,4 +47,5 @@ class Toolbar:
         self.pick_clear_cell_button.pack()
         self.pick_clear_all_cells_button.pack()
         self.cancel_editing_grid_button.pack()
+        self.settings_button.pack(side="right")
 
