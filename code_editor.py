@@ -10,7 +10,7 @@ from utility import *
 
 class CodeEditor:
     def __init__(self, root):
-        self.frame = DefaultTextFrame(root.horizontally_paned_window, bg=root.primary_color, bd=0,)
+        self.frame = DefaultTextFrame(root.horizontally_paned_window, line_numbers=TRUE, bg=root.primary_color, bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
         self.percolator = Percolator(self.frame.text_widget)

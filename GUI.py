@@ -126,7 +126,8 @@ class Root(tk.Tk):
         self.horizontally_paned_window.sash_place(1, int(self.screen_width*0.5625), 0)
         self.vertically_pained_window.sash_place(0, 0, int((self.vertically_pained_window.winfo_height())/2)-1)
 
-        self.file_manager.open_python_file_and_grid_from_options()        
+        self.file_manager.open_python_file_and_grid_from_options()
+        self.code_editor.frame.update_line_numbers()        
         self.bind("<Control-s>", lambda event: self.file_manager.save_python_file_and_grid())
         
     def update_colors(self):
