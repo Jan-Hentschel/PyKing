@@ -9,14 +9,14 @@ class Terminal:
 
     def __init__(self, root):
         self.status_seperator = "_"
-        self.frame = Frame(root.vertically_pained_window, bg="#3F3F3F", bd=0,)
+        self.frame = Frame(root.vertically_pained_window, bg=root.primary_color, bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
-        self.terminal_and_horizontal_scrollbar_frame = Frame(self.frame, bg="#3F3F3F", bd=0,)
+        self.terminal_and_horizontal_scrollbar_frame = Frame(self.frame, bg=root.primary_color, bd=0,)
         self.terminal_and_horizontal_scrollbar_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
         # Terminal Textfeld erstellen (unten rechts)
-        self.text_widget = Text(self.terminal_and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="white", bd=0, wrap="none")
+        self.text_widget = Text(self.terminal_and_horizontal_scrollbar_frame, bg=root.primary_color, fg=root.foreground_color, bd=0, wrap="none", insertbackground=root.foreground_color, selectbackground="#6F6F6F", tabs="40")
         self.text_widget.pack(fill=BOTH, expand=True, side=TOP, padx=5, pady=5)
         # scrollbars
         self.vertical_scrollbar = AutoHiddenScrollbar(self.frame, self.text_widget, style="My.Vertical.TScrollbar", orient=VERTICAL, cursor="arrow")

@@ -2,16 +2,21 @@ import tkinter as tk
 from tkinter import *
 from ctypes import windll
 from tkinter import ttk
+from idlelib.percolator import Percolator
+from idlelib.colorizer import ColorDelegator
 
-from utility import resource_path
-#damit text nicht blurry ist
+from utility import *
+
 
 
 
 class Root(tk.Tk):
     def __init__(self, *args, **kwargs):
-        windll.shcore.SetProcessDpiAwareness(2)
+
+        windll.shcore.SetProcessDpiAwareness(2) #damit text nicht blurry ist
+
         super().__init__(*args, **kwargs)
+
         self.title("PyKing")
         self.iconbitmap(resource_path("Assets\\Icon.ico"))
 
@@ -21,6 +26,7 @@ class Root(tk.Tk):
 
         self.state('zoomed')
 
+        self.foreground_color = "#FFFFFF"
         self.primary_color = "#3F3F3F"
         self.secondary_color = "#333333"
 
@@ -28,8 +34,12 @@ class Root(tk.Tk):
         self.style = ttk.Style()
         self.style.theme_use("default")# Define a vertical scrollbar style
 
-        self.style.configure("Treeview", background="#333333", foreground="#FFFFFF", fieldbackground="#333333")
-        self.style.map("Treeview", background=[("selected", "#3F3F3F")])
+        self.style.layout("Treeview", [
+            ('Treeview.treearea', {'sticky': 'nswe'})  # removes borders
+        ])
+
+        self.style.configure("Treeview", background=self.secondary_color, foreground=self.foreground_color, fieldbackground=self.secondary_color, )
+        self.style.map("Treeview", background=[("selected", self.primary_color)])
 
         self.style.element_create("My.Vertical.Scrollbar.trough", "from", "default")
         self.style.layout("My.Vertical.TScrollbar",
@@ -40,7 +50,7 @@ class Root(tk.Tk):
                     [('Vertical.Scrollbar.grip', {'sticky': ''})],
                 'sticky': 'nswe'})],
             'sticky': 'ns'})])
-        self.style.configure("My.Vertical.TScrollbar", troughcolor="#333333")
+
 
         self.style.element_create("My.Horizontal.Scrollbar.trough", "from", "default")
         self.style.layout("My.Horizontal.TScrollbar",
@@ -52,11 +62,15 @@ class Root(tk.Tk):
                 'sticky': 'nswe'})],
             'sticky': 'we'})])
         
-        self.style.configure("My.Horizontal.TScrollbar", troughcolor="#333333", background="#3F3F3F", width=20, bordercolor ="#333333", arrowsize="20")#, arrowcolor="FFFFFF") 
-        self.style.configure("My.Vertical.TScrollbar", troughcolor="#333333", background="#3F3F3F", width=20, bordercolor="#333333", arrowsize="20")#, arrowcolor="FFFFFF")
+        self.style.configure("My.Horizontal.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor =self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF") 
+        self.style.configure("My.Vertical.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor=self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF")
  
-
-
+        self.color_delegator = ColorDelegator()
+        self.color_delegator.tagdefs['COMMENT'] = {'foreground': '#AAAAAA', 'background': self.primary_color} #example: #, """, '''
+        self.color_delegator.tagdefs['KEYWORD'] = {'foreground': '#D67CBC', 'background': self.primary_color} #example: def, class, if, else, etc.
+        self.color_delegator.tagdefs['BUILTIN'] = {'foreground': '#71BFFF', 'background': self.primary_color} #example: print, len, etc.
+        self.color_delegator.tagdefs['STRING'] = {'foreground': '#A8D37E', 'background': self.primary_color} #example: "string", 'string', """string""", '''string'''
+        self.color_delegator.tagdefs['DEFINITION'] = {'foreground': '#71BFFF', 'background': self.primary_color} #example: def function_name, class ClassName, etc.
 
         self.configure(bg=self.secondary_color)
         self.horizontally_paned_window = PanedWindow(self, orient=tk.HORIZONTAL, bg=self.secondary_color, sashwidth = 10)
@@ -122,32 +136,49 @@ class Root(tk.Tk):
         self.top_right_frame.configure(bg=self.secondary_color)
         self.grid_frame.configure(bg=self.secondary_color)
 
+        self.style.configure("Treeview", background=self.secondary_color, foreground=self.foreground_color, fieldbackground=self.secondary_color)
+        self.style.map("Treeview", background=[("selected", self.primary_color)])
+
+        self.style.configure("My.Horizontal.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor =self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF") 
+        self.style.configure("My.Vertical.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor=self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF")
+
+        self.code_editor.frame.configure(bg=self.primary_color)
+        self.code_editor.code_editor_and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
+        self.code_editor.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
+ 
+        self.terminal.frame.configure(bg=self.primary_color)
+        self.terminal.terminal_and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
+        self.terminal.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
+
+        self.file_tree.frame.configure(bg=self.secondary_color)
+
+        self.toolbar.frame.configure(bg=self.secondary_color)
+
+        self.toolbar.tick_rate_slider.configure(bg=self.secondary_color, activebackground=self.secondary_color, highlightbackground=self.secondary_color, fg=self.foreground_color, troughcolor=self.primary_color)
+
+        for button in button_list:
+            try:
+                button.configure(bg=self.primary_color, activebackground=self.secondary_color, fg=self.foreground_color, activeforeground=self.foreground_color)
+            except tk.TclError:
+                pass
+        for cell in self.grid_manager.cells:
+            if cell.type == "hamster" or cell.type == "empty":
+                cell.canvas.configure(bg=self.primary_color)
+            if cell.type == "wall":
+                cell.canvas.configure(bg=self.secondary_color)
+
+        self.color_delegator.tagdefs.update({
+            'COMMENT': {'foreground': '#AAAAAA', 'background': self.primary_color},
+            'KEYWORD': {'foreground': '#D67CBC', 'background': self.primary_color},
+            'BUILTIN': {'foreground': '#71BFFF', 'background': self.primary_color},
+            'STRING': {'foreground': '#A8D37E', 'background': self.primary_color},
+            'DEFINITION': {'foreground': '#71BFFF', 'background': self.primary_color},
+        })
+        self.code_editor.percolator.removefilter(self.color_delegator)
+        self.code_editor.percolator.insertfilter(self.color_delegator)    
 
 root = Root()
 
-
-
-# from terminal import terminal
-# from toolbar import toolbar
-# from filetree import file_tree
-# from code_editor import code_editor
-
-# toolbar.frame.pack(side="top", fill="x")
-
-# root.horizontally_paned_window.add(file_tree.frame)
-# root.horizontally_paned_window.add(code_editor.frame)  
-# root.horizontally_paned_window.add(root.vertically_pained_window)
-
-# root.vertically_pained_window.add(root.top_right_frame)  
-# root.vertically_pained_window.add(terminal.frame)  
-
-
-# # Alle widgets updaten, um die screen_width/screen_height zu updaten
-# root.update_idletasks()
-# # Seperatoren von den Pained Windows placen
-# root.horizontally_paned_window.sash_place(0, int(root.screen_width*.125), 0)
-# root.horizontally_paned_window.sash_place(1, int(root.screen_width*0.5625), 0)
-# root.vertically_pained_window.sash_place(0, 0, int((root.vertically_pained_window.winfo_height())/2)-1)
 
 
 

@@ -9,7 +9,7 @@ class Toolbar:
         
         self.excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
 
-        self.frame = Frame(root, height=68, bg="#333333", pady=5)
+        self.frame = Frame(root, height=68, bg=root.secondary_color, pady=5)
 
 
         self.new_file_button = DefaultButton(self.frame, text ="New File", command = root.file_manager.new_python_file)
@@ -20,9 +20,9 @@ class Toolbar:
         self.save_grid_as_button = DefaultButton(self.frame, text ="Save Grid As", command = root.file_manager.save_grid_as)
         self.save_grid_button = DefaultButton(self.frame, text ="Save Grid", command = root.file_manager.save_grid)
         self.load_grid_button = DefaultButton(self.frame, text ="Load Grid", command = root.file_manager.open_grid_dialog)
-        self.excecute_code_button = Button(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread, bg="#333333", activebackground="#3F3F3F")
+        self.excecute_code_button = DefaultButton(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread)
         self.stop_code_execution_button = DefaultButton(self.frame, text ="Stop Execution", command = root.code_executor.stop_execute_code_thread)
-        self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg="#333333", activebackground="#333333", highlightbackground="#333333",fg="#FFFFFF", troughcolor="#3F3F3F")
+        self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg=root.secondary_color, activebackground=root.secondary_color, highlightbackground=root.secondary_color, fg=root.foreground_color, troughcolor=root.primary_color)
         self.tick_rate_slider.set(options_handler.get_variable("default_tick_rate"))
         self.pick_add_hamster_button = DefaultButton(self.frame, text ="Add Hamster", command = root.grid_manager.pick_add_hamster)
         self.pick_subtract_hamster_button = DefaultButton(self.frame, text ="Subtract Hamster", command = root.grid_manager.pick_subtract_hamster)

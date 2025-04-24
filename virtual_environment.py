@@ -150,7 +150,7 @@ class GridCell:
         self.x = x
         self.y = y
         self.type = type
-        self.canvas = Canvas(root.grid_frame, width=100, height=100, background="#3F3F3F", highlightthickness=0)
+        self.canvas = Canvas(root.grid_frame, width=100, height=100, background=self.root.primary_color, highlightthickness=0)
         self.hamsters = 0
 
     def edit(self):
@@ -175,9 +175,9 @@ class GridCell:
 
     def add_clickable(self):
         if self.type == "empty":
-            id = self.canvas.create_rectangle((0, 0, 101, 101), fill="#3F3F3F", outline="")
+            id = self.canvas.create_rectangle((0, 0, 101, 101), fill=self.root.primary_color, outline="")
         elif self.type == "wall":
-            id = self.canvas.create_rectangle((0, 0, 101, 101), fill="#333333", outline="")
+            id = self.canvas.create_rectangle((0, 0, 101, 101), fill=self.root.secondary_color, outline="")
         else:
             id = self.canvas_image
         self.canvas.tag_bind(id, "<Button-1>", lambda _: self.edit())
@@ -187,7 +187,7 @@ class GridCell:
 
     def change_to_wall(self):
         self.type = "wall"
-        self.canvas.configure(background="#333333")
+        self.canvas.configure(background=self.root.secondary_color)
 
     def add_hamster(self):
         self.type = "hamster"
@@ -203,7 +203,7 @@ class GridCell:
     def clear(self):
         self.type = "empty"
         self.canvas.delete("all")
-        self.canvas.configure(background="#3F3F3F")
+        self.canvas.configure(background=self.root.primary_color)
 
 class Snake:
 

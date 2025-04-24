@@ -12,7 +12,7 @@ from options_handler import options_handler
 class Filetree:
     def __init__(self, root):
         self.root = root
-        self.frame = Frame(self.root.horizontally_paned_window, bg="#333333")
+        self.frame = Frame(self.root.horizontally_paned_window, bg=root.secondary_color)
         self.start_path = options_handler.get_variable("current_filetree_directory")
 
         self.file_icon = PhotoImage(file=resource_path('Assets\\file_icon.png'))
@@ -114,4 +114,10 @@ class Filetree:
                 else:
                     iid = self.treeview.insert(parent=parent_iid, index='end', text=name, image=self.file_icon, tags=tag)
             
-                    
+                                
+                                
+                                
+                                
+                                
+                                
+                                          

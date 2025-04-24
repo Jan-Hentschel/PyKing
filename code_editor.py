@@ -4,20 +4,21 @@ from tkinter import *
 from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
 
-from utility import AutoHiddenScrollbar
+from utility import *
 
 
 
 class CodeEditor:
     def __init__(self, root):
-        self.frame = Frame(root.horizontally_paned_window, bg=root.primary_color, bd=0,)
+        self.frame = DefaultFrame(root.horizontally_paned_window, bg=root.primary_color, bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
-        self.code_editor_and_horizontal_scrollbar_frame = Frame(self.frame, bg=root.primary_color, bd=0,)
+        self.code_editor_and_horizontal_scrollbar_frame = DefaultFrame(self.frame, bg=root.primary_color, bd=0,)
         self.code_editor_and_horizontal_scrollbar_frame.pack(side=LEFT, fill=BOTH, expand=True)
 
+
         # Text-Feld für den Code Editor erstellen (mitte)
-        self.text_widget = Text(self.code_editor_and_horizontal_scrollbar_frame, bg=root.primary_color, fg="white", bd=0, wrap="none", insertbackground="#FFFFFF", selectbackground="#6F6F6F", tabs="40")
+        self.text_widget = Text(self.code_editor_and_horizontal_scrollbar_frame, bg=root.primary_color, fg=root.foreground_color, bd=0, wrap="none", insertbackground=root.foreground_color, selectbackground="#6F6F6F", tabs="40")
         self.text_widget.pack(fill=BOTH, expand=True, side=TOP)
         
         #self.style.map("Scrollbar", background=[("selected", "#3F3F3F")])
@@ -34,14 +35,8 @@ class CodeEditor:
         self.text_widget["xscrollcommand"] = self.horizontal_scrollbar.set
         self.text_widget["yscrollcommand"] = self.vertical_scrollbar.set
 
-        color_delegator = ColorDelegator()
-        color_delegator.tagdefs['COMMENT'] = {'foreground': '#AAAAAA', 'background': root.primary_color} #example: #, """, '''
-        color_delegator.tagdefs['KEYWORD'] = {'foreground': '#D67CBC', 'background': root.primary_color} #example: def, class, if, else, etc.
-        color_delegator.tagdefs['BUILTIN'] = {'foreground': '#71BFFF', 'background': root.primary_color} #example: print, len, etc.
-        color_delegator.tagdefs['STRING'] = {'foreground': '#A8D37E', 'background': root.primary_color} #example: "string", 'string', """string""", '''string'''
-        color_delegator.tagdefs['DEFINITION'] = {'foreground': '#71BFFF', 'background': root.primary_color} #example: def function_name, class ClassName, etc.
-        
-        Percolator(self.text_widget).insertfilter(color_delegator)
+        self.percolator = Percolator(self.text_widget)
+        self.percolator.insertfilter(root.color_delegator)
 
     def load_into_editor(self, content):
         self.text_widget.delete(1.0,END)
