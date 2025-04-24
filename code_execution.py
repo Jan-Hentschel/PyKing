@@ -58,7 +58,7 @@ class CodeExecution:
         try:
             self.root.file_manager.open_grid(options_handler.get_variable("current_grid_directory")) #ask to save before
             self.root.update_idletasks()
-            code_string = self.root.code_editor.text_widget.get("1.0", END)
+            code_string = self.root.code_editor.frame.text_widget.get("1.0", END)
             exec(code_string, PyKing_functions)
 
             # buffer = ""

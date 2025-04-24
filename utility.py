@@ -72,6 +72,45 @@ class DefaultFrame(Frame):
     def __init__(self, master, bg="#3F3F3F", **kwargs):
         super().__init__(master, bg=bg, **kwargs)
 
+class DefaultTextFrame(Frame):
+    def __init__(self, master, bg="#3F3F3F", **kwargs):
+        super().__init__(master, bg=bg, **kwargs)
+        self.and_horizontal_scrollbar_frame = DefaultFrame(self, bg="#3F3F3F", bd=0)
+        self.and_horizontal_scrollbar_frame.pack(side=LEFT, fill=BOTH, expand=True)
+
+
+        self.text_widget = Text(self.and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="#FFFFFF", bd=0, wrap="none", insertbackground="#FFFFFF", selectbackground="#6F6F6F", tabs="40")
+        self.text_widget.pack(fill=BOTH, expand=True, side=TOP)
+   
+                
+        self.horizontal_scrollbar = AutoHiddenScrollbar(self.and_horizontal_scrollbar_frame, self.text_widget, style="My.Horizontal.TScrollbar", orient=HORIZONTAL, cursor="arrow")
+        self.horizontal_scrollbar.pack(side = BOTTOM, fill=X)
+
+        self.vertical_scrollbar = AutoHiddenScrollbar(self, self.text_widget, style="My.Vertical.TScrollbar", orient=VERTICAL, cursor="arrow")
+        self.vertical_scrollbar.pack(side = RIGHT, fill=Y)
+
+        self.vertical_scrollbar.config(command = self.text_widget.yview)
+        self.horizontal_scrollbar.config(command = self.text_widget.xview)
+
+        self.text_widget["xscrollcommand"] = self.horizontal_scrollbar.set
+        self.text_widget["yscrollcommand"] = self.vertical_scrollbar.set
+
+
+
+
+        
+
+        
+
+
+        
+        
+
+
+
+
+
+
 #https://www.youtube.com/watch?v=p3tSLatmGvU
 #https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
 #vor jeden relative path diese funktion setzen um pyinstaller zu helfen alle dateien zu finden

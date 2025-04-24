@@ -143,12 +143,12 @@ class Root(tk.Tk):
         self.style.configure("My.Vertical.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor=self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF")
 
         self.code_editor.frame.configure(bg=self.primary_color)
-        self.code_editor.code_editor_and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
-        self.code_editor.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
+        self.code_editor.frame.and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
+        self.code_editor.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
  
         self.terminal.frame.configure(bg=self.primary_color)
-        self.terminal.terminal_and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
-        self.terminal.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
+        self.terminal.frame.and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
+        self.terminal.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
 
         self.file_tree.frame.configure(bg=self.secondary_color)
 
