@@ -154,18 +154,18 @@ class GridCell:
         self.hamsters = 0
 
     def edit(self):
-        if self.root.grid_man.editing == "add_hamster":
+        if self.root.grid_manager.editing == "add_hamster":
             self.add_hamster()
             self.add_clickable()
-        elif self.root.grid_man.editing == "subtract_hamster":
+        elif self.root.grid_manager.editing == "subtract_hamster":
             if self.hamsters > 0:
                 self.subtract_hamster()
                 self.add_clickable()
-        elif self.root.grid_man.editing == "make_wall":
+        elif self.root.grid_manager.editing == "make_wall":
             self.change_to_wall()
             self.canvas.delete(tk.ALL)
             self.add_clickable
-        elif self.root.grid_man.editing == "clear_cell":
+        elif self.root.grid_manager.editing == "clear_cell":
             self.clear()
             self.canvas.delete(tk.ALL)
             self.add_clickable
@@ -180,7 +180,7 @@ class GridCell:
             id = self.canvas.create_rectangle((0, 0, 101, 101), fill="#333333", outline="")
         else:
             id = self.canvas_image
-        self.canvas.tag_bind(id, "<Button-1>", lambda _: self.root.grid_man.edit())
+        self.canvas.tag_bind(id, "<Button-1>", lambda _: self.edit())
 
     def display_image(self, image):
         self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import *
 from ctypes import windll
+from tkinter import ttk
 
 from utility import resource_path
 #damit text nicht blurry ist
@@ -22,6 +23,40 @@ class Root(tk.Tk):
 
         self.primary_color = "#3F3F3F"
         self.secondary_color = "#333333"
+
+        #scrollbars
+        self.style = ttk.Style()
+        self.style.theme_use("default")# Define a vertical scrollbar style
+
+        self.style.configure("Treeview", background="#333333", foreground="#FFFFFF", fieldbackground="#333333")
+        self.style.map("Treeview", background=[("selected", "#3F3F3F")])
+
+        self.style.element_create("My.Vertical.Scrollbar.trough", "from", "default")
+        self.style.layout("My.Vertical.TScrollbar",
+            [('My.Vertical.Scrollbar.trough', {'children':
+                [('Vertical.Scrollbar.uparrow', {'side': 'top', 'sticky': ''}),
+                ('Vertical.Scrollbar.downarrow', {'side': 'bottom', 'sticky': ''}),
+                ('Vertical.Scrollbar.thumb', {'unit': '1', 'children':
+                    [('Vertical.Scrollbar.grip', {'sticky': ''})],
+                'sticky': 'nswe'})],
+            'sticky': 'ns'})])
+        self.style.configure("My.Vertical.TScrollbar", troughcolor="#333333")
+
+        self.style.element_create("My.Horizontal.Scrollbar.trough", "from", "default")
+        self.style.layout("My.Horizontal.TScrollbar",
+            [('My.Horizontal.Scrollbar.trough', {'children':
+                [('Horizontal.Scrollbar.leftarrow', {'side': 'left', 'sticky': ''}),
+                ('Horizontal.Scrollbar.rightarrow', {'side': 'right', 'sticky': ''}),
+                ('Horizontal.Scrollbar.thumb', {'unit': '1', 'children':
+                    [('Horizontal.Scrollbar.grip', {'sticky': ''})],
+                'sticky': 'nswe'})],
+            'sticky': 'we'})])
+        
+        self.style.configure("My.Horizontal.TScrollbar", troughcolor="#333333", background="#3F3F3F", width=20, bordercolor ="#333333", arrowsize="20")#, arrowcolor="FFFFFF") 
+        self.style.configure("My.Vertical.TScrollbar", troughcolor="#333333", background="#3F3F3F", width=20, bordercolor="#333333", arrowsize="20")#, arrowcolor="FFFFFF")
+ 
+
+
 
         self.configure(bg=self.secondary_color)
         self.horizontally_paned_window = PanedWindow(self, orient=tk.HORIZONTAL, bg=self.secondary_color, sashwidth = 10)

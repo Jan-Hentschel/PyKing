@@ -18,37 +18,7 @@ class CodeEditor:
 
         # Text-Feld für den Code Editor erstellen (mitte)
         self.text_widget = Text(self.code_editor_and_horizontal_scrollbar_frame, bg=root.primary_color, fg="white", bd=0, wrap="none", insertbackground="#FFFFFF", selectbackground="#6F6F6F", tabs="40")
-        self.text_widget.pack(fill=BOTH, expand=True, side=TOP, padx=5, pady=5)
-
-
-        #scrollbars
-        self.style = ttk.Style()
-        self.style.theme_use("default")# Define a vertical scrollbar style
-
-        self.style.element_create("My.Vertical.Scrollbar.trough", "from", "default")
-        self.style.layout("My.Vertical.TScrollbar",
-            [('My.Vertical.Scrollbar.trough', {'children':
-                [('Vertical.Scrollbar.uparrow', {'side': 'top', 'sticky': ''}),
-                ('Vertical.Scrollbar.downarrow', {'side': 'bottom', 'sticky': ''}),
-                ('Vertical.Scrollbar.thumb', {'unit': '1', 'children':
-                    [('Vertical.Scrollbar.grip', {'sticky': ''})],
-                'sticky': 'nswe'})],
-            'sticky': 'ns'})])
-        self.style.configure("My.Vertical.TScrollbar", troughcolor="#333333")
-
-        self.style.element_create("My.Horizontal.Scrollbar.trough", "from", "default")
-        self.style.layout("My.Horizontal.TScrollbar",
-            [('My.Horizontal.Scrollbar.trough', {'children':
-                [('Horizontal.Scrollbar.leftarrow', {'side': 'left', 'sticky': ''}),
-                ('Horizontal.Scrollbar.rightarrow', {'side': 'right', 'sticky': ''}),
-                ('Horizontal.Scrollbar.thumb', {'unit': '1', 'children':
-                    [('Horizontal.Scrollbar.grip', {'sticky': ''})],
-                'sticky': 'nswe'})],
-            'sticky': 'we'})])
-        
-        self.style.configure("My.Horizontal.TScrollbar", troughcolor="#333333")
-        self.style.configure("My.Vertical.TScrollbar", troughcolor="#333333")
- 
+        self.text_widget.pack(fill=BOTH, expand=True, side=TOP)
         
         #self.style.map("Scrollbar", background=[("selected", "#3F3F3F")])
 

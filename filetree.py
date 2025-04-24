@@ -25,10 +25,6 @@ class Filetree:
 
         #https://stackoverflow.com/questions/68078498/recursively-arrange-all-folders-and-files-in-a-hierarchical-treeview-in-tkinter
 
-        self.style = ttk.Style()
-        self.style.theme_use("default")
-        self.style.configure("Treeview", background="#333333", foreground="#FFFFFF", fieldbackground="#333333")
-        self.style.map("Treeview", background=[("selected", "#3F3F3F")])
 
         self.treeview = ttk.Treeview(self.frame, show='tree')
         self.treeview.pack(fill='both', expand=True)

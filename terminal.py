@@ -18,11 +18,11 @@ class Terminal:
         # Terminal Textfeld erstellen (unten rechts)
         self.text_widget = Text(self.terminal_and_horizontal_scrollbar_frame, bg="#3F3F3F", fg="white", bd=0, wrap="none")
         self.text_widget.pack(fill=BOTH, expand=True, side=TOP, padx=5, pady=5)
-        #scrollbars
-        self.vertical_scrollbar = AutoHiddenScrollbar(self.frame, self.text_widget, orient=VERTICAL, cursor="arrow")
+        # scrollbars
+        self.vertical_scrollbar = AutoHiddenScrollbar(self.frame, self.text_widget, style="My.Vertical.TScrollbar", orient=VERTICAL, cursor="arrow")
         self.vertical_scrollbar.pack(side = RIGHT, fill=Y)
 
-        self.horizontal_scrollbar = AutoHiddenScrollbar(self.terminal_and_horizontal_scrollbar_frame, self.text_widget, orient=HORIZONTAL, cursor="arrow")
+        self.horizontal_scrollbar = AutoHiddenScrollbar(self.terminal_and_horizontal_scrollbar_frame, self.text_widget, style="My.Horizontal.TScrollbar", orient=HORIZONTAL, cursor="arrow")
         self.horizontal_scrollbar.pack(side = BOTTOM, fill=X)
 
         self.vertical_scrollbar.config(command = self.text_widget.yview)

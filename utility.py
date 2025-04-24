@@ -17,32 +17,32 @@ class AutoHiddenScrollbar(ttk.Scrollbar):
 
 
         
-    # def set(self, low, high):
-    #     if self.cget("orient") == HORIZONTAL:
-    #         if self.has_horizontal_overflow():
-    #             self.pack(side = BOTTOM, fill=X)
-    #         else:
-    #             self.pack_forget()   
-    #     else:
-    #         if float(low) <= 0.0 and float(high) >= 1.0:
-    #             self.pack_forget()
-    #         else:
-    #             self.pack(side = RIGHT, fill=Y)
-    #     Scrollbar.set(self, low, high)
+    def set(self, low, high):
+        if self.cget("style") == "My.Horizontal.TScrollbar":
+            if self.has_horizontal_overflow():
+                self.pack(side=BOTTOM, fill=X)
+            else:
+                self.pack_forget()
+        elif self.cget("style") == "My.Vertical.TScrollbar":
+            if float(low) <= 0.0 and float(high) >= 1.0:
+                self.pack_forget()
+            else:
+                self.pack(side=RIGHT, fill=Y)
+        Scrollbar.set(self, low, high)
 
-    # #hilfe von Chatgpt klappt aber immernoch nicht so wie gewollt
-    # def has_horizontal_overflow(self):
+    #hilfe von Chatgpt klappt aber immernoch nicht so wie gewollt
+    def has_horizontal_overflow(self):
         
-    #     widget_width = self.target_widget.winfo_width()
-    #     font = Font(font=self.target_widget["font"])
+        widget_width = self.target_widget.winfo_width()
+        font = Font(font=self.target_widget["font"])
         
-    #     num_lines = int(self.target_widget.index("end-1c").split(".")[0])
-    #     for i in range(1, num_lines + 1):
-    #         line_text = self.target_widget.get(f"{i}.0", f"{i}.end")
-    #         line_width = font.measure(line_text)
-    #         if line_width > widget_width:
-    #             return True
-    #     return False
+        num_lines = int(self.target_widget.index("end-1c").split(".")[0])
+        for i in range(1, num_lines + 1):
+            line_text = self.target_widget.get(f"{i}.0", f"{i}.end")
+            line_width = font.measure(line_text)
+            if line_width > widget_width:
+                return True
+        return False
     
 class DefaultButton(Button):
     def __init__(self, master, bd=2, bg="#3F3F3F", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", height=2, **kwargs):
