@@ -81,71 +81,150 @@ class DefaultFrame(Frame):
         super().__init__(master, bg=bg, **kwargs)
 
 class DefaultTextFrame(Frame):
-    def __init__(self, master, line_numbers=FALSE, bg="#3F3F3F", **kwargs):
+    def __init__(self, master, line_numbers=False, bg="#3F3F3F", **kwargs):
         super().__init__(master, bg=bg, **kwargs)
+
+        self.line_numbers = line_numbers
+        #help from ChatGPT
         if line_numbers:
-            self.line_number_frame = DefaultFrame(self, bg="#333333", padx=2, highlightbackground = "#3F3F3F")
+            self.line_number_frame = DefaultFrame(self, bg="#333333", padx=2, highlightbackground="#3F3F3F")
             self.line_number_frame.pack(side=LEFT, fill=Y)
 
-            self.line_number_text_widget = Text(self.line_number_frame, state="disabled", padx=10, width=4, bg="#3F3F3F", fg="#FFFFFF", bd=0, wrap="none", insertbackground="#FFFFFF", selectbackground="#6F6F6F", tabs="40")
+            self.line_number_text_widget = Text(
+                self.line_number_frame,
+                state="disabled",
+                padx=10,
+                width=4,
+                bg="#3F3F3F",
+                fg="#FFFFFF",
+                bd=0,
+                wrap="none",
+                insertbackground="#FFFFFF",
+                selectbackground="#6F6F6F",
+                tabs="40"
+            )
             self.line_number_text_widget.tag_configure("right", justify='right')
             self.line_number_text_widget.pack(fill=Y, side=LEFT)
 
+            # Prevent interaction with line number widget
+            self.line_number_text_widget.bind("<MouseWheel>", lambda e: "break")
+            self.line_number_text_widget.bind("<Key>", lambda e: "break")
+            self.line_number_text_widget.bind("<Button-1>", lambda e: "break")
+            self.line_number_text_widget.configure(takefocus=0)
 
-
-        # Text + Scrollbars Frame
+        # Frame containing Text + Scrollbars
         self.plus_scrollbar_frame = DefaultFrame(self, bg="#3F3F3F")
         self.plus_scrollbar_frame.pack(side=TOP, fill=BOTH, expand=True)
 
         # Text widget
-        self.text_widget = Text(self.plus_scrollbar_frame, padx=10, bg="#3F3F3F", fg="#FFFFFF", bd=0,
-                                wrap="none", insertbackground="#FFFFFF", selectbackground="#6F6F6F", tabs="40")
+        self.text_widget = Text(
+            self.plus_scrollbar_frame,
+            padx=10,
+            bg="#3F3F3F",
+            fg="#FFFFFF",
+            bd=0,
+            wrap="none",
+            insertbackground="#FFFFFF",
+            selectbackground="#6F6F6F",
+            tabs="40"
+        )
         self.text_widget.grid(row=0, column=0, sticky="nsew")
-
-        if line_numbers:
-            self.text_widget.bind("<KeyRelease>", self.update_line_numbers)
-            self.text_widget.bind("<MouseWheel>", self.update_line_numbers)
-            self.text_widget.bind("<ButtonRelease>", self.update_line_numbers)
-
-
-        # Vertical scrollbar
-        self.vertical_scrollbar = AutoHiddenScrollbar(self.plus_scrollbar_frame, self.text_widget,
-                                                    style="My.Vertical.TScrollbar", orient=VERTICAL, cursor="arrow")
-        self.vertical_scrollbar.grid(row=0, column=1, sticky="ns")
-
-        # Horizontal scrollbar
-        self.horizontal_scrollbar = AutoHiddenScrollbar(self.plus_scrollbar_frame, self.text_widget,
-                                                        style="My.Horizontal.TScrollbar", orient=HORIZONTAL, cursor="arrow")
-        self.horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
 
         # Grid weight for resizing
         self.plus_scrollbar_frame.grid_rowconfigure(0, weight=1)
         self.plus_scrollbar_frame.grid_columnconfigure(0, weight=1)
 
+        # Vertical scrollbar
+        self.vertical_scrollbar = AutoHiddenScrollbar(
+            self.plus_scrollbar_frame,
+            self.text_widget,
+            style="My.Vertical.TScrollbar",
+            orient=VERTICAL,
+            cursor="arrow",
+            command=self.on_scrollbar_scroll
+        )
+        self.vertical_scrollbar.grid(row=0, column=1, sticky="ns")
 
-        self.vertical_scrollbar.config(command = self.text_widget.yview)
-        self.horizontal_scrollbar.config(command = self.text_widget.xview)
+        # Horizontal scrollbar
+        self.horizontal_scrollbar = AutoHiddenScrollbar(
+            self.plus_scrollbar_frame,
+            self.text_widget,
+            style="My.Horizontal.TScrollbar",
+            orient=HORIZONTAL,
+            cursor="arrow",
+            command=self.text_widget.xview
+        )
+        self.horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
 
-        self.text_widget["xscrollcommand"] = self.horizontal_scrollbar.set
-        self.text_widget["yscrollcommand"] = self.vertical_scrollbar.set
+        # Scrollbar <-> text widget communication
+        self.text_widget.configure(xscrollcommand=self.horizontal_scrollbar.set)
+
+        if line_numbers:
+            self.text_widget.bind("<Configure>", self.update_line_numbers)
+            self.text_widget.configure(yscrollcommand=self.on_textscroll)
+            # Sync scrolling from all input methods
+            self.text_widget.bind("<Button-4>", self.on_mousewheel)  # For Linux
+            self.text_widget.bind("<Button-5>", self.on_mousewheel)
+            self.text_widget.bind("<KeyRelease-Up>", self.update_line_numbers)
+            self.text_widget.bind("<KeyRelease-Down>", self.update_line_numbers)
+            self.text_widget.bind("<Return>", self.update_line_numbers)
+            self.text_widget.bind("<BackSpace>", self.update_line_numbers)
+            self.text_widget.bind("<KeyRelease>", self.update_line_numbers)
+            self.text_widget.bind("<MouseWheel>", self.handle_mousewheel_and_update)
+            self.text_widget.bind("<ButtonRelease>", self.update_line_numbers)
+            self.text_widget.bind("<Shift-MouseWheel>", self.on_shift_mousewheel)
+        else:
+            self.text_widget.configure(yscrollcommand=self.vertical_scrollbar.set)
 
     def update_line_numbers(self, event=None):
+        self.after_idle(self._sync_line_numbers)
+
+    def on_textscroll(self, *args):
+        try:
+            first = float(args[0])
+            if self.line_numbers and 0.0 <= first <= 1.0:
+                self.line_number_text_widget.yview_moveto(args[0])
+        except (ValueError, IndexError):
+            pass
+        self.vertical_scrollbar.set(*args)
+
+    def on_scrollbar_scroll(self, *args):
+        self.text_widget.yview(*args)
+        if self.line_numbers:
+            self.line_number_text_widget.yview(*args)
+
+    def on_mousewheel(self, event):
+        # This scrolls the main text
+        self.text_widget.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        
+        # Manually sync the line number widget
+        self.line_number_text_widget.yview_moveto(self.text_widget.yview()[0])
+        
+        return "break"  # Prevent default scrolling from duplicating
+    
+    def on_shift_mousewheel(self, event):
+        self.text_widget.xview_scroll(int(-1 * (event.delta / 120)), "units")
+        return "break"
+            
+    def handle_mousewheel_and_update(self, event):
+        self.on_mousewheel(event)
+        self.update_line_numbers()
+        return "break"
+
+        
+    def _sync_line_numbers(self):
+        if not self.line_numbers:
+            return
+
         self.line_number_text_widget.configure(state="normal")
         self.line_number_text_widget.delete("1.0", "end")
+
         num_lines = int(self.text_widget.index("end-1c").split(".")[0])
         for i in range(1, num_lines + 1):
             self.line_number_text_widget.insert("end", f"{i}\n", "right")
+
+        self.line_number_text_widget.yview_moveto(self.text_widget.yview()[0])
         self.line_number_text_widget.configure(state="disabled")
-
-
-
-        
-
-        
-
-
-        
-        
 
 
 
