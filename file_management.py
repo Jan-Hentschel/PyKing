@@ -45,7 +45,18 @@ class FileManager:
     def open_file(self, directory):
         self.root.code_editor.load_into_editor(self.read_file(directory))
         options_handler.set_variable("current_file_directory", directory)
-        self.root.terminal.show_current_directories(f"loaded python file: {directory}")
+        all_grid_file_paths = self.root.filetree.all_grid_file_paths()
+        for grid_path in all_grid_file_paths:
+            if self.has_valid_link(grid_path):
+                with open(grid_path, "r", encoding="utf-8") as file:
+                    content = file.read()
+                    dict = json.loads(content)
+                    link = dict["link"].replace("\\", "/")
+                    if link == directory:
+                        self.open_grid(grid_path, False)
+                        self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {grid_path}\n\npython file was linked to grid")
+                        return
+        self.root.terminal.show_current_directories(f"loaded python file: {directory}\n\nno linked grids found")
 
     def open_python_file_dialog(self):
         #ask to save before
@@ -92,21 +103,24 @@ class FileManager:
             
         
 
-    def open_grid(self, directory):
+    def open_grid(self, directory, check_if_linked=True):
         with open(directory, "r", encoding="utf-8") as file:
             content = file.read()
             dict = json.loads(content)
             columns = dict["columns"]
             rows = dict["rows"]
             new_cells = dict["cells"]
+            link = dict["link"].replace("\\", "/")
             self.root.grid_manager.change_grid(columns, rows, new_cells)
         options_handler.set_variable("current_grid_directory", directory)
-        if self.has_valid_link(directory):
-            self.open_file(dict["link"])
-            self.root.terminal.show_current_directories(f"loaded python file: {dict['link']}\nloaded grid: {directory}\n\npython file was linked to grid")
-        else:
-            if dict["link"] != "":
-                self.root.terminal.show_current_directories(f"loaded grid: {directory}\nfailed to load linked python file: {dict['link']}\n\nlinked python file does not exist maybe check if the path is correct")
+        if self.has_valid_link(directory) and check_if_linked:
+            
+            self.root.code_editor.load_into_editor(self.read_file(dict["link"]))
+            options_handler.set_variable("current_file_directory", link)
+            self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {directory}\n\npython file was linked to grid")
+        elif check_if_linked:
+            if link != "":
+                self.root.terminal.show_current_directories(f"loaded grid: {directory}\nfailed to load linked python file: {link}\n\nlinked python file does not exist maybe check if the path is correct")
             else:
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}")
         

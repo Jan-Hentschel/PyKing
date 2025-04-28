@@ -84,7 +84,18 @@ class Filetree:
         parent_iid = self.treeview.insert(parent='', index='0', text=os.path.basename(self.start_path), open=True, image=self.folder_icon)
         # inserting items to the treeview
         self.add_directory_to_treeview(self.start_path, start_dir_entries, parent_iid)
-        
+
+    def all_grid_file_paths(self):
+        paths = []
+        for dirpath, subdirs, files in os.walk(self.start_path):
+            for name in files:
+                if (name[-5:]==".json"):
+                    full_path = os.path.join(dirpath, name)
+                    full_path = full_path.replace("\\", "/")
+                    paths.append(full_path)
+        return paths
+
+                        
 
 
 
