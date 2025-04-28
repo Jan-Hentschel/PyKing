@@ -30,11 +30,12 @@ class FileManager:
                 self.root.grid_manager.change_grid_man(int(columns), int(rows))
                 popup.destroy()
                 directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
-                json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
-                with open(directory, "w", encoding="utf-8") as file:
-                    file.write(json_dict)
-                options_handler.set_variable("current_grid_directory", directory)
-                self.root.terminal.show_current_directories(f"created new grid as: {directory}")
+                if directory:
+                    json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
+                    with open(directory, "w", encoding="utf-8") as file:
+                        file.write(json_dict)
+                    options_handler.set_variable("current_grid_directory", directory)
+                    self.root.terminal.show_current_directories(f"created new grid as: {directory}")
 
 
 
@@ -46,25 +47,32 @@ class FileManager:
     def open_python_file_dialog(self):
         #ask to save before
         directory = filedialog.askopenfilename(initialdir=path_from_relative_path("Files"), title="Open a file", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
-        self.open_file(directory)
+        if directory:
+            self.open_file(directory)
 
     def save_python_file_as(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
-        self.save_text_widget_content_to_directory(directory)
-        options_handler.set_variable("current_file_directory", directory)
-        self.root.terminal.show_current_directories(f"saved python file as: {directory}")
+        if directory:
+            self.save_text_widget_content_to_directory(directory)
+            options_handler.set_variable("current_file_directory", directory)
+            self.root.terminal.show_current_directories(f"saved python file as: {directory}")
 
     def save_python_file(self):
-        self.save_text_widget_content_to_directory(options_handler.get_variable("current_file_directory"))
-        self.root.terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}")
-    
+        try:
+            self.save_text_widget_content_to_directory(options_handler.get_variable("current_file_directory"))
+            self.root.terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}")
+        except FileNotFoundError:
+            self.save_python_file_as()
+
+            
     def new_python_file(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="New File", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
-        with open(directory, "w", encoding="utf-8") as file:
-            file.write("")    
-        options_handler.set_variable("current_file_directory", directory)
-        self.root.terminal.show_current_directories(f"created new python file as: {directory}")
-              
+        if directory:
+            with open(directory, "w", encoding="utf-8") as file:
+                file.write("")    
+            options_handler.set_variable("current_file_directory", directory)
+            self.root.terminal.show_current_directories(f"created new python file as: {directory}")
+                
 
     def open_grid(self, directory):
         with open(directory, "r", encoding="utf-8") as file:
@@ -80,22 +88,28 @@ class FileManager:
     def open_grid_dialog(self):
         #ask to save before
         directory = filedialog.askopenfilename(initialdir=path_from_relative_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
-        self.open_grid(directory)
+        if directory:
+            self.open_grid(directory)
         
     def save_grid_as(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
-        json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
-        with open(directory, "w", encoding="utf-8") as file:
-            file.write(json_dict)
-        options_handler.set_variable("current_grid_directory", directory)
-        self.root.terminal.show_current_directories(f"saved grid as: {directory}")
+        if directory:
+            json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
+            with open(directory, "w", encoding="utf-8") as file:
+                file.write(json_dict)
+            options_handler.set_variable("current_grid_directory", directory)
+            self.root.terminal.show_current_directories(f"saved grid as: {directory}")
 
     def save_grid(self):
-        directory = options_handler.get_variable("current_grid_directory")
-        json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
-        with open(directory, "w", encoding="utf-8") as file:
-            file.write(json_dict)
-        self.root.terminal.show_current_directories(f"saved grid: {options_handler.get_variable('current_grid_directory')}")
+        try:
+            directory = options_handler.get_variable("current_grid_directory")
+            json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
+            with open(directory, "w", encoding="utf-8") as file:
+                file.write(json_dict)
+            self.root.terminal.show_current_directories(f"saved grid: {options_handler.get_variable('current_grid_directory')}")
+        except FileNotFoundError:
+            self.save_grid_as()
+
 
     def new_grid(self):
         popup = DefaultToplevel(self.root)
@@ -129,7 +143,7 @@ class FileManager:
         try:
             self.open_file(options_handler.get_variable("current_file_directory"))
             self.open_grid(options_handler.get_variable("current_grid_directory"))
-        except Exception as error:
-            print(error)
+        except FileNotFoundError:
+            pass
         self.root.terminal.show_current_directories(f"loaded python file: {options_handler.get_variable('current_file_directory')}\nloaded grid: {options_handler.get_variable('current_grid_directory')}")
 

@@ -28,9 +28,10 @@ class Filetree:
 
         self.treeview = ttk.Treeview(self.frame, show='tree')
         self.treeview.pack(fill='both', expand=True)
-
-        self.display_treeview()
-
+        try:
+            self.display_treeview()
+        except FileNotFoundError:
+            pass
 
 
 
