@@ -5,7 +5,13 @@ from tkinter.font import Font
 import os
 import sys
 
+from settings_handler import settings_handler
+
 button_list = []
+
+foreground_color = settings_handler.get_variable("foreground_color")
+primary_color = settings_handler.get_variable("primary_color")
+secondary_color = settings_handler.get_variable("secondary_color")
 
 #https://www.geeksforgeeks.org/autohiding-scrollbars-using-python-tkinter/
 #https://stackoverflow.com/questions/41095385/autohide-tkinter-canvas-scrollbar-with-pack-geometry 
@@ -54,7 +60,7 @@ class AutoHiddenScrollbar(ttk.Scrollbar):
             super().grid(**self.grid_info_cache)
     
 class DefaultButton(Button):
-    def __init__(self, master, bd=2, bg="#3F3F3F", activebackground="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", height=2, **kwargs):
+    def __init__(self, master, bd=2, bg=primary_color, activebackground=secondary_color, fg=foreground_color, activeforeground=foreground_color, height=2, **kwargs):
         super().__init__(master, bd=bd, bg=bg, activebackground=activebackground, fg=fg, activeforeground=activeforeground, **kwargs)
         if not self.cget("image"):
             self.configure(height=height)
@@ -65,29 +71,29 @@ class DefaultButton(Button):
         button_list.append(self)
 
 class DefaultLabel(Label):
-    def __init__(self, master, bg="#333333", fg="#FFFFFF", activeforeground="#FFFFFF", **kwargs):
+    def __init__(self, master, bg=secondary_color, fg=foreground_color, activeforeground=foreground_color, **kwargs):
         super().__init__(master, bg=bg, fg=fg, activeforeground=activeforeground, **kwargs)
 
 class DefaultEntry(Entry):
-    def __init__(self, master, bg="#3F3F3F", fg="#FFFFFF", **kwargs):
+    def __init__(self, master, bg=primary_color, fg=foreground_color, **kwargs):
         super().__init__(master, bg=bg, fg=fg, **kwargs)
 
 class DefaultToplevel(Toplevel):
-    def __init__(self, master, bg="#333333", **kwargs):
+    def __init__(self, master, bg=secondary_color, **kwargs):
         super().__init__(master, bg=bg, **kwargs)
 
 class DefaultFrame(Frame):
-    def __init__(self, master, bg="#3F3F3F", **kwargs):
+    def __init__(self, master, bg=primary_color, **kwargs):
         super().__init__(master, bg=bg, **kwargs)
 
 class DefaultTextFrame(Frame):
-    def __init__(self, master, line_numbers=False, bg="#3F3F3F", **kwargs):
+    def __init__(self, master, line_numbers=False, bg=primary_color, **kwargs):
         super().__init__(master, bg=bg, **kwargs)
 
         self.line_numbers = line_numbers
         #help from ChatGPT
         if line_numbers:
-            self.line_number_frame = DefaultFrame(self, bg="#333333", padx=2, highlightbackground="#3F3F3F")
+            self.line_number_frame = DefaultFrame(self, bg=secondary_color, padx=2, highlightbackground=primary_color)
             self.line_number_frame.pack(side=LEFT, fill=Y)
 
             self.line_number_text_widget = Text(
@@ -95,11 +101,11 @@ class DefaultTextFrame(Frame):
                 state="disabled",
                 padx=10,
                 width=4,
-                bg="#3F3F3F",
-                fg="#FFFFFF",
+                bg=primary_color,
+                fg=foreground_color,
                 bd=0,
                 wrap="none",
-                insertbackground="#FFFFFF",
+                insertbackground=foreground_color,
                 selectbackground="#6F6F6F",
                 tabs="40"
             )
@@ -113,18 +119,18 @@ class DefaultTextFrame(Frame):
             self.line_number_text_widget.configure(takefocus=0)
 
         # Frame containing Text + Scrollbars
-        self.plus_scrollbar_frame = DefaultFrame(self, bg="#3F3F3F")
+        self.plus_scrollbar_frame = DefaultFrame(self, bg=primary_color)
         self.plus_scrollbar_frame.pack(side=TOP, fill=BOTH, expand=True)
 
         # Text widget
         self.text_widget = Text(
             self.plus_scrollbar_frame,
             padx=10,
-            bg="#3F3F3F",
-            fg="#FFFFFF",
+            bg=primary_color,
+            fg=foreground_color,
             bd=0,
             wrap="none",
-            insertbackground="#FFFFFF",
+            insertbackground=foreground_color,
             selectbackground="#6F6F6F",
             tabs="40"
         )

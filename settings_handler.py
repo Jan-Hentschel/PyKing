@@ -1,4 +1,7 @@
-from utility import path_from_relative_path
+import os
+def path_from_relative_path(relative_path):
+    base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 class SettingsHandler:
     def __init__(self):

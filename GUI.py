@@ -28,12 +28,15 @@ class Root(tk.Tk):
 
 
         #settings variables
-        self.remember_last_file = FALSE
-        self.remember_last_grid = FALSE
-        self.remember_last_directory = FALSE
-        self.foreground_color = "#FFFFFF"
-        self.primary_color = "#3F3F3F"
-        self.secondary_color = "#333333"
+        self.remember_last_file = settings_handler.get_variable("remember_last_file")
+        self.remember_last_grid = settings_handler.get_variable("remember_last_grid")
+        self.remember_last_directory = settings_handler.get_variable("remember_last_directory")
+        self.foreground_color = settings_handler.get_variable("foreground_color")
+        self.primary_color = settings_handler.get_variable("primary_color")
+        self.secondary_color = settings_handler.get_variable("secondary_color")
+
+
+
 
         #scrollbars
         self.style = ttk.Style()
@@ -153,11 +156,14 @@ class Root(tk.Tk):
         self.style.configure("My.Vertical.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor=self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF")
 
         self.code_editor.frame.configure(bg=self.primary_color)
-        self.code_editor.frame.and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
+        self.code_editor.frame.plus_scrollbar_frame.configure(bg=self.primary_color)
         self.code_editor.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
+        self.code_editor.frame.line_number_text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
+        self.code_editor.frame.line_number_frame.configure(bg=self.secondary_color, highlightbackground=self.primary_color)
+
  
         self.terminal.frame.configure(bg=self.primary_color)
-        self.terminal.frame.and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
+        self.terminal.frame.plus_scrollbar_frame.configure(bg=self.primary_color)
         self.terminal.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
 
         self.filetree.frame.configure(bg=self.secondary_color)
@@ -177,6 +183,8 @@ class Root(tk.Tk):
             if cell.type == "wall":
                 cell.canvas.configure(bg=self.secondary_color)
 
+        
+
         self.color_delegator.tagdefs.update({
             'COMMENT': {'foreground': '#AAAAAA', 'background': self.primary_color},
             'KEYWORD': {'foreground': '#D67CBC', 'background': self.primary_color},
@@ -188,7 +196,7 @@ class Root(tk.Tk):
         self.code_editor.percolator.insertfilter(self.color_delegator) 
 
     def on_closing(self):
-        
+        #check if the user wants to save the current file and grid before closing
         if not self.remember_last_file:
             settings_handler.set_variable("current_file_directory", "")
         if not self.remember_last_grid:

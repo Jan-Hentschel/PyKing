@@ -2,3 +2,13 @@ default_tick_rate = 2
 current_file_directory = 
 current_grid_directory = 
 current_filetree_directory = 
+remember_last_file = FALSE
+remember_last_grid = FALSE
+remember_last_directory = FALSE
+foreground_color = #FFFFFF
+primary_color = #3F3F3F
+secondary_color = #333333
+
+
+
+
