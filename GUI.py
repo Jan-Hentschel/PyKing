@@ -6,7 +6,7 @@ from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
 
 from utility import *
-
+from options_handler import options_handler
 
 
 
@@ -26,6 +26,11 @@ class Root(tk.Tk):
 
         self.state('zoomed')
 
+
+        #settings variables
+        self.remember_last_file = FALSE
+        self.remember_last_grid = FALSE
+        self.remember_last_directory = FALSE
         self.foreground_color = "#FFFFFF"
         self.primary_color = "#3F3F3F"
         self.secondary_color = "#333333"
@@ -131,6 +136,8 @@ class Root(tk.Tk):
         self.file_manager.open_python_file_and_grid_from_options()
         self.code_editor.frame.update_line_numbers()        
         self.bind("<Control-s>", lambda event: self.file_manager.save_python_file_and_grid())
+
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)
         
     def update_colors(self):
         self.configure(bg=self.secondary_color)
@@ -178,7 +185,18 @@ class Root(tk.Tk):
             'DEFINITION': {'foreground': '#71BFFF', 'background': self.primary_color},
         })
         self.code_editor.percolator.removefilter(self.color_delegator)
-        self.code_editor.percolator.insertfilter(self.color_delegator)    
+        self.code_editor.percolator.insertfilter(self.color_delegator) 
+
+    def on_closing(self):
+        
+        if not self.remember_last_file:
+            options_handler.set_variable("current_file_directory", "")
+        if not self.remember_last_grid:
+            options_handler.set_variable("current_grid_directory", "")
+        if not self.remember_last_directory:
+            options_handler.set_variable("current_filetree_directory", "")
+        self.destroy()
+           
 
 root = Root()
 

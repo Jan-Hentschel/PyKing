@@ -36,8 +36,7 @@ class Filetree:
 
 
 
-    def open_file_from_tree(self, iid):
-        
+    def open_file_from_tree(self, iid):        
         name = self.treeview.item(iid)["text"]
 
         added_path = f"/{name}"
@@ -99,10 +98,10 @@ class Filetree:
 
 
 
-    def add_directory_to_treeview(self, parent_path, directory_entries, parent_iid):
+    def add_directory_to_treeview(self, parent_path, directory_entries, parent_iid, depth=0):
 
         for index, name in enumerate(directory_entries):
-            tag = f"file_{index}"
+            tag = f"file_{depth}{index}"
             item_path = parent_path+os.sep+name
             # optional: file does not exist or broken symbolic link
             #if not os.path.exists(item_path):
@@ -116,7 +115,7 @@ class Filetree:
                     # all files/folders found in this subdirectory
                     # will be attached to this subdirectory node
                     subdir_entries = os.listdir(item_path)
-                    self.add_directory_to_treeview(item_path, subdir_entries, subdir_iid)
+                    self.add_directory_to_treeview(item_path, subdir_entries, subdir_iid, depth=depth+1)
                 except PermissionError:
                     pass
             else:

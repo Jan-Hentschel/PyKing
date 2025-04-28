@@ -1,4 +1,4 @@
 default_tick_rate = 2
-current_file_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/tust.py
-current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/yaa.json
-current_filetree_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files
+current_file_directory = 
+current_grid_directory = 
+current_filetree_directory = 

@@ -42,9 +42,11 @@ class FileManager:
 
 
 
-    def open_file(self, directory):
+    def open_file(self, directory, check_if_linked=True):
         self.root.code_editor.load_into_editor(self.read_file(directory))
         options_handler.set_variable("current_file_directory", directory)
+        if not check_if_linked:
+            return
         all_grid_file_paths = self.root.filetree.all_grid_file_paths()
         for grid_path in all_grid_file_paths:
             if self.has_valid_link(grid_path):
@@ -106,22 +108,22 @@ class FileManager:
     def open_grid(self, directory, check_if_linked=True):
         with open(directory, "r", encoding="utf-8") as file:
             content = file.read()
-            dict = json.loads(content)
-            columns = dict["columns"]
-            rows = dict["rows"]
-            new_cells = dict["cells"]
-            link = dict["link"].replace("\\", "/")
-            self.root.grid_manager.change_grid(columns, rows, new_cells)
+        dict = json.loads(content)
+        columns = dict["columns"]
+        rows = dict["rows"]
+        new_cells = dict["cells"]
+        link = dict["link"].replace("\\", "/")
+        self.root.grid_manager.change_grid(columns, rows, new_cells)
         options_handler.set_variable("current_grid_directory", directory)
         if self.has_valid_link(directory) and check_if_linked:
-            
             self.root.code_editor.load_into_editor(self.read_file(dict["link"]))
             options_handler.set_variable("current_file_directory", link)
             self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {directory}\n\npython file was linked to grid")
         elif check_if_linked:
-            if link != "":
+            if link:
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}\nfailed to load linked python file: {link}\n\nlinked python file does not exist maybe check if the path is correct")
             else:
+                
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}")
         
 
