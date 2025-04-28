@@ -184,6 +184,9 @@ class FileManager:
     def open_python_file_and_grid_from_options(self):
         try:
             self.open_file(settings_handler.get_variable("current_file_directory"))
+        except FileNotFoundError:
+            pass
+        try:
             self.open_grid(settings_handler.get_variable("current_grid_directory"))
         except FileNotFoundError:
             pass

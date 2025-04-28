@@ -31,6 +31,7 @@ class Root(tk.Tk):
         self.remember_last_file = settings_handler.get_variable("remember_last_file")
         self.remember_last_grid = settings_handler.get_variable("remember_last_grid")
         self.remember_last_directory = settings_handler.get_variable("remember_last_directory")
+        
         self.foreground_color = settings_handler.get_variable("foreground_color")
         self.primary_color = settings_handler.get_variable("primary_color")
         self.secondary_color = settings_handler.get_variable("secondary_color")
@@ -197,11 +198,11 @@ class Root(tk.Tk):
 
     def on_closing(self):
         #check if the user wants to save the current file and grid before closing
-        if not self.remember_last_file:
+        if self.remember_last_file == "False":
             settings_handler.set_variable("current_file_directory", "")
-        if not self.remember_last_grid:
+        if self.remember_last_grid == "False":
             settings_handler.set_variable("current_grid_directory", "")
-        if not self.remember_last_directory:
+        if self.remember_last_directory == "False":
             settings_handler.set_variable("current_filetree_directory", "")
         self.destroy()
            

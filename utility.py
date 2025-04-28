@@ -233,7 +233,9 @@ class DefaultTextFrame(Frame):
         self.line_number_text_widget.configure(state="disabled")
 
 
-
+class DefaultCheckbutton(Checkbutton):
+    def __init__(self, master, bg=secondary_color, selectcolor=primary_color, fg=foreground_color, activebackground=secondary_color, activeforeground=foreground_color, onvalue = 1, offvalue = 0,  **kwargs):
+        super().__init__(master, bg=bg, selectcolor=selectcolor,fg=fg, activebackground=activebackground, activeforeground=activeforeground, onvalue = onvalue, offvalue = offvalue, **kwargs)
 
 
 

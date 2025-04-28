@@ -7,9 +7,34 @@ class Settings:
 
     def open_settings(self):
         self.settings_toplevel = DefaultToplevel(self.root)
-        self.settings_toplevel.geometry("400x300")
+        self.settings_toplevel.geometry("400x800")
         self.settings_toplevel.title("Settings")
         self.settings_toplevel.iconbitmap(resource_path("Assets\\Icon.ico"))
+
+        self.remember_last_file_var = IntVar()
+        self.remember_last_grid_var = IntVar() 
+        self.remember_last_directory_var = IntVar() 
+
+        if self.root.remember_last_file == "True":
+            self.remember_last_file_var.set(1)
+        else:
+            self.remember_last_file_var.set(0)
+        if self.root.remember_last_grid == "True":
+            self.remember_last_grid_var.set(1)
+        else:
+            self.remember_last_grid_var.set(0)
+        if self.root.remember_last_directory == "True":
+            self.remember_last_directory_var.set(1)
+        else:   
+            self.remember_last_directory_var.set(0)
+
+        self.remember_last_file_check = DefaultCheckbutton(self.settings_toplevel, text = "Remember Last File", variable = self.remember_last_file_var) 
+        self.remember_last_grid_check = DefaultCheckbutton(self.settings_toplevel, text = "Remember Last Grid", variable = self.remember_last_grid_var) 
+        self.remember_last_directory_check = DefaultCheckbutton(self.settings_toplevel, text = "Remember Last Directory", variable = self.remember_last_directory_var) 
+            
+        self.remember_last_file_check.pack() 
+        self.remember_last_grid_check.pack() 
+        self.remember_last_directory_check.pack() 
 
         self.foreground_color_label = DefaultLabel(self.settings_toplevel, text="Foreground Color:")
         self.foreground_color_label.pack()
@@ -64,6 +89,27 @@ class Settings:
         foreground_color = self.foreground_color_entry.get()
         primary_color = self.primary_color_entry.get()
         secondary_color = self.secondary_color_entry.get()
+
+        if self.remember_last_file_var.get() == 1:
+            settings_handler.set_variable("remember_last_file", True)
+            self.root.remember_last_file = "True"
+        else:
+            settings_handler.set_variable("remember_last_file", False)
+            self.root.remember_last_file = "False"
+
+        if self.remember_last_grid_var.get() == 1:
+            settings_handler.set_variable("remember_last_grid", True)
+            self.root.remember_last_grid = "True"
+        else:
+            settings_handler.set_variable("remember_last_grid", False)
+            self.root.remember_last_grid = "False"
+
+        if self.remember_last_directory_var.get() == 1:
+            settings_handler.set_variable("remember_last_directory", True)
+            self.root.remember_last_directory = "True"
+        else:
+            settings_handler.set_variable("remember_last_directory", False)
+            self.root.remember_last_directory = "False"
 
         if foreground_color:
             self.change_foreground_color(foreground_color)
