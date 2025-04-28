@@ -27,10 +27,10 @@ class FileManager:
     def create_grid(self, popup):
                 columns = popup.column_entry.get()
                 rows = popup.row_entry.get()
-                self.root.grid_manager.change_grid_man(int(columns), int(rows))
                 popup.destroy()
                 directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
                 if directory:
+                    self.root.grid_manager.change_grid_man(int(columns), int(rows))
                     grid_dict = self.root.grid_manager.get_grid_dict()
                     grid_dict["link"] = ""
                     json_dict = json.dumps(grid_dict)
@@ -38,6 +38,7 @@ class FileManager:
                         file.write(json_dict)
                     options_handler.set_variable("current_grid_directory", directory)
                     self.root.terminal.show_current_directories(f"created new grid as: {directory}")
+                    self.root.filetree.refresh_treeview()
 
 
 
@@ -102,9 +103,12 @@ class FileManager:
         options_handler.set_variable("current_grid_directory", directory)
         if self.has_valid_link(directory):
             self.open_file(dict["link"])
-            self.root.terminal.show_current_directories(f"loaded python file: {dict['link']}\nloaded grid: {directory}\npython file was linked to grid")
+            self.root.terminal.show_current_directories(f"loaded python file: {dict['link']}\nloaded grid: {directory}\n\npython file was linked to grid")
         else:
-            self.root.terminal.show_current_directories(f"loaded grid: {directory}")
+            if dict["link"] != "":
+                self.root.terminal.show_current_directories(f"loaded grid: {directory}\nfailed to load linked python file: {dict['link']}\n\nlinked python file does not exist maybe check if the path is correct")
+            else:
+                self.root.terminal.show_current_directories(f"loaded grid: {directory}")
         
 
     def open_grid_dialog(self):
