@@ -26,8 +26,8 @@ share/python-wheels/
 *.egg
 MANIFEST
 # Ignore the contents but keep the folder
-folder_name/*
-!folder_name/
+Files/*
+!Files/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

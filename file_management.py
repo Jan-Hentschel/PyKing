@@ -31,7 +31,9 @@ class FileManager:
                 popup.destroy()
                 directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
                 if directory:
-                    json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
+                    grid_dict = self.root.grid_manager.get_grid_dict()
+                    grid_dict["link"] = ""
+                    json_dict = json.dumps(grid_dict)
                     with open(directory, "w", encoding="utf-8") as file:
                         file.write(json_dict)
                     options_handler.set_variable("current_grid_directory", directory)
@@ -72,7 +74,22 @@ class FileManager:
                 file.write("")    
             options_handler.set_variable("current_file_directory", directory)
             self.root.terminal.show_current_directories(f"created new python file as: {directory}")
+            self.open_file(directory)
+            self.root.filetree.refresh_treeview()
                 
+
+
+    def has_valid_link(self, directory):
+        with open(directory, "r", encoding="utf-8") as file:
+            content = file.read()
+            dict = json.loads(content)
+            link = dict["link"]       
+            if os.path.isfile(link) and link[-3:] == ".py":
+                return True 
+            else:
+                return False
+            
+        
 
     def open_grid(self, directory):
         with open(directory, "r", encoding="utf-8") as file:
@@ -83,7 +100,12 @@ class FileManager:
             new_cells = dict["cells"]
             self.root.grid_manager.change_grid(columns, rows, new_cells)
         options_handler.set_variable("current_grid_directory", directory)
-        self.root.terminal.show_current_directories(f"loaded grid: {directory}")
+        if self.has_valid_link(directory):
+            self.open_file(dict["link"])
+            self.root.terminal.show_current_directories(f"loaded python file: {dict['link']}\nloaded grid: {directory}\npython file was linked to grid")
+        else:
+            self.root.terminal.show_current_directories(f"loaded grid: {directory}")
+        
 
     def open_grid_dialog(self):
         #ask to save before

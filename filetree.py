@@ -75,6 +75,10 @@ class Filetree:
         options_handler.set_variable("current_filetree_directory", self.start_path)
         self.display_treeview()
 
+    def refresh_treeview(self):
+        self.treeview.delete(*self.treeview.get_children())
+        self.display_treeview()
+
     def display_treeview(self):
         start_dir_entries = os.listdir(self.start_path)
         parent_iid = self.treeview.insert(parent='', index='0', text=os.path.basename(self.start_path), open=True, image=self.folder_icon)

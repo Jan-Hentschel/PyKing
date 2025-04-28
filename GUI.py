@@ -105,7 +105,7 @@ class Root(tk.Tk):
         self.toolbar = Toolbar(self) 
 
         from filetree import Filetree # NEEDS FILE-MANAGER
-        self.file_tree = Filetree(self) 
+        self.filetree = Filetree(self) 
 
 
 
@@ -113,7 +113,7 @@ class Root(tk.Tk):
         self.horizontally_paned_window.pack(side="bottom", fill="both", expand=1)
         self.grid_frame.pack(anchor=NE)
 
-        self.horizontally_paned_window.add(self.file_tree.frame)
+        self.horizontally_paned_window.add(self.filetree.frame)
         self.horizontally_paned_window.add(self.code_editor.frame)  
         self.horizontally_paned_window.add(self.vertically_pained_window)
 
@@ -153,7 +153,7 @@ class Root(tk.Tk):
         self.terminal.frame.and_horizontal_scrollbar_frame.configure(bg=self.primary_color)
         self.terminal.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
 
-        self.file_tree.frame.configure(bg=self.secondary_color)
+        self.filetree.frame.configure(bg=self.secondary_color)
 
         self.toolbar.frame.configure(bg=self.secondary_color)
 
