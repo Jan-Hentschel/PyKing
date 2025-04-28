@@ -4,7 +4,7 @@ import threading
 import code
 
 
-from options_handler import options_handler
+from settings_handler import settings_handler
 from virtual_environment import Snake
 
 
@@ -56,7 +56,7 @@ class CodeExecution:
         interpreter = code.InteractiveInterpreter(locals=PyKing_functions)
 
         try:
-            self.root.file_manager.open_grid(options_handler.get_variable("current_grid_directory")) #ask to save before
+            self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory")) #ask to save before
             self.root.update_idletasks()
             code_string = self.root.code_editor.frame.text_widget.get("1.0", END)
             exec(code_string, PyKing_functions)

@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import *
 from utility import *
 
-from options_handler import options_handler
+from settings_handler import settings_handler
 
 
 class Terminal:
@@ -17,7 +17,7 @@ class Terminal:
         if len(status.splitlines()) > 1:
             longest_line = max(len(line) for line in status.splitlines())
 
-        longest_line = max(longest_line, len(f"File: {options_handler.get_variable("current_file_directory")} "), len(f"Grid: {options_handler.get_variable("current_grid_directory")} "))
+        longest_line = max(longest_line, len(f"File: {settings_handler.get_variable("current_file_directory")} "), len(f"Grid: {settings_handler.get_variable("current_grid_directory")} "))
 
         return longest_line
 
@@ -27,8 +27,8 @@ class Terminal:
         self.frame.text_widget.insert(tk.END, 
                     f"{status}\n"
                     f"{seperator}\n\n"
-                    f"File: {options_handler.get_variable('current_file_directory')}\n"
-                    f"Grid: {options_handler.get_variable('current_grid_directory')}\n"
+                    f"File: {settings_handler.get_variable('current_file_directory')}\n"
+                    f"Grid: {settings_handler.get_variable('current_grid_directory')}\n"
                     f"{seperator}\n\n")
 
     def print(self, string):

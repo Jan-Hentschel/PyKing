@@ -3,7 +3,7 @@ from tkinter import filedialog
 import json
 
 from utility import *
-from options_handler import options_handler
+from settings_handler import settings_handler
 
 
 
@@ -36,7 +36,7 @@ class FileManager:
                     json_dict = json.dumps(grid_dict)
                     with open(directory, "w", encoding="utf-8") as file:
                         file.write(json_dict)
-                    options_handler.set_variable("current_grid_directory", directory)
+                    settings_handler.set_variable("current_grid_directory", directory)
                     self.root.terminal.show_current_directories(f"created new grid as: {directory}")
                     self.root.filetree.refresh_treeview()
 
@@ -44,7 +44,7 @@ class FileManager:
 
     def open_file(self, directory, check_if_linked=True):
         self.root.code_editor.load_into_editor(self.read_file(directory))
-        options_handler.set_variable("current_file_directory", directory)
+        settings_handler.set_variable("current_file_directory", directory)
         if not check_if_linked:
             return
         all_grid_file_paths = self.root.filetree.all_grid_file_paths()
@@ -70,13 +70,13 @@ class FileManager:
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".py", filetypes=(("Python files", "*.py"), ("All Files", "*.*")))
         if directory:
             self.save_text_widget_content_to_directory(directory)
-            options_handler.set_variable("current_file_directory", directory)
+            settings_handler.set_variable("current_file_directory", directory)
             self.root.terminal.show_current_directories(f"saved python file as: {directory}")
 
     def save_python_file(self):
         try:
-            self.save_text_widget_content_to_directory(options_handler.get_variable("current_file_directory"))
-            self.root.terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}")
+            self.save_text_widget_content_to_directory(settings_handler.get_variable("current_file_directory"))
+            self.root.terminal.show_current_directories(f"saved python file: {settings_handler.get_variable('current_file_directory')}")
         except FileNotFoundError:
             self.save_python_file_as()
 
@@ -86,7 +86,7 @@ class FileManager:
         if directory:
             with open(directory, "w", encoding="utf-8") as file:
                 file.write("")    
-            options_handler.set_variable("current_file_directory", directory)
+            settings_handler.set_variable("current_file_directory", directory)
             self.root.terminal.show_current_directories(f"created new python file as: {directory}")
             self.open_file(directory)
             self.root.filetree.refresh_treeview()
@@ -114,10 +114,10 @@ class FileManager:
         new_cells = dict["cells"]
         link = dict["link"].replace("\\", "/")
         self.root.grid_manager.change_grid(columns, rows, new_cells)
-        options_handler.set_variable("current_grid_directory", directory)
+        settings_handler.set_variable("current_grid_directory", directory)
         if self.has_valid_link(directory) and check_if_linked:
             self.root.code_editor.load_into_editor(self.read_file(dict["link"]))
-            options_handler.set_variable("current_file_directory", link)
+            settings_handler.set_variable("current_file_directory", link)
             self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {directory}\n\npython file was linked to grid")
         elif check_if_linked:
             if link:
@@ -139,16 +139,16 @@ class FileManager:
             json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
             with open(directory, "w", encoding="utf-8") as file:
                 file.write(json_dict)
-            options_handler.set_variable("current_grid_directory", directory)
+            settings_handler.set_variable("current_grid_directory", directory)
             self.root.terminal.show_current_directories(f"saved grid as: {directory}")
 
     def save_grid(self):
         try:
-            directory = options_handler.get_variable("current_grid_directory")
+            directory = settings_handler.get_variable("current_grid_directory")
             json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
             with open(directory, "w", encoding="utf-8") as file:
                 file.write(json_dict)
-            self.root.terminal.show_current_directories(f"saved grid: {options_handler.get_variable('current_grid_directory')}")
+            self.root.terminal.show_current_directories(f"saved grid: {settings_handler.get_variable('current_grid_directory')}")
         except FileNotFoundError:
             self.save_grid_as()
 
@@ -179,13 +179,13 @@ class FileManager:
     def save_python_file_and_grid(self):
         self.save_python_file()
         self.save_grid()
-        self.root.terminal.show_current_directories(f"saved python file: {options_handler.get_variable('current_file_directory')}\nsaved grid: {options_handler.get_variable('current_grid_directory')}")
+        self.root.terminal.show_current_directories(f"saved python file: {settings_handler.get_variable('current_file_directory')}\nsaved grid: {settings_handler.get_variable('current_grid_directory')}")
         
     def open_python_file_and_grid_from_options(self):
         try:
-            self.open_file(options_handler.get_variable("current_file_directory"))
-            self.open_grid(options_handler.get_variable("current_grid_directory"))
+            self.open_file(settings_handler.get_variable("current_file_directory"))
+            self.open_grid(settings_handler.get_variable("current_grid_directory"))
         except FileNotFoundError:
             pass
-        self.root.terminal.show_current_directories(f"loaded python file: {options_handler.get_variable('current_file_directory')}\nloaded grid: {options_handler.get_variable('current_grid_directory')}")
+        self.root.terminal.show_current_directories(f"loaded python file: {settings_handler.get_variable('current_file_directory')}\nloaded grid: {settings_handler.get_variable('current_grid_directory')}")
 

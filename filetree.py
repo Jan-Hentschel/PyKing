@@ -4,7 +4,7 @@ import os
 from tkinter import filedialog
 
 from utility import DefaultButton, resource_path, path_from_relative_path
-from options_handler import options_handler
+from settings_handler import settings_handler
 
 
 
@@ -13,7 +13,7 @@ class Filetree:
     def __init__(self, root):
         self.root = root
         self.frame = Frame(self.root.horizontally_paned_window, bg=root.secondary_color)
-        self.start_path = options_handler.get_variable("current_filetree_directory")
+        self.start_path = settings_handler.get_variable("current_filetree_directory")
 
         self.file_icon = PhotoImage(file=resource_path('Assets\\file_icon.png'))
         self.python_file_icon = PhotoImage(file=resource_path('Assets\\python_file_icon.png'))
@@ -71,7 +71,7 @@ class Filetree:
         self.treeview.delete(*self.treeview.get_children())
  
         self.start_path = filedialog.askdirectory(initialdir=path_from_relative_path("Files"), title="Open a Directory")
-        options_handler.set_variable("current_filetree_directory", self.start_path)
+        settings_handler.set_variable("current_filetree_directory", self.start_path)
         self.display_treeview()
 
     def refresh_treeview(self):

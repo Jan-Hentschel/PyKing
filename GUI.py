@@ -6,7 +6,7 @@ from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
 
 from utility import *
-from options_handler import options_handler
+from settings_handler import settings_handler
 
 
 
@@ -190,11 +190,11 @@ class Root(tk.Tk):
     def on_closing(self):
         
         if not self.remember_last_file:
-            options_handler.set_variable("current_file_directory", "")
+            settings_handler.set_variable("current_file_directory", "")
         if not self.remember_last_grid:
-            options_handler.set_variable("current_grid_directory", "")
+            settings_handler.set_variable("current_grid_directory", "")
         if not self.remember_last_directory:
-            options_handler.set_variable("current_filetree_directory", "")
+            settings_handler.set_variable("current_filetree_directory", "")
         self.destroy()
            
 

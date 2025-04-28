@@ -1,8 +1,8 @@
 from utility import path_from_relative_path
 
-class OptionsHandler:
+class SettingsHandler:
     def __init__(self):
-        self.directory = path_from_relative_path("options.txt")
+        self.directory = path_from_relative_path("settings.txt")
     
 
     def get_variable(self, name):
@@ -11,7 +11,7 @@ class OptionsHandler:
                 if name in line:
                     split_line = line.split("=")
                     return split_line[1][1:-1]
-            raise Exception(f"could not find {name} in options.txt")
+            raise Exception(f"could not find {name} in settings.txt")
             
         
     def set_variable(self, name, new_value):
@@ -25,5 +25,5 @@ class OptionsHandler:
         with open(self.directory, "w", encoding="utf-8") as file:
             file.writelines(old_file)
 
-options_handler = OptionsHandler()
+settings_handler = SettingsHandler()
             
