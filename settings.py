@@ -14,6 +14,7 @@ class Settings:
         self.remember_last_file_var = IntVar()
         self.remember_last_grid_var = IntVar() 
         self.remember_last_directory_var = IntVar() 
+        self.show_snake_actions_in_terminal_var = IntVar()
 
         if self.root.remember_last_file == "True":
             self.remember_last_file_var.set(1)
@@ -28,13 +29,23 @@ class Settings:
         else:   
             self.remember_last_directory_var.set(0)
 
+        if self.root.show_snake_actions_in_terminal == "True":
+            self.show_snake_actions_in_terminal_var.set(1)
+        else: 
+            self.show_snake_actions_in_terminal_var.set(0)
+
+
         self.remember_last_file_check = DefaultCheckbutton(self.settings_toplevel, text = "Remember Last File", variable = self.remember_last_file_var) 
         self.remember_last_grid_check = DefaultCheckbutton(self.settings_toplevel, text = "Remember Last Grid", variable = self.remember_last_grid_var) 
         self.remember_last_directory_check = DefaultCheckbutton(self.settings_toplevel, text = "Remember Last Directory", variable = self.remember_last_directory_var) 
             
+        self.show_snake_actions_in_terminal_check = DefaultCheckbutton(self.settings_toplevel, text = "Show Snake Actions in Terminal", variable = self.show_snake_actions_in_terminal_var)
+
         self.remember_last_file_check.pack() 
         self.remember_last_grid_check.pack() 
         self.remember_last_directory_check.pack() 
+
+        self.show_snake_actions_in_terminal_check.pack()
 
         self.foreground_color_label = DefaultLabel(self.settings_toplevel, text="Foreground Color:")
         self.foreground_color_label.pack()
@@ -110,6 +121,15 @@ class Settings:
         else:
             settings_handler.set_variable("remember_last_directory", False)
             self.root.remember_last_directory = "False"
+
+
+        if self.show_snake_actions_in_terminal_var.get() == 1:
+            settings_handler.set_variable("show_snake_actions_in_terminal", True)
+            self.root.show_snake_actions_in_terminal = "True"
+        else:
+            settings_handler.set_variable("show_snake_actions_in_terminal", False)
+            self.root.show_snake_actions_in_terminal = "False"
+
 
         if foreground_color:
             self.change_foreground_color(foreground_color)

@@ -32,6 +32,8 @@ class Root(tk.Tk):
         self.remember_last_grid = settings_handler.get_variable("remember_last_grid")
         self.remember_last_directory = settings_handler.get_variable("remember_last_directory")
         
+        self.show_snake_actions_in_terminal = settings_handler.get_variable("show_snake_actions_in_terminal")
+
         self.foreground_color = settings_handler.get_variable("foreground_color")
         self.primary_color = settings_handler.get_variable("primary_color")
         self.secondary_color = settings_handler.get_variable("secondary_color")

@@ -71,6 +71,7 @@ class CodeExecution:
             
         except Exception as error:
             print_to_terminal_widget(error)
+            print("code execution grr")
 
     def start_execute_code_thread(self):
         self.execute_code_thread = StoppableThread(target=self.execute_code)

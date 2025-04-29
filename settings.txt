@@ -1,11 +1,13 @@
 default_tick_rate = 2
-current_file_directory = 
-current_grid_directory = 
+current_file_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/Hello World.py
+current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/subfolder/Hello Worfld.json
 current_filetree_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files
 
-remember_last_file = False
-remember_last_grid = False
+remember_last_file = True
+remember_last_grid = True
 remember_last_directory = True
+
+show_snake_actions_in_terminal = False
 
 foreground_color = #FFFFFF
 primary_color = #3F3F3F
