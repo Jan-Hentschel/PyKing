@@ -33,13 +33,26 @@ class FileManager:
                     self.root.grid_manager.change_grid_man(int(columns), int(rows))
                     grid_dict = self.root.grid_manager.get_grid_dict()
                     grid_dict["link"] = ""
-                    json_dict = json.dumps(grid_dict)
+                    json_dict = json.dumps(grid_dict, indent=4)
                     with open(directory, "w", encoding="utf-8") as file:
                         file.write(json_dict)
                     settings_handler.set_variable("current_grid_directory", directory)
                     self.root.terminal.show_current_directories(f"created new grid as: {directory}")
                     self.root.filetree.refresh_treeview()
 
+    def link_grid_to_python_file(self):
+        try:
+            grid_directory = settings_handler.get_variable("current_grid_directory")
+            python_directory = settings_handler.get_variable("current_file_directory")
+            with open(grid_directory, "r", encoding="utf-8") as file:
+                content = file.read()
+                dict = json.loads(content)
+                dict["link"] = python_directory
+            with open(grid_directory, "w", encoding="utf-8") as file:
+                file.write(json.dumps(dict, indent=4))
+            self.root.terminal.show_current_directories(f"linked grid: {grid_directory}\nto python file: {python_directory}")
+        except FileNotFoundError:
+            self.root.terminal.show_current_directories(f"failed to link grid: {grid_directory} to python file: {python_directory}\n\n")
 
 
     def open_file(self, directory, check_if_linked=True):
@@ -136,7 +149,7 @@ class FileManager:
     def save_grid_as(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
         if directory:
-            json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
+            json_dict = json.dumps(self.root.grid_manager.get_grid_dict(), indent=4)
             with open(directory, "w", encoding="utf-8") as file:
                 file.write(json_dict)
             settings_handler.set_variable("current_grid_directory", directory)
@@ -145,7 +158,7 @@ class FileManager:
     def save_grid(self):
         try:
             directory = settings_handler.get_variable("current_grid_directory")
-            json_dict = json.dumps(self.root.grid_manager.get_grid_dict())
+            json_dict = json.dumps(self.root.grid_manager.get_grid_dict(), indent=4)
             with open(directory, "w", encoding="utf-8") as file:
                 file.write(json_dict)
             self.root.terminal.show_current_directories(f"saved grid: {settings_handler.get_variable('current_grid_directory')}")

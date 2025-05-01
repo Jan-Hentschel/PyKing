@@ -30,6 +30,8 @@ class Toolbar:
         self.pick_clear_cell_button = DefaultButton(self.frame, text ="Clear Cell", command = root.grid_manager.clear_cell)
         self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", command = root.grid_manager.edit_clear_all_cells)
         self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", command = root.grid_manager.cancel_editing_grid)
+        self.link_grid_to_python_file = DefaultButton(self.frame, text ="Link Grid To Python File", command = root.file_manager.link_grid_to_python_file)
+
         self.settings_button = DefaultButton(self.frame, text ="Settings", command = root.settings.open_settings)
 
         self.new_file_button.pack()
@@ -49,5 +51,7 @@ class Toolbar:
         self.pick_clear_cell_button.pack()
         self.pick_clear_all_cells_button.pack()
         self.cancel_editing_grid_button.pack()
+        self.link_grid_to_python_file.pack()
+
         self.settings_button.pack(side="right")
 

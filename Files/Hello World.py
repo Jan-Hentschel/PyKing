@@ -7,3 +7,6 @@ paul.spit()
 paul.can_move()
 paul.can_spit()
 paul.can_eat()
+
+
+

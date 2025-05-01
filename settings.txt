@@ -1,6 +1,6 @@
 default_tick_rate = 2
-current_file_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/Hello World.py
-current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/subfolder/Hello Worfld.json
+current_file_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/tust.py
+current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/tust.json
 current_filetree_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files
 
 remember_last_file = True
