@@ -2,6 +2,7 @@
 from tkinter import *
 import tkinter as tk
 import time
+import json
 
 from utility import resource_path
 
@@ -74,7 +75,8 @@ class GridManager:
         self.add_cells_to_grid()
         self.root.update_idletasks()
 
-    def change_grid(self, columns, rows, new_cells):
+    def change_grid(self, columns, rows, new_cells, link):
+        self.link = link
         self.change_grid_man(columns, rows)
         for i in range(len(new_cells)):
             old_cell = self.cells[i]
@@ -91,7 +93,6 @@ class GridManager:
 
 
     def get_grid_dict(self):
-        self.link = ""
         new_cells = []
         for cell in self.cells:
             if cell.type == "wall":
@@ -110,7 +111,7 @@ class GridManager:
             "rows": rows,
             "cells": new_cells
         }
-        return dictionary
+        return json.dumps(dictionary, indent=4)
     
     def pick_add_hamster(self):
         self.editing = "add_hamster"

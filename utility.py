@@ -272,8 +272,29 @@ class DefaultTextFrame(Frame):
 class DefaultCheckbutton(Checkbutton):
     def __init__(self, master, bg=secondary_color, selectcolor=primary_color, fg=foreground_color, activebackground=secondary_color, activeforeground=foreground_color, onvalue = 1, offvalue = 0,  **kwargs):
         super().__init__(master, bg=bg, selectcolor=selectcolor,fg=fg, activebackground=activebackground, activeforeground=activeforeground, onvalue = onvalue, offvalue = offvalue, **kwargs)
+        
+class SettingsCheckbutton(Checkbutton):
+    def __init__(self, master, root_var_name, bg=secondary_color, selectcolor=primary_color, fg=foreground_color, activebackground=secondary_color, activeforeground=foreground_color, onvalue = 1, offvalue = 0,  **kwargs):
+        self.root_var_name = root_var_name
+        from gui import root
+        self.root = root
 
+        self.var= IntVar()
 
+        self.root_var = self.root.settings_variables[self.root_var_name]
+        if self.root_var == "True":
+            self.var.set(1)
+        else:
+            self.var.set(0)
+        super().__init__(master, bg=bg, variable=self.var, selectcolor=selectcolor,fg=fg, activebackground=activebackground, activeforeground=activeforeground, onvalue = onvalue, offvalue = offvalue, **kwargs)
+
+    def apply(self):
+        if self.var.get() == 1:
+            settings_handler.set_variable(self.root_var_name, True)
+            self.root.settings_variables[self.root_var_name] = "True"
+        else:
+            settings_handler.set_variable(self.root_var_name, False)
+            self.root.settings_variables[self.root_var_name] = "False"        
 
 #https://www.youtube.com/watch?v=p3tSLatmGvU
 #https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file

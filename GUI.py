@@ -28,11 +28,18 @@ class Root(tk.Tk):
 
 
         #settings variables
-        self.remember_last_file = settings_handler.get_variable("remember_last_file")
-        self.remember_last_grid = settings_handler.get_variable("remember_last_grid")
-        self.remember_last_directory = settings_handler.get_variable("remember_last_directory")
-        
-        self.show_snake_actions_in_terminal = settings_handler.get_variable("show_snake_actions_in_terminal")
+        self.settings_variables = {
+            "ask_to_save_on_close" : settings_handler.get_variable("ask_to_save_on_close"),
+
+            "remember_last_file" : settings_handler.get_variable("remember_last_file"),
+            "remember_last_grid" : settings_handler.get_variable("remember_last_grid"),
+            "remember_last_directory" : settings_handler.get_variable("remember_last_directory"),
+            
+            "show_snake_actions_in_terminal" : settings_handler.get_variable("show_snake_actions_in_terminal")
+
+        }
+
+
 
         self.foreground_color = settings_handler.get_variable("foreground_color")
         self.primary_color = settings_handler.get_variable("primary_color")
@@ -200,14 +207,45 @@ class Root(tk.Tk):
 
     def on_closing(self):
         #check if the user wants to save the current file and grid before closing
-        if self.remember_last_file == "False":
-            settings_handler.set_variable("current_file_directory", "")
-        if self.remember_last_grid == "False":
-            settings_handler.set_variable("current_grid_directory", "")
-        if self.remember_last_directory == "False":
-            settings_handler.set_variable("current_filetree_directory", "")
+        if self.settings_variables["ask_to_save_on_close"] == "True":
+            self.ask_if_save_on_close()
+        else:
+            self.close()
+
+    def ask_if_save_on_close(self):
+        self.popup = DefaultToplevel(self, padx=10, pady=10)
+        self.popup.geometry("325x120")
+        self.popup.title("Are you sure?")
+        self.popup.iconbitmap(resource_path("Assets\\Icon.ico"))
+
+        self.popup.are_you_sure_label = DefaultLabel(self.popup, text="Are you sure you want to close?\nDo you want to save the current file and grid?")
+        self.popup.are_you_sure_label.pack()
+        
+        self.popup.save_button = DefaultButton(self.popup, text="Save", command=lambda: self.save_before_closing(), padx=50)
+        self.popup.save_button.pack()
+
+        self.popup.dont_save_button = DefaultButton(self.popup, text="Don't Save", command=lambda: self.close(), padx=10)
+        self.popup.dont_save_button.pack()
+
+        self.popup.cancel_button = DefaultButton(self.popup, text="Cancel", command= lambda: self.cancel_closing(), padx=10)
+        self.popup.cancel_button.pack()
+
+    def save_before_closing(self):
+        self.file_manager.save_python_file_and_grid()
         self.destroy()
            
+    def close(self):
+        if self.settings_variables["remember_last_file"] == "False":
+            settings_handler.set_variable("current_file_directory", "")
+        if self.settings_variables["remember_last_grid"] == "False":
+            settings_handler.set_variable("current_grid_directory", "")
+        if self.settings_variables["remember_last_directory"] == "False":
+            settings_handler.set_variable("current_filetree_directory", "")
+        self.destroy()
+
+    def cancel_closing(self):
+        self.popup.destroy()
+        
 
 root = Root()
 

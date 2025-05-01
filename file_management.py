@@ -127,7 +127,7 @@ class FileManager:
         rows = grid_dictionary["rows"]
         new_cells = grid_dictionary["cells"]
         link = grid_dictionary["link"].replace("\\", "/")
-        self.root.grid_manager.change_grid(columns, rows, new_cells)
+        self.root.grid_manager.change_grid(columns, rows, new_cells, link)
         settings_handler.set_variable("current_grid_directory", directory)
         if self.has_valid_link(directory):
             self.root.toolbar.update_linked_status(True)
@@ -154,7 +154,7 @@ class FileManager:
     def save_grid_as(self):
         directory = filedialog.asksaveasfilename(initialdir=path_from_relative_path("Files"), title="Save as", defaultextension=".json", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))
         if directory:
-            json_dict = json.dumps(self.root.grid_manager.get_grid_dict(), indent=4)
+            json_dict = self.root.grid_manager.get_grid_dict()
             with open(directory, "w", encoding="utf-8") as file:
                 file.write(json_dict)
             settings_handler.set_variable("current_grid_directory", directory)
@@ -163,7 +163,7 @@ class FileManager:
     def save_grid(self):
         try:
             directory = settings_handler.get_variable("current_grid_directory")
-            json_dict = json.dumps(self.root.grid_manager.get_grid_dict(), indent=4)
+            json_dict = self.root.grid_manager.get_grid_dict()
             with open(directory, "w", encoding="utf-8") as file:
                 file.write(json_dict)
             self.root.terminal.show_current_directories(f"saved grid: {settings_handler.get_variable('current_grid_directory')}")
