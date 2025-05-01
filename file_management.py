@@ -51,6 +51,7 @@ class FileManager:
             with open(grid_directory, "w", encoding="utf-8") as file:
                 file.write(json.dumps(dict, indent=4))
             self.root.terminal.show_current_directories(f"linked grid: {grid_directory}\nto python file: {python_directory}")
+            self.root.toolbar.update_linked_status(True)
         except FileNotFoundError:
             self.root.terminal.show_current_directories(f"failed to link grid: {grid_directory} to python file: {python_directory}\n\n")
 
@@ -71,7 +72,7 @@ class FileManager:
                         self.open_grid(grid_path, False)
                         self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {grid_path}\n\npython file was linked to grid")
                         return
-        self.root.terminal.show_current_directories(f"loaded python file: {directory}\n\nno linked grids found")
+        self.root.terminal.show_current_directories(f"loaded python file: {directory}")
 
     def open_python_file_dialog(self):
         #ask to save before
@@ -128,15 +129,19 @@ class FileManager:
         link = grid_dictionary["link"].replace("\\", "/")
         self.root.grid_manager.change_grid(columns, rows, new_cells)
         settings_handler.set_variable("current_grid_directory", directory)
+        if self.has_valid_link(directory):
+            self.root.toolbar.update_linked_status(True)
+        else:
+            self.root.toolbar.update_linked_status(False)
         if self.has_valid_link(directory) and check_if_linked:
             self.root.code_editor.load_into_editor(self.read_file(grid_dictionary["link"]))
             settings_handler.set_variable("current_file_directory", link)
             self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {directory}\n\npython file was linked to grid")
+
         elif check_if_linked:
             if link:
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}\nfailed to load linked python file: {link}\n\nlinked python file does not exist maybe check if the path is correct")
             else:
-                
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}")
         
 

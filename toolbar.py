@@ -1,13 +1,15 @@
 import tkinter as tk
 from tkinter import *
 
-from utility import DefaultButton, resource_path
+from utility import *
 from settings_handler import settings_handler
 
 class Toolbar:
     def __init__(self, root):
         
         self.excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
+        self.linked_false_image = tk.PhotoImage(file=resource_path('Assets\\linked_false_image.png'))
+        self.linked_true_image = tk.PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
 
         self.frame = Frame(root, height=68, bg=root.secondary_color, pady=5)
 
@@ -31,6 +33,7 @@ class Toolbar:
         self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", command = root.grid_manager.edit_clear_all_cells)
         self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", command = root.grid_manager.cancel_editing_grid)
         self.link_grid_to_python_file = DefaultButton(self.frame, text ="Link Grid To Python File", command = root.file_manager.link_grid_to_python_file)
+        self.is_linked = DefaultLabel(self.frame, text="Linked", image=self.linked_false_image, compound="left")
 
         self.settings_button = DefaultButton(self.frame, text ="Settings", command = root.settings.open_settings)
 
@@ -52,6 +55,12 @@ class Toolbar:
         self.pick_clear_all_cells_button.pack()
         self.cancel_editing_grid_button.pack()
         self.link_grid_to_python_file.pack()
+        self.is_linked.pack(side="left")
 
         self.settings_button.pack(side="right")
 
+    def update_linked_status(self, linked):
+        if linked:
+            self.is_linked.configure(image=self.linked_true_image)
+        else:
+            self.is_linked.configure(image=self.linked_false_image)

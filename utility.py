@@ -132,9 +132,14 @@ class DefaultTextFrame(Frame):
             wrap="none",
             insertbackground=foreground_color,
             selectbackground="#6F6F6F",
-            tabs="40"
+            tabs="40",
+
+
         )
+        
         self.text_widget.grid(row=0, column=0, sticky="nsew")
+        self.text_widget.bind("<Control-BackSpace>", lambda event: self.on_control_backspace())
+
 
         # Grid weight for resizing
         self.plus_scrollbar_frame.grid_rowconfigure(0, weight=1)
@@ -231,6 +236,37 @@ class DefaultTextFrame(Frame):
 
         self.line_number_text_widget.yview_moveto(self.text_widget.yview()[0])
         self.line_number_text_widget.configure(state="disabled")
+
+    def on_control_backspace(self):
+        #CHATGPT HELP (VIBE CODED)
+        cursor_index = self.text_widget.index(tk.INSERT)
+        prev_index = self.text_widget.index(f"{cursor_index} -1c")
+
+        if self.text_widget.compare(prev_index, "<", "1.0"):
+            return "break"  # Already at start of text
+
+        char = self.text_widget.get(prev_index)
+
+        break_chars = set(" \n\t()[]{}:;.,'\"#=+-*/%<>!&|^~\\")
+
+        # If previous character is a break character, delete just one
+        if char in break_chars:
+            self.text_widget.delete(prev_index, cursor_index)
+            return "break"
+
+        # Otherwise, delete until a break character is found
+        index = cursor_index
+        while True:
+            prev_index = self.text_widget.index(f"{index} -1c")
+            if self.text_widget.compare(prev_index, "<", "1.0"):
+                break
+            char = self.text_widget.get(prev_index)
+            if char in break_chars:
+                break
+            index = prev_index
+
+        self.text_widget.delete(index, cursor_index)
+        return "break"
 
 
 class DefaultCheckbutton(Checkbutton):
