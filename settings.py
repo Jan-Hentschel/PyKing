@@ -12,30 +12,6 @@ class Settings:
         self.settings_toplevel.iconbitmap(resource_path("Assets\\Icon.ico"))
 
         
-        # self.remember_last_file_var = IntVar()
-        # self.remember_last_grid_var = IntVar() 
-        # self.remember_last_directory_var = IntVar() 
-        # self.show_snake_actions_in_terminal_var = IntVar()
-
-        # if self.root.remember_last_file == "True":
-        #     self.remember_last_file_var.set(1)
-        # else:
-        #     self.remember_last_file_var.set(0)
-        # if self.root.remember_last_grid == "True":
-        #     self.remember_last_grid_var.set(1)
-        # else:
-        #     self.remember_last_grid_var.set(0)
-        # if self.root.remember_last_directory == "True":
-        #     self.remember_last_directory_var.set(1)
-        # else:   
-        #     self.remember_last_directory_var.set(0)
-
-        # if self.root.show_snake_actions_in_terminal == "True":
-        #     self.show_snake_actions_in_terminal_var.set(1)
-        # else: 
-        #     self.show_snake_actions_in_terminal_var.set(0)
-
-        
         self.ask_to_save_on_close_check = SettingsCheckbutton(self.settings_toplevel, "ask_to_save_on_close", text = "Ask to Save on Close")
 
         self.remember_last_file_check = SettingsCheckbutton(self.settings_toplevel, "remember_last_file", text = "Remember Last File") 
@@ -114,35 +90,6 @@ class Settings:
         self.remember_last_directory_check.apply() 
 
         self.show_snake_actions_in_terminal_check.apply()
-        # if self.remember_last_file_var.get() == 1:
-        #     settings_handler.set_variable("remember_last_file", True)
-        #     self.root.remember_last_file = "True"
-        # else:
-        #     settings_handler.set_variable("remember_last_file", False)
-        #     self.root.remember_last_file = "False"
-
-        # if self.remember_last_grid_var.get() == 1:
-        #     settings_handler.set_variable("remember_last_grid", True)
-        #     self.root.remember_last_grid = "True"
-        # else:
-        #     settings_handler.set_variable("remember_last_grid", False)
-        #     self.root.remember_last_grid = "False"
-
-        # if self.remember_last_directory_var.get() == 1:
-        #     settings_handler.set_variable("remember_last_directory", True)
-        #     self.root.remember_last_directory = "True"
-        # else:
-        #     settings_handler.set_variable("remember_last_directory", False)
-        #     self.root.remember_last_directory = "False"
-
-
-        # if self.show_snake_actions_in_terminal_var.get() == 1:
-        #     settings_handler.set_variable("show_snake_actions_in_terminal", True)
-        #     self.root.show_snake_actions_in_terminal = "True"
-        # else:
-        #     settings_handler.set_variable("show_snake_actions_in_terminal", False)
-        #     self.root.show_snake_actions_in_terminal = "False"
-
 
         if foreground_color:
             self.change_foreground_color(foreground_color)
