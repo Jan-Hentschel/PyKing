@@ -306,7 +306,7 @@ class Snake:
         #self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image) <-- useless and breaks code (whyy?? just why)
         self.show_snake()
         self.root.update_idletasks()
-        if self.root.show_snake_actions_in_terminal == "True":
+        if self.root.settings_variables["show_snake_actions_in_terminal"] == "True":
             self.root.terminal.print(f"{self.name}.turn_right()")
         time.sleep(self.wait_time())
 
@@ -344,7 +344,7 @@ class Snake:
         self.update_cell()
         self.show_snake()
         self.root.update_idletasks()
-        if self.root.show_snake_actions_in_terminal == "True":
+        if self.root.settings_variables["show_snake_actions_in_terminal"] == "True":
             self.root.terminal.print(f"{self.name}.move()")
         time.sleep(self.wait_time())
 
@@ -357,7 +357,7 @@ class Snake:
             self.cell.subtract_hamster()
             self.update_cell()
             self.show_snake()
-            if self.root.show_snake_actions_in_terminal == "True":
+            if self.root.settings_variables["show_snake_actions_in_terminal"] == "True":
                 self.root.terminal.print(f"{self.name}.eat()")
         else:
             self.root.terminal.print(f"what is {self.name} trying to eat?")
@@ -372,7 +372,7 @@ class Snake:
             self.delete_snake_image()
             self.cell.add_hamster()
             self.show_snake()
-            if self.root.show_snake_actions_in_terminal == "True":
+            if self.root.settings_variables["show_snake_actions_in_terminal"] == "True":
                 self.root.terminal.print(f"{self.name}.spit()")
         else:
             self.root.terminal.print(f"what should {self.name} spit? their mouth is empty!")
@@ -397,36 +397,36 @@ class Snake:
         for cell in root.grid_manager.cells:
             if cell.x == new_x and cell.y == new_y:
                 if cell.type == "wall":
-                    if self.root.show_snake_actions_in_terminal == "True" and show:
+                    if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
                         self.root.terminal.print(f"{self.name}.can_move() - False")
                     return False
         if self.is_outside_grid(new_x, new_y):
-            if self.root.show_snake_actions_in_terminal == "True" and show:
+            if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
                 self.root.terminal.print(f"{self.name}.can_move() - False")
             return False
-        if self.root.show_snake_actions_in_terminal == "True" and show:
+        if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
             self.root.terminal.print(f"{self.name}.can_move() - True")
         return True
 
     def can_eat(self, show=True):
         self.update_cell()
         if self.cell.type == "hamster":
-            if self.root.show_snake_actions_in_terminal == "True" and show:
+            if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
                 self.root.terminal.print(f"{self.name}.can_eat() - True")
             return True
         else:
-            if self.root.show_snake_actions_in_terminal == "True" and show:
+            if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
                 self.root.terminal.print(f"{self.name}.can_eat() - False")
             return False
 
     def can_spit(self, show=True):
         self.update_cell()
         if self.hamsters > 0:
-            if self.root.show_snake_actions_in_terminal == "True" and show:
+            if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
                 self.root.terminal.print(f"{self.name}.can_spit() - True")
             return True
         else:
-            if self.root.show_snake_actions_in_terminal == "True" and show:
+            if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
                 self.root.terminal.print(f"{self.name}.can_spit() - False")
             return False
         

@@ -1,6 +1,6 @@
 default_tick_rate = 2
 
-ask_to_save_on_close = False
+ask_to_save_on_close = True
 
 current_file_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/Hello World.py
 current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/Hello World.json

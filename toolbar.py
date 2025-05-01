@@ -4,6 +4,7 @@ from tkinter import *
 from utility import *
 from settings_handler import settings_handler
 
+
 class Toolbar:
     def __init__(self, root):
         

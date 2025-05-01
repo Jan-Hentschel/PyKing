@@ -1,6 +1,7 @@
 from utility import *
 from settings_handler import settings_handler
 
+
 class Settings:
     def __init__(self, root):
         self.root = root

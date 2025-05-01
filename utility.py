@@ -7,6 +7,7 @@ import sys
 
 from settings_handler import settings_handler
 
+
 button_list = []
 
 foreground_color = settings_handler.get_variable("foreground_color")
@@ -142,6 +143,7 @@ class DefaultTextFrame(Frame):
         
         self.text_widget.grid(row=0, column=0, sticky="nsew")
         self.text_widget.bind("<Control-BackSpace>", lambda event: self.on_control_backspace())
+        self.text_widget.bind("<Control-Delete>", lambda event: self.on_control_delete())
 
 
         # Grid weight for resizing
@@ -271,6 +273,32 @@ class DefaultTextFrame(Frame):
         self.text_widget.delete(index, cursor_index)
         return "break"
 
+    def on_control_delete(self):
+        cursor_index = self.text_widget.index(tk.INSERT)
+        next_index = self.text_widget.index(f"{cursor_index} +1c")
+
+        if self.text_widget.compare(next_index, ">", tk.END):
+            return "break"  # Already at end of text
+
+        char = self.text_widget.get(cursor_index)
+
+        break_chars = set(" \n\t()[]{}:;.,'\"#=+-*/%<>!&|^~\\")
+
+        # If next character is a break character, delete just one
+        if char in break_chars:
+            self.text_widget.delete(cursor_index, next_index)
+            return "break"
+
+        # Otherwise, delete until a break character is found
+        index = cursor_index
+        while True:
+            char = self.text_widget.get(index)
+            if char in break_chars or self.text_widget.compare(index, ">=", tk.END):
+                break
+            index = self.text_widget.index(f"{index} +1c")
+
+        self.text_widget.delete(cursor_index, index)
+        return "break"
 
 class DefaultCheckbutton(Checkbutton):
     def __init__(self, master, bg=secondary_color, selectcolor=primary_color, fg=foreground_color, activebackground=secondary_color, activeforeground=foreground_color, onvalue = 1, offvalue = 0,  **kwargs):

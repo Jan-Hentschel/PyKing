@@ -6,11 +6,6 @@ from utility import *
 from settings_handler import settings_handler
 
 
-
-
-
-
-
 class FileManager:
     def __init__(self, root):
         self.root = root
@@ -111,12 +106,17 @@ class FileManager:
         with open(directory, "r", encoding="utf-8") as file:
             content = file.read()
             dict = json.loads(content)
-            link = dict["link"]       
-            if os.path.isfile(link) and link[-3:] == ".py":
-                return True 
-            else:
+            link = None
+            try:
+                link = dict["link"]        
+                if os.path.isfile(link) and link[-3:] == ".py":
+                    return True 
+                else:
+                    return False
+            except KeyError:
                 return False
-            
+
+                
         
 
     def open_grid(self, directory, check_if_linked=True):
