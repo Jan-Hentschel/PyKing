@@ -210,14 +210,28 @@ class GridCell:
 
 class Snake:
 
-    def __init__(self, x, y, direction):
+    snakes = []
+
+    def __init__(self, x=0, y=0, direction="N", name=None):
         from gui import root
         self.root = root
-        self.x = x
-        self.y = y
-        if self.is_outside_grid(self.x, self.y):
+        try:
+            self.x = int(x)
+            self.y = int(y) 
+        except ValueError:
             del self
-            raise Exception("you tried to put a snake outside of the grid... fucking looser, now it killed itself")
+            raise Exception("x and y are the first two parameters and must be integers")
+
+        if name is not None:
+            self.name = name
+        else:
+            self.name = f"Snake Nr.{len(Snake.snakes)+1}"
+        Snake.snakes.append(self)
+
+        if self.is_outside_grid(self.x, self.y):
+            raise Exception(f"you tried to put {self.name} outside of the grid... it killed itself")
+
+            
         self.hamsters = 0 #Einfügen dass man das voreinstellen kann
 
         self.update_cell()
@@ -278,7 +292,7 @@ class Snake:
         self.show_snake()
         self.root.update_idletasks()
         if self.root.show_snake_actions_in_terminal == "True":
-            self.root.terminal.print("turn_right()")
+            self.root.terminal.print(f"{self.name}.turn_right()")
         time.sleep(self.wait_time())
 
     def move(self):
@@ -286,7 +300,7 @@ class Snake:
         self.delete_snake_image()
 
         if not(self.can_move(False)):
-            self.root.terminal.print("you ran into a wall...")
+            self.root.terminal.print(f"{self.name} ran into a wall...")
             self.update_cell()
             self.show_snake()
             return
@@ -296,27 +310,27 @@ class Snake:
                 if self.y+1 < root.grid_manager.grid_height:
                     self.y +=1
                 else:
-                    self.root.terminal.print("you ran into a wall...")
+                    self.root.terminal.print(f"{self.name} ran into a wall...")
             case "E":
                 if self.x+1 < root.grid_manager.grid_width:
                     self.x +=1
                 else:
-                    self.root.terminal.print("you ran into a wall...")
+                    self.root.terminal.print(f"{self.name} ran into a wall...")
             case "S":
                 if self.y-1 >= 0:
                     self.y -=1
                 else:
-                    self.root.terminal.print("you ran into a wall...")
+                    self.root.terminal.print(f"{self.name} ran into a wall...")
             case "W":
                 if self.x-1 >= 0:
                     self.x -=1
                 else:
-                    self.root.terminal.print("you ran into a wall...")
+                    self.root.terminal.print(f"{self.name} ran into a wall...")
         self.update_cell()
         self.show_snake()
         self.root.update_idletasks()
         if self.root.show_snake_actions_in_terminal == "True":
-            self.root.terminal.print("move()")
+            self.root.terminal.print(f"{self.name}.move()")
         time.sleep(self.wait_time())
 
 
@@ -329,9 +343,9 @@ class Snake:
             self.update_cell()
             self.show_snake()
             if self.root.show_snake_actions_in_terminal == "True":
-                self.root.terminal.print("eat()")
+                self.root.terminal.print(f"{self.name}.eat()")
         else:
-            self.root.terminal.print("what are you trying to eat?")
+            self.root.terminal.print(f"what is {self.name} trying to eat?")
         self.root.update_idletasks()
         time.sleep(self.wait_time())
 
@@ -342,9 +356,9 @@ class Snake:
             self.update_cell()
             self.cell.add_hamster()
             if self.root.show_snake_actions_in_terminal == "True":
-                self.root.terminal.print("spit()")
+                self.root.terminal.print(f"{self.name}.spit()")
         else:
-            self.root.terminal.print("spit what? your mouth is empty!")
+            self.root.terminal.print(f"what should {self.name} spit? their mouth is empty!")
             self.root.update_idletasks()
             time.sleep(self.wait_time())
 
@@ -367,36 +381,36 @@ class Snake:
             if cell.x == new_x and cell.y == new_y:
                 if cell.type == "wall":
                     if self.root.show_snake_actions_in_terminal == "True" and show:
-                        self.root.terminal.print("can_move() - False")
+                        self.root.terminal.print(f"{self.name}.can_move() - False")
                     return False
         if self.is_outside_grid(new_x, new_y):
             if self.root.show_snake_actions_in_terminal == "True" and show:
-                self.root.terminal.print("can_move() - False")
+                self.root.terminal.print(f"{self.name}.can_move() - False")
             return False
         if self.root.show_snake_actions_in_terminal == "True" and show:
-            self.root.terminal.print("can_move() - True")
+            self.root.terminal.print(f"{self.name}.can_move() - True")
         return True
 
     def can_eat(self, show=True):
         self.update_cell()
         if self.cell.type == "hamster":
             if self.root.show_snake_actions_in_terminal == "True" and show:
-                self.root.terminal.print("can_eat() - True")
+                self.root.terminal.print(f"{self.name}.can_eat() - True")
             return True
         else:
             if self.root.show_snake_actions_in_terminal == "True" and show:
-                self.root.terminal.print("can_eat() - False")
+                self.root.terminal.print(f"{self.name}.can_eat() - False")
             return False
 
     def can_spit(self, show=True):
         self.update_cell()
         if self.hamsters > 0:
             if self.root.show_snake_actions_in_terminal == "True" and show:
-                self.root.terminal.print("can_spit() - True")
+                self.root.terminal.print(f"{self.name}.can_spit() - True")
             return True
         else:
             if self.root.show_snake_actions_in_terminal == "True" and show:
-                self.root.terminal.print("can_spit() - False")
+                self.root.terminal.print(f"{self.name}.can_spit() - False")
             return False
         
         

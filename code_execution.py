@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import *
 import threading
 import code
-
+import traceback
 
 from settings_handler import settings_handler
 from virtual_environment import Snake
@@ -70,7 +70,8 @@ class CodeExecution:
             #         buffer = ""
             
         except Exception as error:
-            print_to_terminal_widget(error)
+            error_trace = traceback.format_exc()
+            print_to_terminal_widget(error_trace)
             print("code execution grr")
 
     def start_execute_code_thread(self):

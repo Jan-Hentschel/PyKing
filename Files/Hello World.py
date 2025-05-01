@@ -1,12 +1,14 @@
 print("Hello World")
-paul = Snake(0,0,"N")
-paul.move()
-paul.turn_right()
-paul.eat()
-paul.spit()
-paul.can_move()
-paul.can_spit()
-paul.can_eat()
+
+candy = Snake(0,0,"N","candy")
+candy.move()
+candy.turn_right()
+candy.eat()
+candy.spit()
+candy.can_move()
+candy.can_spit(
+candy.can_eat()
+
 
 
 
