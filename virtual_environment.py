@@ -155,6 +155,7 @@ class GridCell:
         self.type = type
         self.canvas = Canvas(root.grid_frame, width=100, height=100, background=self.root.primary_color, highlightthickness=0)
         self.hamsters = 0
+        self.canvas.hamster_number_text = None
 
     def edit(self):
         if self.root.grid_manager.editing == "add_hamster":
@@ -196,12 +197,25 @@ class GridCell:
         self.type = "hamster"
         self.display_image(self.hamster_image)
         self.hamsters += 1
+        if self.canvas.hamster_number_text:
+            self.canvas.itemconfigure(self.canvas.hamster_number_text, text=str(self.hamsters))
+        else:
+            self.canvas.hamster_number_text = self.canvas.create_text(
+                91, 84,  # x, y position
+                text=str(self.hamsters),
+                fill="white",
+                font=("Arial", 18, "bold")
+            )
+
 
     def subtract_hamster(self):
         self.hamsters -= 1
         if self.hamsters < 1:
             self.type = "empty"
             self.clear()
+            self.canvas.hamster_number_text = None
+        else:
+            self.canvas.itemconfigure(self.canvas.hamster_number_text, text=str(self.hamsters))
 
     def clear(self):
         self.type = "empty"
@@ -354,7 +368,9 @@ class Snake:
     def spit(self):
         if self.can_spit(False):
             self.update_cell()
+            self.delete_snake_image()
             self.cell.add_hamster()
+            self.show_snake()
             if self.root.show_snake_actions_in_terminal == "True":
                 self.root.terminal.print(f"{self.name}.spit()")
         else:
@@ -424,6 +440,12 @@ class Snake:
             self.cell.clear()
             self.cell.type = "hamster"
             self.cell.display_image(root.grid_manager.hamster_image)
+            self.cell.canvas.hamster_number_text = self.cell.canvas.create_text(
+                91, 84,  # x, y position
+                text=str(self.cell.hamsters),
+                fill="white",
+                font=("Arial", 18, "bold")
+            )
         else:
             self.cell.clear()
 
