@@ -178,12 +178,10 @@ class FileManager:
         popup.iconbitmap(resource_path("Assets\\Icon.ico"))
 
         column_label = DefaultLabel(popup, text="Columns:")
-        column_label.pack()
         popup.column_entry = DefaultEntry(popup)
         popup.column_entry.pack()
 
         row_label = DefaultLabel(popup, text="Rows:")
-        row_label.pack()
         popup.row_entry = DefaultEntry(popup)
         popup.row_entry.pack()
         

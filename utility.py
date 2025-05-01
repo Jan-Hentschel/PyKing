@@ -64,6 +64,7 @@ class DefaultButton(Button):
         super().__init__(master, bd=bd, bg=bg, activebackground=activebackground, fg=fg, activeforeground=activeforeground, **kwargs)
         if not self.cget("image"):
             self.configure(height=height)
+        self.pack()
 
     def pack(self, side="left", **kwargs):
         super().pack(side=side, **kwargs)
@@ -73,10 +74,12 @@ class DefaultButton(Button):
 class DefaultLabel(Label):
     def __init__(self, master, bg=secondary_color, fg=foreground_color, activeforeground=foreground_color, **kwargs):
         super().__init__(master, bg=bg, fg=fg, activeforeground=activeforeground, **kwargs)
+        self.pack()
 
 class DefaultEntry(Entry):
     def __init__(self, master, bg=primary_color, fg=foreground_color, **kwargs):
         super().__init__(master, bg=bg, fg=fg, **kwargs)
+        self.pack()
 
 class DefaultToplevel(Toplevel):
     def __init__(self, master, bg=secondary_color, **kwargs):
@@ -287,6 +290,7 @@ class SettingsCheckbutton(Checkbutton):
         else:
             self.var.set(0)
         super().__init__(master, bg=bg, variable=self.var, selectcolor=selectcolor,fg=fg, activebackground=activebackground, activeforeground=activeforeground, onvalue = onvalue, offvalue = offvalue, **kwargs)
+        self.pack()
 
     def apply(self):
         if self.var.get() == 1:

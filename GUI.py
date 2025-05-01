@@ -219,7 +219,6 @@ class Root(tk.Tk):
         self.popup.iconbitmap(resource_path("Assets\\Icon.ico"))
 
         self.popup.are_you_sure_label = DefaultLabel(self.popup, text="Are you sure you want to close?\nDo you want to save the current file and grid?")
-        self.popup.are_you_sure_label.pack()
         
         self.popup.save_button = DefaultButton(self.popup, text="Save", command=lambda: self.save_before_closing(), padx=50)
         self.popup.save_button.pack()

@@ -20,31 +20,24 @@ class Settings:
             
         self.show_snake_actions_in_terminal_check = SettingsCheckbutton(self.settings_toplevel, "show_snake_actions_in_terminal", text = "Show Snake Actions in Terminal")
 
-        self.ask_to_save_on_close_check.pack()
-
-        self.remember_last_file_check.pack() 
-        self.remember_last_grid_check.pack() 
-        self.remember_last_directory_check.pack() 
-
-        self.show_snake_actions_in_terminal_check.pack()
 
         self.foreground_color_label = DefaultLabel(self.settings_toplevel, text="Foreground Color:")
-        self.foreground_color_label.pack()
+
 
         self.foreground_color_entry = DefaultEntry(self.settings_toplevel)
-        self.foreground_color_entry.pack()
+
 
         self.primary_color_label = DefaultLabel(self.settings_toplevel, text="Primary Color:")
-        self.primary_color_label.pack()
+
 
         self.primary_color_entry = DefaultEntry(self.settings_toplevel)
-        self.primary_color_entry.pack()
+
 
         self.secondary_color_label = DefaultLabel(self.settings_toplevel, text="Secondary Color:")
-        self.secondary_color_label.pack()
+
 
         self.secondary_color_entry = DefaultEntry(self.settings_toplevel)
-        self.secondary_color_entry.pack()
+
 
         self.reset_to_darkmode_button = DefaultButton(self.settings_toplevel, text="Reset To Darkmode", command=lambda: self.apply_darkmode())
         self.reset_to_darkmode_button.pack(side="top")
