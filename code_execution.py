@@ -5,6 +5,7 @@ import code
 import traceback
 
 from settings_handler import settings_handler
+
 from virtual_environment import Snake
 
 

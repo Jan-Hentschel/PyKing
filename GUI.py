@@ -35,7 +35,9 @@ class Root(tk.Tk):
             "remember_last_grid" : settings_handler.get_variable("remember_last_grid"),
             "remember_last_directory" : settings_handler.get_variable("remember_last_directory"),
             
-            "show_snake_actions_in_terminal" : settings_handler.get_variable("show_snake_actions_in_terminal")
+            "show_snake_actions_in_terminal" : settings_handler.get_variable("show_snake_actions_in_terminal"),
+
+            "gore" : settings_handler.get_variable("gore")
 
         }
 
@@ -107,27 +109,27 @@ class Root(tk.Tk):
         from code_editor import CodeEditor # needs nothing
         self.code_editor = CodeEditor(self, self.left_frame)
 
-        from virtual_environment import GridManager # NEEDS Terminal, grid_frame
-        self.grid_manager = GridManager(self, self.top_right_frame, 0, 0)
-
-        from file_management import FileManager # NEEDS GRID-MANAGER, code_editor, terminal
-        self.file_manager = FileManager(self)
-
-        from code_execution import CodeExecution 
-        self.code_executor = CodeExecution(self)
-
-        from settings import Settings
+        from settings import Settings # needs nothing
         self.settings = Settings(self)
 
-        from toolbar import Toolbar # NEEDS GRID-MAN AND FILE-MANAGER AND CODE-EXECUTION AND SETTINGS
-        self.toolbar = Toolbar(self) 
+        from virtual_environment import GridManager # NEEDS terminal
+        self.grid_manager = GridManager(self, self.top_right_frame, 0, 0)
 
-        from filetree import Filetree # NEEDS FILE-MANAGER
+        from file_management import FileManager # NEEDS grid_manager, code_editor, terminal
+        self.file_manager = FileManager(self)
+
+        from filetree import Filetree # NEEDS file_manager
         self.filetree = Filetree(self, self.leftest_frame) 
 
+        from code_execution import CodeExecution #NEEDS Snake 
+        self.code_executor = CodeExecution(self)
 
-
+        from toolbar import Toolbar # NEEDS grid_manager AND file_manager AND code_executor AND settings
+        self.toolbar = Toolbar(self) 
         self.toolbar.frame.pack(side="top", fill="x")
+
+
+        
         self.horizontally_paned_window.pack(side="bottom", fill="both", expand=1)
 
         self.horizontally_paned_window.add(self.leftest_frame)

@@ -4,8 +4,8 @@ import tkinter as tk
 import time
 import json
 
-from utility import resource_path
-
+from utility import *
+from settings_handler import settings_handler
 
 
 class GridManager:
@@ -19,7 +19,10 @@ class GridManager:
         self.link = ""
         self.editing = None
 
-        self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
+        if settings_handler.get_variable("gore") == "False":
+            self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
+        else:
+            self.hamster_image = PhotoImage(file=resource_path('Assets\\dead_hamster.png'))
         self.up_image = PhotoImage(file=resource_path('Assets\\Up.png'))
         self.down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
         self.left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
@@ -151,7 +154,10 @@ class GridManager:
 class GridCell:
     def __init__(self, root, grid_manager,x, y, type):
         self.root = root
-        self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
+        if settings_handler.get_variable("gore") == "False":
+            self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
+        else:
+            self.hamster_image = PhotoImage(file=resource_path('Assets\\dead_hamster.png'))
         self.x = x
         self.y = y
         self.type = type

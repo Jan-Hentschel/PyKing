@@ -21,6 +21,7 @@ class Settings:
             
         self.show_snake_actions_in_terminal_check = SettingsCheckbutton(self.settings_toplevel, "show_snake_actions_in_terminal", text = "Show Snake Actions in Terminal")
 
+        self.gore_check = SettingsCheckbutton(self.settings_toplevel, "gore", text="GORE MODE")
 
         self.foreground_color_label = DefaultLabel(self.settings_toplevel, text="Foreground Color:")
 
@@ -84,6 +85,9 @@ class Settings:
         self.remember_last_directory_check.apply() 
 
         self.show_snake_actions_in_terminal_check.apply()
+
+        self.gore_check.apply()
+        self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory"))
 
         if foreground_color:
             self.change_foreground_color(foreground_color)

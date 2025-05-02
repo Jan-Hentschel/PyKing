@@ -12,6 +12,8 @@ remember_last_directory = True
 
 show_snake_actions_in_terminal = True
 
+gore = False
+
 foreground_color = #FFFFFF
 primary_color = #3F3F3F
 secondary_color = #333333
