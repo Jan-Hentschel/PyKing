@@ -98,7 +98,8 @@ class Root(tk.Tk):
         self.vertically_pained_window = PanedWindow(self.horizontally_paned_window, orient=tk.VERTICAL, bg=self.secondary_color, sashwidth=10)
 
         self.top_right_frame = Frame(self.vertically_pained_window, bg=self.secondary_color)
-        self.grid_frame = Frame(self.top_right_frame, bg=self.secondary_color)
+        
+        
         
 
         from terminal import Terminal # needs nothing
@@ -129,7 +130,7 @@ class Root(tk.Tk):
 
         self.toolbar.frame.pack(side="top", fill="x")
         self.horizontally_paned_window.pack(side="bottom", fill="both", expand=1)
-        self.grid_frame.pack(anchor=NE)
+        self.grid_manager.grid_frame.pack(anchor=NE)
 
         self.horizontally_paned_window.add(self.filetree.frame)
         self.horizontally_paned_window.add(self.code_editor.frame)  

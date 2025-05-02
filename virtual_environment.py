@@ -11,7 +11,7 @@ from utility import resource_path
 class GridManager:
     def __init__(self, root, grid_width, grid_height):
         self.root = root
-
+        self.grid_frame = Frame(self.root.top_right_frame, bg=self.root.secondary_color)
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.cells = []
@@ -31,7 +31,7 @@ class GridManager:
     def create_cells(self):
         for y in range(self.grid_height):
             for x in range(self.grid_width):
-                self.cells.append(GridCell(self.root, x, y, "empty"))
+                self.cells.append(GridCell(self.root, self, x, y, "empty"))
                 
     def add_all_clickables(self):
         for cell in self.cells:
@@ -148,13 +148,13 @@ class GridManager:
         
     
 class GridCell:
-    def __init__(self, root, x, y, type):
+    def __init__(self, root, grid_manager,x, y, type):
         self.root = root
         self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
         self.x = x
         self.y = y
         self.type = type
-        self.canvas = Canvas(root.grid_frame, width=100, height=100, background=self.root.primary_color, highlightthickness=0)
+        self.canvas = Canvas(grid_manager.grid_frame, width=100, height=100, background=self.root.primary_color, highlightthickness=0)
         self.hamsters = 0
         self.canvas.hamster_number_text = None
 
