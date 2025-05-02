@@ -91,36 +91,9 @@ class DefaultFrame(Frame):
         super().__init__(master, bg=bg, **kwargs)
 
 class DefaultTextFrame(Frame):
-    def __init__(self, master, line_numbers=False, bg=primary_color, **kwargs):
+    def __init__(self, master, bg=primary_color, **kwargs):
         super().__init__(master, bg=bg, **kwargs)
 
-        self.line_numbers = line_numbers
-        #help from ChatGPT
-        if line_numbers:
-            self.line_number_frame = DefaultFrame(self, bg=secondary_color, padx=2, highlightbackground=primary_color)
-            self.line_number_frame.pack(side=LEFT, fill=Y)
-
-            self.line_number_text_widget = Text(
-                self.line_number_frame,
-                state="disabled",
-                padx=10,
-                width=4,
-                bg=primary_color,
-                fg=foreground_color,
-                bd=0,
-                wrap="none",
-                insertbackground=foreground_color,
-                selectbackground="#6F6F6F",
-                tabs="40"
-            )
-            self.line_number_text_widget.tag_configure("right", justify='right')
-            self.line_number_text_widget.pack(fill=Y, side=LEFT)
-
-            # Prevent interaction with line number widget
-            self.line_number_text_widget.bind("<MouseWheel>", lambda e: "break")
-            self.line_number_text_widget.bind("<Key>", lambda e: "break")
-            self.line_number_text_widget.bind("<Button-1>", lambda e: "break")
-            self.line_number_text_widget.configure(takefocus=0)
 
         # Frame containing Text + Scrollbars
         self.plus_scrollbar_frame = DefaultFrame(self, bg=primary_color)
@@ -174,73 +147,7 @@ class DefaultTextFrame(Frame):
 
         # Scrollbar <-> text widget communication
         self.text_widget.configure(xscrollcommand=self.horizontal_scrollbar.set)
-
-        if line_numbers:
-            self.text_widget.bind("<Configure>", self.update_line_numbers)
-            self.text_widget.configure(yscrollcommand=self.on_textscroll)
-            # Sync scrolling from all input methods
-            self.text_widget.bind("<Button-4>", self.on_mousewheel)  # For Linux
-            self.text_widget.bind("<Button-5>", self.on_mousewheel)
-            self.text_widget.bind("<KeyRelease-Up>", self.update_line_numbers)
-            self.text_widget.bind("<KeyRelease-Down>", self.update_line_numbers)
-            self.text_widget.bind("<Return>", self.update_line_numbers)
-            self.text_widget.bind("<BackSpace>", self.update_line_numbers)
-            self.text_widget.bind("<KeyRelease>", self.update_line_numbers)
-            self.text_widget.bind("<MouseWheel>", self.handle_mousewheel_and_update)
-            self.text_widget.bind("<ButtonRelease>", self.update_line_numbers)
-            self.text_widget.bind("<Shift-MouseWheel>", self.on_shift_mousewheel)
-        else:
-            self.text_widget.configure(yscrollcommand=self.vertical_scrollbar.set)
-
-    def update_line_numbers(self, event=None):
-        self.after_idle(self._sync_line_numbers)
-
-    def on_textscroll(self, *args):
-        try:
-            first = float(args[0])
-            if self.line_numbers and 0.0 <= first <= 1.0:
-                self.line_number_text_widget.yview_moveto(args[0])
-        except (ValueError, IndexError):
-            pass
-        self.vertical_scrollbar.set(*args)
-
-    def on_scrollbar_scroll(self, *args):
-        self.text_widget.yview(*args)
-        if self.line_numbers:
-            self.line_number_text_widget.yview(*args)
-
-    def on_mousewheel(self, event):
-        # This scrolls the main text
-        self.text_widget.yview_scroll(int(-1 * (event.delta / 120)), "units")
-        
-        # Manually sync the line number widget
-        self.line_number_text_widget.yview_moveto(self.text_widget.yview()[0])
-        
-        return "break"  # Prevent default scrolling from duplicating
-    
-    def on_shift_mousewheel(self, event):
-        self.text_widget.xview_scroll(int(-1 * (event.delta / 120)), "units")
-        return "break"
-            
-    def handle_mousewheel_and_update(self, event):
-        self.on_mousewheel(event)
-        self.update_line_numbers()
-        return "break"
-
-        
-    def _sync_line_numbers(self):
-        if not self.line_numbers:
-            return
-
-        self.line_number_text_widget.configure(state="normal")
-        self.line_number_text_widget.delete("1.0", "end")
-
-        num_lines = int(self.text_widget.index("end-1c").split(".")[0])
-        for i in range(1, num_lines + 1):
-            self.line_number_text_widget.insert("end", f"{i}\n", "right")
-
-        self.line_number_text_widget.yview_moveto(self.text_widget.yview()[0])
-        self.line_number_text_widget.configure(state="disabled")
+        self.text_widget.configure(yscrollcommand=self.vertical_scrollbar.set)
 
     def on_control_backspace(self):
         #CHATGPT HELP (VIBE CODED)
@@ -300,6 +207,12 @@ class DefaultTextFrame(Frame):
         self.text_widget.delete(cursor_index, index)
         return "break"
 
+    def on_scrollbar_scroll(self, *args):
+        self.text_widget.yview(*args)
+        if self.line_numbers:
+            self.line_number_text_widget.yview(*args)
+
+            
 class DefaultCheckbutton(Checkbutton):
     def __init__(self, master, bg=secondary_color, selectcolor=primary_color, fg=foreground_color, activebackground=secondary_color, activeforeground=foreground_color, onvalue = 1, offvalue = 0,  **kwargs):
         super().__init__(master, bg=bg, selectcolor=selectcolor,fg=fg, activebackground=activebackground, activeforeground=activeforeground, onvalue = onvalue, offvalue = offvalue, **kwargs)

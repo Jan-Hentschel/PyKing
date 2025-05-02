@@ -68,6 +68,12 @@ class FileManager:
                         self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {grid_path}\n\npython file was linked to grid")
                         return
         self.root.terminal.show_current_directories(f"loaded python file: {directory}")
+        
+        try:
+            from gui import root
+            root.code_editor.update_file_label()
+        except ImportError:
+            pass
 
     def open_python_file_dialog(self):
         #ask to save before
@@ -143,8 +149,13 @@ class FileManager:
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}\nfailed to load linked python file: {link}\n\nlinked python file does not exist maybe check if the path is correct")
             else:
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}")
-        
 
+        try:
+            from gui import root
+            root.code_editor.update_file_label()
+        except ImportError:
+            pass
+        
     def open_grid_dialog(self):
         #ask to save before
         directory = filedialog.askopenfilename(initialdir=path_from_relative_path("Files"), title="Open a file", filetypes=(("Json files", "*.json"), ("All Files", "*.*")))

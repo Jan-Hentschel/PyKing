@@ -148,7 +148,7 @@ class Root(tk.Tk):
         self.vertically_pained_window.sash_place(0, 0, int((self.vertically_pained_window.winfo_height())/2)-1)
 
         self.file_manager.open_python_file_and_grid_from_options()
-        self.code_editor.frame.update_line_numbers()        
+        self.code_editor.update_line_numbers()        
         self.bind("<Control-s>", lambda event: self.file_manager.save_python_file_and_grid())
 
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
@@ -158,7 +158,6 @@ class Root(tk.Tk):
         self.horizontally_paned_window.configure(bg=self.secondary_color)
         self.vertically_pained_window.configure(bg=self.secondary_color)
         self.top_right_frame.configure(bg=self.secondary_color)
-        self.grid_frame.configure(bg=self.secondary_color)
 
         self.style.configure("Treeview", background=self.secondary_color, foreground=self.foreground_color, fieldbackground=self.secondary_color)
         self.style.map("Treeview", background=[("selected", self.primary_color)])
