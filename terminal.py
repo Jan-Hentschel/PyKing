@@ -7,9 +7,9 @@ from settings_handler import settings_handler
 
 class Terminal:
 
-    def __init__(self, root):
+    def __init__(self, root, master):
         self.status_seperator = "_"
-        self.frame = DefaultTextFrame(root.vertically_pained_window, bg=root.primary_color, bd=0,)
+        self.frame = DefaultTextFrame(master, bg=root.primary_color, bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
     def calculate_seperator_length(self, status):

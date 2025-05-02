@@ -9,8 +9,8 @@ from utility import *
 
 
 class CodeEditor:
-    def __init__(self, root):
-        self.frame = DefaultTextFrame(root.horizontally_paned_window, line_numbers=TRUE, bg=root.primary_color, bd=0,)
+    def __init__(self, root, master):
+        self.frame = DefaultTextFrame(master, line_numbers=TRUE, bg=root.primary_color, bd=0,)
         self.frame.text_widget.configure(undo=True, maxundo=-1, autoseparators=True)
         self.frame.text_widget.bind("<Control-Shift-Z>", lambda event: self.text_widget.edit_redo())
         self.frame.pack(fill=BOTH, expand=True)

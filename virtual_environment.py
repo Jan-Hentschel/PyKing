@@ -9,9 +9,10 @@ from utility import resource_path
 
 
 class GridManager:
-    def __init__(self, root, grid_width, grid_height):
+    def __init__(self, root, master, grid_width, grid_height):
         self.root = root
-        self.grid_frame = Frame(self.root.top_right_frame, bg=self.root.secondary_color)
+        self.grid_frame = Frame(master, bg=self.root.secondary_color)
+        self.grid_frame.pack(anchor=CENTER)
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.cells = []

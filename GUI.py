@@ -92,24 +92,23 @@ class Root(tk.Tk):
 
         self.configure(bg=self.secondary_color)
         self.horizontally_paned_window = PanedWindow(self, orient=tk.HORIZONTAL, bg=self.secondary_color, sashwidth = 10)
-        
-
 
         self.vertically_pained_window = PanedWindow(self.horizontally_paned_window, orient=tk.VERTICAL, bg=self.secondary_color, sashwidth=10)
 
         self.top_right_frame = Frame(self.vertically_pained_window, bg=self.secondary_color)
-        
-        
+        self.bottom_right_frame = Frame(self.vertically_pained_window, bg=self.secondary_color)
+        self.leftest_frame = Frame(self.horizontally_paned_window, bg=self.secondary_color)
+        self.left_frame = Frame(self.horizontally_paned_window, bg=self.secondary_color)
         
 
         from terminal import Terminal # needs nothing
-        self.terminal = Terminal(self)
+        self.terminal = Terminal(self, self.bottom_right_frame)
 
         from code_editor import CodeEditor # needs nothing
-        self.code_editor = CodeEditor(self)
+        self.code_editor = CodeEditor(self, self.left_frame)
 
         from virtual_environment import GridManager # NEEDS Terminal, grid_frame
-        self.grid_manager = GridManager(self, 0, 0)
+        self.grid_manager = GridManager(self, self.top_right_frame, 0, 0)
 
         from file_management import FileManager # NEEDS GRID-MANAGER, code_editor, terminal
         self.file_manager = FileManager(self)
@@ -124,20 +123,19 @@ class Root(tk.Tk):
         self.toolbar = Toolbar(self) 
 
         from filetree import Filetree # NEEDS FILE-MANAGER
-        self.filetree = Filetree(self) 
+        self.filetree = Filetree(self, self.leftest_frame) 
 
 
 
         self.toolbar.frame.pack(side="top", fill="x")
         self.horizontally_paned_window.pack(side="bottom", fill="both", expand=1)
-        self.grid_manager.grid_frame.pack(anchor=NE)
 
-        self.horizontally_paned_window.add(self.filetree.frame)
-        self.horizontally_paned_window.add(self.code_editor.frame)  
+        self.horizontally_paned_window.add(self.leftest_frame)
+        self.horizontally_paned_window.add(self.left_frame)  
         self.horizontally_paned_window.add(self.vertically_pained_window)
 
         self.vertically_pained_window.add(self.top_right_frame)  
-        self.vertically_pained_window.add(self.terminal.frame)  
+        self.vertically_pained_window.add(self.bottom_right_frame)  
 
 
         # Alle widgets updaten, um die screen_width/screen_height zu updaten
