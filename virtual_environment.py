@@ -11,8 +11,14 @@ from settings_handler import settings_handler
 class GridManager:
     def __init__(self, root, master, grid_width, grid_height):
         self.root = root
+
+        self.label_frame = DefaultFrame(master, bg=root.secondary_color)
+        self.label_frame.pack(side=TOP, fill=X)
+
+        self.labels = []
+
         self.grid_frame = Frame(master, bg=self.root.secondary_color)
-        self.grid_frame.pack(anchor=CENTER)
+        self.grid_frame.pack(anchor=NW)
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.cells = []
@@ -149,8 +155,32 @@ class GridManager:
         self.delete_all_clickables()
         self.root.terminal.show_current_directories(f"cancelled editing grid")
         
+    def update_label(self):
+        current_grid = settings_handler.get_variable("current_grid_directory")
+        current_grid = current_grid.split("/")[-1]
+        self.file_label.configure(text=current_grid)
+
+    def add_label(self, directory):
+        for label in self.labels:
+            if directory == label.directory:
+                for label_ in self.labels:
+                    label_.configure(bg=self.root.secondary_color)
+                    label.configure(bg=self.root.primary_color)
+                return
+        name = directory.split("/")[-1]
+        file_label = FileLabel(self.label_frame, directory, text=name, bg=self.root.primary_color, )
+        file_label.bind("<Button-1>", lambda e: self.open_label(file_label))
+        self.labels.append(file_label)
+        self.open_label(file_label)
         
     
+    def open_label(self, opened_label):
+        for label in self.labels:
+            label.configure(bg=self.root.secondary_color)
+        opened_label.configure(bg=self.root.primary_color)
+        self.root.file_manager.open_grid(opened_label.directory, label_opened=True)        
+    
+
 class GridCell:
     def __init__(self, root, grid_manager,x, y, type):
         self.root = root

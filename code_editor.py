@@ -22,9 +22,6 @@ class CodeEditor:
         self.label_frame.pack(side=TOP, fill=X)
 
         self.labels = []
-
-        
-
         
 
         self.line_number_frame = DefaultFrame(self.first_frame, bg=secondary_color, padx=2, highlightbackground=primary_color)
@@ -138,7 +135,7 @@ class CodeEditor:
         self.line_number_text_widget.yview_moveto(self.frame.text_widget.yview()[0])
         self.line_number_text_widget.configure(state="disabled")
 
-    def update_file_label(self):
+    def update_label(self):
         current_file = settings_handler.get_variable("current_file_directory")
         current_file = current_file.split("/")[-1]
         self.file_label.configure(text=current_file)

@@ -73,9 +73,9 @@ class FileManager:
                         self.open_grid(grid_path, False)
                         self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {grid_path}\n\npython file was linked to grid")
                         return
+        self.root.toolbar.update_linked_status(False)
         self.root.terminal.show_current_directories(f"loaded python file: {directory}")
         
-
 
     def open_python_file_dialog(self):
         #ask to save before
@@ -106,6 +106,7 @@ class FileManager:
             settings_handler.set_variable("current_file_directory", directory)
             self.root.terminal.show_current_directories(f"created new python file as: {directory}")
             self.open_file(directory)
+            
             self.root.filetree.refresh_treeview()
                 
 
@@ -127,7 +128,7 @@ class FileManager:
                 
         
 
-    def open_grid(self, directory, check_if_linked=True):
+    def open_grid(self, directory, check_if_linked=True, label_opened=False):
         with open(directory, "r", encoding="utf-8") as file:
             content = file.read()
         grid_dictionary = json.loads(content)
@@ -138,13 +139,10 @@ class FileManager:
         self.root.grid_manager.change_grid(columns, rows, new_cells, link)
         settings_handler.set_variable("current_grid_directory", directory)
 
-        if self.has_valid_link(directory):
-            self.root.toolbar.update_linked_status(True)
-        else:
-            self.root.toolbar.update_linked_status(False)
+        if not label_opened:
+            self.root.grid_manager.add_label(directory)
 
         if self.has_valid_link(directory) and check_if_linked:
-            print(directory)
             self.open_file(grid_dictionary["link"], check_if_linked=False)
             settings_handler.set_variable("current_file_directory", link)
             self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {directory}\n\npython file was linked to grid")
@@ -155,7 +153,10 @@ class FileManager:
             else:
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}")
 
-
+        if self.has_valid_link(directory) and link==settings_handler.get_variable("current_file_directory"):
+            self.root.toolbar.update_linked_status(True)
+        else:
+            self.root.toolbar.update_linked_status(False)
 
 
     def open_grid_dialog(self):

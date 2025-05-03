@@ -122,11 +122,11 @@ class Filetree:
             else:
                 if name[-3:] == ".py":
                     iid = self.treeview.insert(parent=parent_iid, index='end', text=name, image=self.python_file_icon, tags=tag)
-                    self.treeview.tag_bind(tag, "<Double-Button-1>", lambda event, item_iid=iid: self.open_file_from_tree(item_iid))
+                    self.treeview.tag_bind(tag, "<Button-1>", lambda event, item_iid=iid: self.open_file_from_tree(item_iid))
                     
                 elif name[-5:]==".json":
                     iid = self.treeview.insert(parent=parent_iid, index='end', text=name, image=self.json_file_icon, tags=tag)
-                    self.treeview.tag_bind(tag, "<Double-Button-1>", lambda event, item_iid=iid: self.open_file_from_tree(item_iid))
+                    self.treeview.tag_bind(tag, "<Button-1>", lambda event, item_iid=iid: self.open_file_from_tree(item_iid))
                 else:
                     iid = self.treeview.insert(parent=parent_iid, index='end', text=name, image=self.file_icon, tags=tag)
             
