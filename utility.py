@@ -259,3 +259,11 @@ def path_from_relative_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 
+class FileLabel(DefaultLabel):
+    def __init__(self, master, directory, padx=10, pady=5, bg=secondary_color, fg=foreground_color, activeforeground=foreground_color, **kwargs):
+        super().__init__(master, bg=bg, fg=fg, padx=padx, pady=pady,activeforeground=activeforeground, **kwargs)
+        self.directory = directory
+        self.pack()
+
+    def pack(self, side="left", **kwargs):
+        super().pack(side=side, **kwargs)
