@@ -12,7 +12,8 @@ class Settings:
         self.settings_toplevel.title("Settings")
         self.settings_toplevel.iconbitmap(resource_path("Assets\\Icon.ico"))
 
-        
+        self.github_link_label = DefaultLabel(self.settings_toplevel, text="Click here for my GitHub")
+
         self.ask_to_save_on_close_check = SettingsCheckbutton(self.settings_toplevel, "ask_to_save_on_close", text = "Ask to Save on Close")
 
         self.remember_last_file_check = SettingsCheckbutton(self.settings_toplevel, "remember_last_file", text = "Remember Last File") 
