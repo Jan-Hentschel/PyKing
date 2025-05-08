@@ -70,9 +70,13 @@ class Filetree:
     
     def open_directory(self):
         self.treeview.delete(*self.treeview.get_children())
- 
+        temporary_start_path = self.start_path
+        self.start_path = None
         self.start_path = filedialog.askdirectory(initialdir=path_from_relative_path("Files"), title="Open a Directory")
-        settings_handler.set_variable("current_filetree_directory", self.start_path)
+        if self.start_path:
+            settings_handler.set_variable("current_filetree_directory", self.start_path)
+        else: 
+            self.start_path = temporary_start_path
         self.display_treeview()
 
     def refresh_treeview(self):

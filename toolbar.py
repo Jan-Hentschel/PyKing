@@ -14,15 +14,23 @@ class Toolbar:
 
         self.frame = Frame(root, height=68, bg=root.secondary_color, pady=5)
 
+        self.filemenu_button = DefaultButton(self.frame, text="File", command=lambda: self.open_filemenu(), padx=50)
+        self.filemenu = Menu(self.frame, tearoff=0)
+        self.filemenu.add_command(label="New", command=root.file_manager.new_python_file)
+        self.filemenu.add_command(label="Save as", command=root.file_manager.save_python_file_as)
+        self.filemenu.add_command(label="Save", command=root.file_manager.save_python_file)
+        self.filemenu.add_command(label="Open", command=root.file_manager.open_python_file_dialog)
+        
 
-        self.new_file_button = DefaultButton(self.frame, text ="New File", command = root.file_manager.new_python_file)
-        self.save_file_as_button = DefaultButton(self.frame, text ="Save File As", command = root.file_manager.save_python_file_as)
-        self.save_file_button = DefaultButton(self.frame, text ="Save File", command = root.file_manager.save_python_file)
-        self.load_button = DefaultButton(self.frame, text ="Load File", command = root.file_manager.open_python_file_dialog)
-        self.new_grid_button = DefaultButton(self.frame, text ="New Grid", command = root.file_manager.new_grid)
-        self.save_grid_as_button = DefaultButton(self.frame, text ="Save Grid As", command = root.file_manager.save_grid_as)
-        self.save_grid_button = DefaultButton(self.frame, text ="Save Grid", command = root.file_manager.save_grid)
-        self.load_grid_button = DefaultButton(self.frame, text ="Load Grid", command = root.file_manager.open_grid_dialog)
+        self.gridmenu_button = DefaultButton(self.frame, text="Grid", command=lambda: self.open_gridmenu(), padx=50)
+        self.gridmenu = Menu(self.frame, tearoff=0)
+        self.gridmenu.add_command(label="New", command=root.file_manager.new_grid)
+        self.gridmenu.add_command(label="Save as", command=root.file_manager.save_grid_as)
+        self.gridmenu.add_command(label="Save", command=root.file_manager.save_grid)
+        self.gridmenu.add_command(label="Open", command=root.file_manager.open_grid_dialog)
+        
+
+
         self.excecute_code_button = DefaultButton(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread)
         self.stop_code_execution_button = DefaultButton(self.frame, text ="Stop Execution", command = root.code_executor.stop_execute_code_thread)
         self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg=root.secondary_color, activebackground=root.secondary_color, highlightbackground=root.secondary_color, fg=root.foreground_color, troughcolor=root.primary_color)
@@ -45,3 +53,15 @@ class Toolbar:
             self.is_linked.configure(image=self.linked_true_image)
         else:
             self.is_linked.configure(image=self.linked_false_image)
+
+    def open_filemenu(self):
+        x = self.filemenu_button.winfo_rootx()
+        y = self.filemenu_button.winfo_rooty() + self.filemenu_button.winfo_height()
+        self.filemenu.post(x, y)
+
+
+    def open_gridmenu(self):
+        x = self.gridmenu_button.winfo_rootx()
+        y = self.gridmenu_button.winfo_rooty() + self.gridmenu_button.winfo_height()
+        print(x, y)
+        self.gridmenu.post(x, y)
