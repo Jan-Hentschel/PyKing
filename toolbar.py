@@ -13,17 +13,17 @@ class Toolbar:
         self.linked_true_image = tk.PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
 
         self.frame = Frame(root, height=68, bg=root.secondary_color, pady=5)
+        self.filemenu_button = DefaultMenuButton(self.frame, text="File", command=lambda: self.open_filemenu(), padx=50)
+        self.filemenu = DefaultMenu(self.frame, tearoff=0)
 
-        self.filemenu_button = DefaultButton(self.frame, text="File", command=lambda: self.open_filemenu(), padx=50)
-        self.filemenu = Menu(self.frame, tearoff=0)
         self.filemenu.add_command(label="New", command=root.file_manager.new_python_file)
         self.filemenu.add_command(label="Save as", command=root.file_manager.save_python_file_as)
         self.filemenu.add_command(label="Save", command=root.file_manager.save_python_file)
         self.filemenu.add_command(label="Open", command=root.file_manager.open_python_file_dialog)
         
 
-        self.gridmenu_button = DefaultButton(self.frame, text="Grid", command=lambda: self.open_gridmenu(), padx=50)
-        self.gridmenu = Menu(self.frame, tearoff=0)
+        self.gridmenu_button = DefaultMenuButton(self.frame, text="Grid", command=lambda: self.open_gridmenu(), padx=50)
+        self.gridmenu = DefaultMenu(self.frame, tearoff=0)
         self.gridmenu.add_command(label="New", command=root.file_manager.new_grid)
         self.gridmenu.add_command(label="Save as", command=root.file_manager.save_grid_as)
         self.gridmenu.add_command(label="Save", command=root.file_manager.save_grid)

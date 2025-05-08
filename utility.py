@@ -72,6 +72,27 @@ class DefaultButton(Button):
         global button_list
         button_list.append(self)
 
+class DefaultMenuButton(Button):
+    def __init__(self, master, bd=0, bg=secondary_color, activebackground=primary_color, fg=foreground_color, activeforeground=foreground_color, height=2, **kwargs):
+        super().__init__(master, bd=bd, bg=bg, activebackground=activebackground, fg=fg, activeforeground=activeforeground, **kwargs)
+        if not self.cget("image"):
+            self.configure(height=height)
+        self.bind("<Enter>", self.on_enter)
+        self.bind("<Leave>", self.on_leave)
+
+        self.pack()
+
+    def pack(self, side="left", **kwargs):
+        super().pack(side=side, **kwargs)
+        global button_list
+        button_list.append(self)
+
+    def on_enter(self, e):
+        self['background'] = primary_color
+
+    def on_leave(self, e):
+        self['background'] = secondary_color
+
 class DefaultLabel(Label):
     def __init__(self, master, bg=secondary_color, fg=foreground_color, activeforeground=foreground_color, **kwargs):
         super().__init__(master, bg=bg, fg=fg, activeforeground=activeforeground, **kwargs)
@@ -267,3 +288,7 @@ class FileLabel(DefaultLabel):
 
     def pack(self, side="left", **kwargs):
         super().pack(side=side, **kwargs)
+
+class DefaultMenu(Menu):
+    def __init__(self, master, bd=0, activebackground=primary_color, activeborderwidth=0, bg=secondary_color, fg=foreground_color, activeforeground=foreground_color, **kwargs):
+        super().__init__(master, bd=bd, activebackground=activebackground, activeborderwidth=activeborderwidth, bg=bg, fg=fg, activeforeground=activeforeground, **kwargs)
