@@ -9,21 +9,23 @@ class Toolbar:
     def __init__(self, root):
         
         self.excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
+        self.stop_excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\stop_execute_icon.png'))
+
         self.linked_false_image = tk.PhotoImage(file=resource_path('Assets\\linked_false_image.png'))
         self.linked_true_image = tk.PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
 
         self.frame = Frame(root, height=68, bg=root.secondary_color, pady=5)
+        self.filemenu_button = DefaultMenuButton(self.frame, text="File", command=lambda: self.open_filemenu(), padx=50)
+        self.filemenu = DefaultMenu(self.frame, tearoff=0)
 
-        self.filemenu_button = DefaultButton(self.frame, text="File", command=lambda: self.open_filemenu(), padx=50)
-        self.filemenu = Menu(self.frame, tearoff=0)
         self.filemenu.add_command(label="New", command=root.file_manager.new_python_file)
         self.filemenu.add_command(label="Save as", command=root.file_manager.save_python_file_as)
         self.filemenu.add_command(label="Save", command=root.file_manager.save_python_file)
         self.filemenu.add_command(label="Open", command=root.file_manager.open_python_file_dialog)
         
 
-        self.gridmenu_button = DefaultButton(self.frame, text="Grid", command=lambda: self.open_gridmenu(), padx=50)
-        self.gridmenu = Menu(self.frame, tearoff=0)
+        self.gridmenu_button = DefaultMenuButton(self.frame, text="Grid", command=lambda: self.open_gridmenu(), padx=50)
+        self.gridmenu = DefaultMenu(self.frame, tearoff=0)
         self.gridmenu.add_command(label="New", command=root.file_manager.new_grid)
         self.gridmenu.add_command(label="Save as", command=root.file_manager.save_grid_as)
         self.gridmenu.add_command(label="Save", command=root.file_manager.save_grid)
@@ -32,7 +34,7 @@ class Toolbar:
 
 
         self.excecute_code_button = DefaultButton(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread)
-        self.stop_code_execution_button = DefaultButton(self.frame, text ="Stop Execution", command = root.code_executor.stop_execute_code_thread)
+        self.stop_code_execution_button = DefaultButton(self.frame, image=self.stop_excecute_code_icon, command = root.code_executor.stop_execute_code_thread)
         self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg=root.secondary_color, activebackground=root.secondary_color, highlightbackground=root.secondary_color, fg=root.foreground_color, troughcolor=root.primary_color)
         self.tick_rate_slider.set(settings_handler.get_variable("default_tick_rate"))
         self.tick_rate_slider.pack(side="left")
