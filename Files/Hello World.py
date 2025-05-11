@@ -9,6 +9,12 @@ candy.eat()
 candy.spit()
 
 
+x = 1
+while x<1000:
+	print(1)
+x+=1
+
+
 
 
 

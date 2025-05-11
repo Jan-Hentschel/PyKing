@@ -9,6 +9,8 @@ class Toolbar:
     def __init__(self, root):
         
         self.excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
+        self.stop_excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\stop_execute_icon.png'))
+
         self.linked_false_image = tk.PhotoImage(file=resource_path('Assets\\linked_false_image.png'))
         self.linked_true_image = tk.PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
 
@@ -32,7 +34,7 @@ class Toolbar:
 
 
         self.excecute_code_button = DefaultButton(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread)
-        self.stop_code_execution_button = DefaultButton(self.frame, text ="Stop Execution", command = root.code_executor.stop_execute_code_thread)
+        self.stop_code_execution_button = DefaultButton(self.frame, image=self.stop_excecute_code_icon, command = root.code_executor.stop_execute_code_thread)
         self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg=root.secondary_color, activebackground=root.secondary_color, highlightbackground=root.secondary_color, fg=root.foreground_color, troughcolor=root.primary_color)
         self.tick_rate_slider.set(settings_handler.get_variable("default_tick_rate"))
         self.tick_rate_slider.pack(side="left")
