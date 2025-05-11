@@ -15,7 +15,7 @@ from virtual_environment import Snake
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
     from gui import root
-    output = " ".join(map(str, args)) + "\n"
+    output = " ".join(map(str, args))
     root.terminal.print(output)
 
 
