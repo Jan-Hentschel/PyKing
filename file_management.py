@@ -17,7 +17,10 @@ class FileManager:
 
     def read_file(self, directory):
         with open(directory, "r", encoding="utf-8") as file:
-            return file.read()
+            content = file.read()
+            if content.endswith('\n'):
+                content = content[:-1]  # remove exactly one trailing newline
+            return content
     
     def create_grid(self, popup):
         columns = popup.column_entry.get()

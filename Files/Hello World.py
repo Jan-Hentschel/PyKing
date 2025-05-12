@@ -1,21 +1,9 @@
 print("Hello World")
+print("Hello World")
+print("Hello World")
+for i in range(3):
+	print(i)
 
- 
 candy = Snake(0,0,"N","candy")
 candy.move()
-candy.turn_right()
-candy.eat()
-candy.eat()
-candy.spit()
-
-
-x = 1
-while x<1000:
-	print(1)
-x+=1
-
-
-
-
-
-
+candy.move()
