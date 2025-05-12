@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import *
+import webbrowser
 
 from utility import *
 from settings_handler import settings_handler
@@ -49,6 +50,8 @@ class Toolbar:
         self.is_linked.pack(side="left")
         self.settings_button = DefaultButton(self.frame, text ="Settings", command = root.settings.open_settings)
         self.settings_button.pack(side="right")
+        self.help_button = DefaultButton(self.frame, text="GitHub", command=self.show_github)
+        self.help_button.pack(side="right")
 
     def update_linked_status(self, linked):
         if linked:
@@ -67,3 +70,6 @@ class Toolbar:
         y = self.gridmenu_button.winfo_rooty() + self.gridmenu_button.winfo_height()
         print(x, y)
         self.gridmenu.post(x, y)
+    
+    def show_github(self):
+        webbrowser.open('https://github.com/Jan-Hentschel/PyKing')  # Go to example.com
