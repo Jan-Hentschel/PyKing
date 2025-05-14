@@ -1,14 +1,12 @@
 import tkinter as tk
 from tkinter import *
 import threading
-import code
-import traceback
 import sys
-import io
 import bdb
 import time
 import linecache
 import os
+import builtins
 
 from settings_handler import settings_handler
 
@@ -22,7 +20,14 @@ def print_to_terminal_widget(*args):
     root.terminal.print(output)
 
 
+class TerminalWriter:
+    def write(self, text):
+        print_to_terminal_widget(text.rstrip("\n"))
+    def flush(self):
+        pass
 
+# At startup:
+sys.stdout = TerminalWriter()
 #https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread
 class StoppableThread(threading.Thread):
     
@@ -100,6 +105,10 @@ class Debugger(bdb.Bdb):
             self._one_step = False
 
     def run_file(self, filename, custom_globals):
+        folder = os.path.dirname(os.path.abspath(filename))
+        if folder not in sys.path:
+            sys.path.insert(0, folder)
+
         with open(filename, "r", encoding="utf-8") as f:
             source = f.read()
 
@@ -138,11 +147,13 @@ class CodeExecution:
     def execute_code(self):
         # Prepare globals
         PyKing_globals = {
-            "Snake": Snake,
             "__builtins__": dict(__builtins__),
             "__name__": "__main__"
         }
         PyKing_globals["__builtins__"]["print"] = print_to_terminal_widget
+        
+
+        builtins.Snake = Snake
 
         cursor_position = self.root.code_editor.frame.text_widget.index("insert")
         self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory"))
