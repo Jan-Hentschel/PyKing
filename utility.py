@@ -230,8 +230,11 @@ class DefaultTextFrame(Frame):
 
     def on_scrollbar_scroll(self, *args):
         self.text_widget.yview(*args)
-        if self.line_numbers:
-            self.line_number_text_widget.yview(*args)
+        try: 
+            if self.line_numbers:
+                self.line_number_text_widget.yview(*args)
+        except AttributeError:
+            pass
 
             
 class DefaultCheckbutton(Checkbutton):
