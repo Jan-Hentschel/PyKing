@@ -376,7 +376,7 @@ def path_from_relative_path(relative_path):
 
 
 class FileLabel(DefaultLabel):
-    def __init__(self, master, directory, **kwargs):
+    def __init__(self, master, directory: str, **kwargs):
         self.defaults = {
             'padx': 10,
             'pady': 5,
@@ -385,7 +385,7 @@ class FileLabel(DefaultLabel):
             'activeforeground': self.foreground_color
         }
         CustomWidget.__init__(self, master, **kwargs)
-        self.directory = directory
+        self.directory: str = directory
 
 
     def pack(self, side="left", **kwargs):

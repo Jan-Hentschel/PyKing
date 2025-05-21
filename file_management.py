@@ -133,12 +133,15 @@ class FileManager:
 
     def open_grid(self, directory, check_if_linked=True, label_opened=False):
         with open(directory, "r", encoding="utf-8") as file:
-            content = file.read()
+            content: str = file.read()
+
         grid_dictionary = json.loads(content)
-        columns = grid_dictionary["columns"]
-        rows = grid_dictionary["rows"]
-        new_cells = grid_dictionary["cells"]
-        link = grid_dictionary["link"].replace("\\", "/")
+        
+        columns: int = grid_dictionary["columns"]
+        rows: int = grid_dictionary["rows"]
+        new_cells: list[str] = grid_dictionary["cells"]
+        link:str = grid_dictionary["link"].replace("\\", "/")
+
         self.root.grid_manager.change_grid(columns, rows, new_cells, link)
         settings_handler.set_variable("current_grid_directory", directory)
 

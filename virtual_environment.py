@@ -14,13 +14,13 @@ class GridManager:
         self.label_frame = DefaultFrame(master, bg=root.secondary_color)
         self.label_frame.pack(side=TOP, fill=X)
 
-        self.labels = []
+        self.labels = [FileLabel]
 
-        self.grid_frame = Frame(master, bg=self.root.secondary_color)
+        self.grid_frame = DefaultFrame(master, bg=self.root.secondary_color)
         self.grid_frame.pack(anchor=NW)
-        self.grid_width = grid_width
-        self.grid_height = grid_height
-        self.cells = []
+        self.grid_width: int = grid_width
+        self.grid_height: int = grid_height
+        self.cells = [GridCell]
         self.link: str = ""
         self.editing: str = None
 
@@ -76,33 +76,33 @@ class GridManager:
             del cell
             self.cells = []
 
-    def change_grid_man(self, columns, rows):
+    def change_grid_man(self, columns: int , rows: int ):
         self.remove_all_cells()
-        self.grid_width=columns
-        self.grid_height=rows
+        self.grid_width: int = columns
+        self.grid_height: int  = rows
         self.create_cells()
         self.add_cells_to_grid()
         self.root.update_idletasks()
 
-    def change_grid(self, columns, rows, new_cells, link):
-        self.link = link
+    def change_grid(self, columns: int , rows: int , new_cells: list[str], link: str):
+        self.link: str = link
         self.change_grid_man(columns, rows)
         for i in range(len(new_cells)):
-            old_cell = self.cells[i]
-            new_cell = new_cells[i]
+            old_cell: GridCell = self.cells[i]
+            new_cell: str = new_cells[i]
             if new_cell == "empty":
                 pass
             elif new_cell == "wall":
                 old_cell.change_to_wall()
             else:
-                cell_type, num_hamsters = new_cell.split()
-                for i in range(int(num_hamsters)):
+                num_hamsters: int = int(new_cell.split()[1])
+                for i in range(num_hamsters):
                     old_cell.add_hamster()
             self.delete_all_clickables()
 
 
     def get_grid_dict(self):
-        new_cells = []
+        new_cells = [str]
         for cell in self.cells:
             if cell.type == "wall":
                 new_cells.append("wall")
@@ -111,13 +111,10 @@ class GridManager:
             else:
                 new_cells.append(f"hamster {cell.hamsters}")
 
-
-        columns = self.grid_width
-        rows = self.grid_height
         dictionary = {
             "link": self.link,
-            "columns": columns,
-            "rows": rows,
+            "columns": self.grid_width,
+            "rows": self.grid_height,
             "cells": new_cells
         }
         return json.dumps(dictionary, indent=4)
@@ -155,19 +152,19 @@ class GridManager:
         self.root.terminal.show_current_directories(f"cancelled editing grid")
         
     def update_label(self):
-        current_grid = settings_handler.get_variable("current_grid_directory")
+        current_grid: str = settings_handler.get_variable("current_grid_directory")
         current_grid = current_grid.split("/")[-1]
         self.file_label.configure(text=current_grid)
 
-    def add_label(self, directory):
+    def add_label(self, directory: str):
         for label in self.labels:
             if directory == label.directory:
                 for label_ in self.labels:
                     label_.configure(bg=self.root.secondary_color)
                     label.configure(bg=self.root.primary_color)
                 return
-        name = directory.split("/")[-1]
-        file_label = FileLabel(self.label_frame, directory, text=name, bg=self.root.primary_color, )
+        grid_name: str = directory.split("/")[-1]
+        file_label: FileLabel = FileLabel(self.label_frame, directory, text=grid_name, bg=self.root.primary_color, )
         file_label.bind("<Button-1>", lambda e: self.open_label(file_label))
         self.labels.append(file_label)
         self.open_label(file_label)
@@ -181,12 +178,14 @@ class GridManager:
     
 
 class GridCell:
-    def __init__(self, root, grid_manager, x: int, y: int, type: str):
+    def __init__(self, root, grid_manager: GridManager, x: int, y: int, type: str):
         self.root = root
+
         if settings_handler.get_variable("gore") == "False":
             self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
         else:
             self.hamster_image = PhotoImage(file=resource_path('Assets\\dead_hamster.png'))
+        
         self.x: int = x
         self.y: int = y
         self.type: str = type
@@ -263,9 +262,9 @@ class Snake:
 
     snakes = []
 
-    def __init__(self, x: int=0, y: int=0, direction="N", name=None):
-        from gui import root
-        self.root = root
+    def __init__(self, x: int=0, y: int=0, direction: str="N", name: str=None):
+        from gui import root, Root
+        self.root: Root = root
         try:
             self.x = int(x)
             self.y = int(y) 
@@ -274,20 +273,20 @@ class Snake:
             raise Exception("x and y are the first two parameters and must be integers")
 
         if name is not None:
-            self.name = name
+            self.name: str = name
         else:
-            self.name = f"Snake Nr.{len(Snake.snakes)+1}"
+            self.name: str = f"Snake Nr.{len(Snake.snakes)+1}"
         Snake.snakes.append(self)
 
         if self.is_outside_grid(self.x, self.y):
             raise Exception(f"you tried to put {self.name} outside of the grid... it killed itself")
 
             
-        self.hamsters = 0 #Einfügen dass man das voreinstellen kann
+        self.hamsters: int = 0 #Einfügen dass man das voreinstellen kann
 
         self.update_cell()
 
-        self.direction = direction
+        self.direction: str = direction
 
         match self.direction:
             case "N":
@@ -302,40 +301,36 @@ class Snake:
         self.cell.display_image(self.image)
         self.root.update_idletasks()
         
-    def is_outside_grid(self, x, y):
-        from gui import root
-        if y < root.grid_manager.grid_height and x < root.grid_manager.grid_width and y >= 0 and x >= 0:
+    def is_outside_grid(self, x: int, y: int):
+        if y < self.root.grid_manager.grid_height and x < self.root.grid_manager.grid_width and y >= 0 and x >= 0:
             return False
         else:
             return True
         
     def update_cell(self):
-        from gui import root
-        for cell in root.grid_manager.cells:
+        for cell in self.root.grid_manager.cells:
             if cell.x == self.x and cell.y == self.y:
                 self.cell = cell
 
     def turn_right(self):
-        from gui import root
         self.delete_snake_image()
 
         match self.direction:
             case "N":
                 self.direction="E"
-                self.image = root.grid_manager.right_image
+                self.image = self.root.grid_manager.right_image
             case "E":
                 self.direction="S"
-                self.image = root.grid_manager.down_image
+                self.image = self.root.grid_manager.down_image
 
             case "S":
                 self.direction="W"
-                self.image = root.grid_manager.left_image
+                self.image = self.root.grid_manager.left_image
 
             case "W":
                 self.direction="N"
-                self.image = root.grid_manager.up_image
+                self.image = self.root.grid_manager.up_image
 
-        #self.cell.canvas.itemconfig(self.cell.canvas_image, image=self.image) <-- useless and breaks code (whyy?? just why)
         self.show_snake()
         self.root.update_idletasks()
         if self.root.settings_variables["show_snake_actions_in_terminal"] == "True":
