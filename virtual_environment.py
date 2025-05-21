@@ -1,4 +1,3 @@
-
 from tkinter import *
 import tkinter as tk
 import time
@@ -9,7 +8,7 @@ from settings_handler import settings_handler
 
 
 class GridManager:
-    def __init__(self, root, master, grid_width, grid_height):
+    def __init__(self, root, master: DefaultFrame, grid_width: int, grid_height: int):
         self.root = root
 
         self.label_frame = DefaultFrame(master, bg=root.secondary_color)
@@ -22,8 +21,8 @@ class GridManager:
         self.grid_width = grid_width
         self.grid_height = grid_height
         self.cells = []
-        self.link = ""
-        self.editing = None
+        self.link: str = ""
+        self.editing: str = None
 
         if settings_handler.get_variable("gore") == "False":
             self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
@@ -182,17 +181,17 @@ class GridManager:
     
 
 class GridCell:
-    def __init__(self, root, grid_manager,x, y, type):
+    def __init__(self, root, grid_manager, x: int, y: int, type: str):
         self.root = root
         if settings_handler.get_variable("gore") == "False":
             self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
         else:
             self.hamster_image = PhotoImage(file=resource_path('Assets\\dead_hamster.png'))
-        self.x = x
-        self.y = y
-        self.type = type
+        self.x: int = x
+        self.y: int = y
+        self.type: str = type
         self.canvas = Canvas(grid_manager.grid_frame, width=100, height=100, background=self.root.primary_color, highlightthickness=0)
-        self.hamsters = 0
+        self.hamsters: int = 0
         self.canvas.hamster_number_text = None
 
     def edit(self):
@@ -264,7 +263,7 @@ class Snake:
 
     snakes = []
 
-    def __init__(self, x=0, y=0, direction="N", name=None):
+    def __init__(self, x: int=0, y: int=0, direction="N", name=None):
         from gui import root
         self.root = root
         try:
@@ -302,11 +301,7 @@ class Snake:
 
         self.cell.display_image(self.image)
         self.root.update_idletasks()
-        time.sleep(self.wait_time())
-
-    def wait_time(self):
-        return 1/self.root.toolbar.tick_rate_slider.get()
-
+        
     def is_outside_grid(self, x, y):
         from gui import root
         if y < root.grid_manager.grid_height and x < root.grid_manager.grid_width and y >= 0 and x >= 0:
@@ -345,7 +340,6 @@ class Snake:
         self.root.update_idletasks()
         if self.root.settings_variables["show_snake_actions_in_terminal"] == "True":
             self.root.terminal.print(f"{self.name}.turn_right()")
-        time.sleep(self.wait_time())
 
     def move(self):
         from gui import root
@@ -383,7 +377,6 @@ class Snake:
         self.root.update_idletasks()
         if self.root.settings_variables["show_snake_actions_in_terminal"] == "True":
             self.root.terminal.print(f"{self.name}.move()")
-        time.sleep(self.wait_time())
 
 
 
@@ -399,7 +392,6 @@ class Snake:
         else:
             self.root.terminal.print(f"what is {self.name} trying to eat?")
         self.root.update_idletasks()
-        time.sleep(self.wait_time())
 
         
 
@@ -414,22 +406,21 @@ class Snake:
         else:
             self.root.terminal.print(f"what should {self.name} spit? their mouth is empty!")
             self.root.update_idletasks()
-            time.sleep(self.wait_time())
 
-    def can_move(self, show=True):
+    def can_move(self, show: bool=True):
         from gui import root
-        new_x = self.x
-        new_y = self.y
+        new_x: int = self.x
+        new_y: int = self.y
 
         match self.direction:
             case "N":
-                new_y+=1                 
+                new_y += 1                 
             case "E":
-                new_x+=1 
+                new_x += 1 
             case "S":
-                new_y-=1  
+                new_y -= 1  
             case "W":
-                new_x-=1 
+                new_x -= 1 
         
         for cell in root.grid_manager.cells:
             if cell.x == new_x and cell.y == new_y:
@@ -437,15 +428,18 @@ class Snake:
                     if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
                         self.root.terminal.print(f"{self.name}.can_move() - False")
                     return False
+                
         if self.is_outside_grid(new_x, new_y):
             if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
                 self.root.terminal.print(f"{self.name}.can_move() - False")
             return False
+        
         if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
             self.root.terminal.print(f"{self.name}.can_move() - True")
+
         return True
 
-    def can_eat(self, show=True):
+    def can_eat(self, show: bool=True):
         self.update_cell()
         if self.cell.type == "hamster":
             if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:
@@ -456,7 +450,7 @@ class Snake:
                 self.root.terminal.print(f"{self.name}.can_eat() - False")
             return False
 
-    def can_spit(self, show=True):
+    def can_spit(self, show: bool=True):
         self.update_cell()
         if self.hamsters > 0:
             if self.root.settings_variables["show_snake_actions_in_terminal"] == "True" and show:

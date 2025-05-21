@@ -16,6 +16,7 @@ class Toolbar:
         self.linked_true_image = tk.PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
 
         self.frame = Frame(root, height=68, bg=root.secondary_color, pady=5)
+        
         self.filemenu_button = DefaultMenuButton(self.frame, text="File", command=lambda: self.open_filemenu(), padx=50)
         self.filemenu = DefaultMenu(self.frame, tearoff=0)
 
@@ -39,7 +40,7 @@ class Toolbar:
         self.pause_btn = DefaultButton(self.frame, text="Pause", command=root.code_executor.pause_debugger)
         self.resume_btn = DefaultButton(self.frame, text="Resume", command=root.code_executor.resume_debugger)
         self.step_btn   = DefaultButton(self.frame, text="Step",   command=root.code_executor.step_debugger)
-        self.tick_rate_slider = Scale(self.frame, from_=1, to=100, orient=HORIZONTAL, length=200, bg=root.secondary_color, activebackground=root.secondary_color, highlightbackground=root.secondary_color, fg=root.foreground_color, troughcolor=root.primary_color)
+        self.tick_rate_slider = DefaultScale(self.frame)
         self.tick_rate_slider.set(settings_handler.get_variable("default_tick_rate"))
         self.tick_rate_slider.pack(side="left")
         self.pick_add_hamster_button = DefaultButton(self.frame, text ="Add Hamster", command = root.grid_manager.pick_add_hamster)

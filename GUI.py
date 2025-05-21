@@ -36,6 +36,7 @@ class Root(tk.Tk):
             "remember_last_directory" : settings_handler.get_variable("remember_last_directory"),
             
             "show_snake_actions_in_terminal" : settings_handler.get_variable("show_snake_actions_in_terminal"),
+            "show_debugger_prints" : settings_handler.get_variable("show_debugger_prints"),
 
             "gore" : settings_handler.get_variable("gore")
 
@@ -104,28 +105,28 @@ class Root(tk.Tk):
         
 
         from terminal import Terminal # needs nothing
-        self.terminal = Terminal(self, self.bottom_right_frame)
+        self.terminal: Terminal = Terminal(self, self.bottom_right_frame)
 
         from code_editor import CodeEditor # needs nothing
-        self.code_editor = CodeEditor(self, self.left_frame)
+        self.code_editor: CodeEditor = CodeEditor(self, self.left_frame)
 
         from settings import Settings # needs nothing
-        self.settings = Settings(self)
+        self.settings: Settings = Settings(self)
 
         from virtual_environment import GridManager # NEEDS terminal
-        self.grid_manager = GridManager(self, self.top_right_frame, 0, 0)
+        self.grid_manager: GridManager = GridManager(self, self.top_right_frame, 0, 0)
 
         from file_management import FileManager # NEEDS grid_manager, code_editor, terminal
-        self.file_manager = FileManager(self)
+        self.file_manager: FileManager = FileManager(self)
 
         from filetree import Filetree # NEEDS file_manager
-        self.filetree = Filetree(self, self.leftest_frame) 
+        self.filetree: Filetree = Filetree(self, self.leftest_frame) 
 
         from code_execution import CodeExecution #NEEDS Snake 
-        self.code_executor = CodeExecution(self)
+        self.code_executor: CodeExecution = CodeExecution(self)
 
         from toolbar import Toolbar # NEEDS grid_manager AND file_manager AND code_executor AND settings
-        self.toolbar = Toolbar(self) 
+        self.toolbar: Toolbar = Toolbar(self) 
         self.toolbar.frame.pack(side="top", fill="x")
 
 
@@ -150,8 +151,9 @@ class Root(tk.Tk):
         self.file_manager.open_python_file_and_grid_from_options()
         self.code_editor.update_line_numbers()        
         self.bind("<Control-s>", lambda event: self.file_manager.save_python_file_and_grid())
-
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        #CustomWidget.print_widgets()
+
         
     def update_colors(self):
         self.configure(bg=self.secondary_color)
@@ -165,27 +167,11 @@ class Root(tk.Tk):
         self.style.configure("My.Horizontal.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor =self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF") 
         self.style.configure("My.Vertical.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor=self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF")
 
-        self.code_editor.frame.configure(bg=self.primary_color)
-        self.code_editor.frame.plus_scrollbar_frame.configure(bg=self.primary_color)
-        self.code_editor.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
-        self.code_editor.frame.line_number_text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
-        self.code_editor.frame.line_number_frame.configure(bg=self.secondary_color, highlightbackground=self.primary_color)
-
- 
-        self.terminal.frame.configure(bg=self.primary_color)
-        self.terminal.frame.plus_scrollbar_frame.configure(bg=self.primary_color)
-        self.terminal.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
-
-        self.filetree.frame.configure(bg=self.secondary_color)
-
-        self.toolbar.frame.configure(bg=self.secondary_color)
-
-        self.toolbar.tick_rate_slider.configure(bg=self.secondary_color, activebackground=self.secondary_color, highlightbackground=self.secondary_color, fg=self.foreground_color, troughcolor=self.primary_color)
-
-        for button in button_list:
+        #CustomWidget.print_widgets()
+        for widget in CustomWidget.widget_list:
             try:
-                button.configure(bg=self.primary_color, activebackground=self.secondary_color, fg=self.foreground_color, activeforeground=self.foreground_color)
-            except tk.TclError:
+                widget.update_color()
+            except AttributeError:
                 pass
         for cell in self.grid_manager.cells:
             if cell.type == "hamster" or cell.type == "empty":
@@ -246,7 +232,7 @@ class Root(tk.Tk):
         self.popup.destroy()
         
 
-root = Root()
+root: Root = Root()
 
 
 

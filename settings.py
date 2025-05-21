@@ -12,7 +12,7 @@ class Settings:
         self.settings_toplevel.title("Settings")
         self.settings_toplevel.iconbitmap(resource_path("Assets\\Icon.ico"))
 
-        self.github_link_label = DefaultLabel(self.settings_toplevel, text="Click here for my GitHub")
+        # self.github_link_label = DefaultLabel(self.settings_toplevel, text="Click here for my GitHub")
 
         self.ask_to_save_on_close_check = SettingsCheckbutton(self.settings_toplevel, "ask_to_save_on_close", text = "Ask to Save on Close")
 
@@ -21,6 +21,7 @@ class Settings:
         self.remember_last_directory_check = SettingsCheckbutton(self.settings_toplevel, "remember_last_directory", text = "Remember Last Directory") 
             
         self.show_snake_actions_in_terminal_check = SettingsCheckbutton(self.settings_toplevel, "show_snake_actions_in_terminal", text = "Show Snake Actions in Terminal")
+        self.show_debugger_prints_check = SettingsCheckbutton(self.settings_toplevel, "show_debugger_prints", text="Show Debugger Prints")
 
         self.gore_check = SettingsCheckbutton(self.settings_toplevel, "gore", text="GORE MODE")
 
@@ -86,6 +87,7 @@ class Settings:
         self.remember_last_directory_check.apply() 
 
         self.show_snake_actions_in_terminal_check.apply()
+        self.show_debugger_prints_check.apply()
 
         self.gore_check.apply()
         self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory"))

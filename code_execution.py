@@ -8,17 +8,19 @@ import linecache
 import os
 import builtins
 
+
 from settings_handler import settings_handler
 
 from virtual_environment import Snake
 
-
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
-    from gui import root
-    output = " ".join(map(str, args))
-    root.terminal.print(output)
-
+    try:
+        from gui import root
+        output = " ".join(map(str, args))
+        root.terminal.print(output)
+    except ImportError:
+        pass
 
 class TerminalWriter:
     def write(self, text):
@@ -27,7 +29,7 @@ class TerminalWriter:
         pass
 
 # At startup:
-sys.stdout = TerminalWriter()
+
 #https://stackoverflow.com/questions/323972/is-there-any-way-to-kill-a-thread
 class StoppableThread(threading.Thread):
     
@@ -73,6 +75,7 @@ class Debugger(bdb.Bdb):
             self.set_step()
             return
         
+        from gui import root
         # Block here when paused
         self._pause_event.wait()
 
@@ -80,7 +83,7 @@ class Debugger(bdb.Bdb):
         lineno   = frame.f_lineno
         filename = frame.f_code.co_filename
         src      = linecache.getline(filename, lineno).rstrip()
-        print_to_terminal_widget(f"▶ {filename}:{lineno} — {src}")
+
         # Make a shallow copy of locals
         user_locals = dict(frame.f_locals)
 
@@ -88,7 +91,11 @@ class Debugger(bdb.Bdb):
         user_locals.pop("__builtins__", None)
 
         # Now display only the remaining names
-        print_to_terminal_widget(f"📦 Locals: {user_locals}")
+        
+        if root.settings_variables["show_debugger_prints"] == "True":
+            print_to_terminal_widget(f"▶ {filename}:{lineno} — {src}")
+            print_to_terminal_widget(f"📦 Locals: {user_locals}")
+            
 
         # Delay
         # report line & locals …
@@ -145,6 +152,7 @@ class CodeExecution:
         self.exec_thread = None
 
     def execute_code(self):
+        sys.stdout = TerminalWriter()
         # Prepare globals
         PyKing_globals = {
             "__builtins__": dict(__builtins__),
@@ -167,6 +175,7 @@ class CodeExecution:
         except Exception:
             import traceback
             print_to_terminal_widget(traceback.format_exc())
+        sys.stdout = sys.__stdout__
 
     def start_execute_code_thread(self):
         # fire off code execution in a thread so GUI stays responsive

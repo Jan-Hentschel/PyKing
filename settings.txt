@@ -11,6 +11,7 @@ remember_last_grid = True
 remember_last_directory = True
 
 show_snake_actions_in_terminal = True
+show_debugger_prints = True
 
 gore = False
 

@@ -8,21 +8,61 @@ import sys
 from settings_handler import settings_handler
 
 
-button_list = []
 
-foreground_color = settings_handler.get_variable("foreground_color")
-primary_color = settings_handler.get_variable("primary_color")
-secondary_color = settings_handler.get_variable("secondary_color")
 
 #https://www.geeksforgeeks.org/autohiding-scrollbars-using-python-tkinter/
 #https://stackoverflow.com/questions/41095385/autohide-tkinter-canvas-scrollbar-with-pack-geometry 
 
+class CustomWidget:
+    widget_list = []
 
-class AutoHiddenScrollbar(ttk.Scrollbar):
+    @staticmethod
+    def print_widgets():
+        for widget in CustomWidget.widget_list:
+            print(widget.__class__.__name__)
+
+    def __init__(self, *args, **kwargs):
+        kwargs = self.apply_default_style(kwargs)
+        super().__init__(*args, **kwargs)  
+        CustomWidget.widget_list.append(self)
+        try:
+            self.pack()
+        except Exception:
+            pass
+
+
+    @property
+    def foreground_color(self):
+        return settings_handler.get_variable("foreground_color")
+
+    @property
+    def primary_color(self):
+        return settings_handler.get_variable("primary_color")
+
+    @property
+    def secondary_color(self):
+        return settings_handler.get_variable("secondary_color")
+    
+    
+    def apply_default_style(self, kwargs: dict):
+        for key, value in self.defaults.items():
+            kwargs.setdefault(key, value)
+        return kwargs
+    
+    def update_color(self):
+        if hasattr(self, 'defaults') and self.winfo_exists():
+            self.configure(**self.defaults)
+            
+
+class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
     def __init__(self, master, target_widget, **kwargs):
-        super().__init__(master, **kwargs)
+        self.defaults = {
+
+        }
+        CustomWidget.__init__(self, master, **kwargs)
         self.target_widget = target_widget
         self.grid_info_cache = None  # Store grid options for reuse
+        
 
     def set(self, low, high):
         is_horizontal = self.cget("orient") == "horizontal"
@@ -60,75 +100,106 @@ class AutoHiddenScrollbar(ttk.Scrollbar):
         if self.grid_info_cache:
             super().grid(**self.grid_info_cache)
     
-class DefaultButton(Button):
-    def __init__(self, master, bd=2, bg=primary_color, activebackground=secondary_color, fg=foreground_color, activeforeground=foreground_color, height=2, **kwargs):
-        super().__init__(master, bd=bd, bg=bg, activebackground=activebackground, fg=fg, activeforeground=activeforeground, **kwargs)
+class DefaultButton(CustomWidget, Button):
+    def __init__(self, master,**kwargs):
+        self.defaults = {
+            'bd': 2,
+            'bg': self.primary_color,
+            'activebackground': self.secondary_color,
+            'fg': self.foreground_color,
+            'activeforeground': self.foreground_color,
+        }
+        CustomWidget.__init__(self, master, **kwargs)
         if not self.cget("image"):
-            self.configure(height=height)
-        self.pack()
+            self.configure(height=2)
 
     def pack(self, side="left", **kwargs):
         super().pack(side=side, **kwargs)
-        global button_list
-        button_list.append(self)
 
-class DefaultMenuButton(Button):
-    def __init__(self, master, bd=0, bg=secondary_color, activebackground=primary_color, fg=foreground_color, activeforeground=foreground_color, height=2, **kwargs):
-        super().__init__(master, bd=bd, bg=bg, activebackground=activebackground, fg=fg, activeforeground=activeforeground, **kwargs)
+class DefaultMenuButton(CustomWidget, Button):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'bd': 0,
+            'bg': self.secondary_color,
+            'activebackground': self.primary_color,
+            'fg': self.foreground_color,
+            'activeforeground': self.foreground_color,
+        }
+        CustomWidget.__init__(self, master, **kwargs)
         if not self.cget("image"):
-            self.configure(height=height)
+            self.configure(height=2)
         self.bind("<Enter>", self.on_enter)
         self.bind("<Leave>", self.on_leave)
 
-        self.pack()
+
 
     def pack(self, side="left", **kwargs):
         super().pack(side=side, **kwargs)
-        global button_list
-        button_list.append(self)
 
     def on_enter(self, e):
-        self['background'] = primary_color
+        self['background'] = self.primary_color
 
     def on_leave(self, e):
-        self['background'] = secondary_color
+        self['background'] = self.secondary_color
 
-class DefaultLabel(Label):
-    def __init__(self, master, bg=secondary_color, fg=foreground_color, activeforeground=foreground_color, **kwargs):
-        super().__init__(master, bg=bg, fg=fg, activeforeground=activeforeground, **kwargs)
-        self.pack()
+class DefaultLabel(CustomWidget, Label):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'bg': self.secondary_color,
+            'fg': self.foreground_color,
+            'activeforeground': self.foreground_color
+        }
+        CustomWidget.__init__(self, master, **kwargs)
 
-class DefaultEntry(Entry):
-    def __init__(self, master, bg=primary_color, fg=foreground_color, **kwargs):
-        super().__init__(master, bg=bg, fg=fg, **kwargs)
-        self.pack()
 
-class DefaultToplevel(Toplevel):
-    def __init__(self, master, bg=secondary_color, **kwargs):
-        super().__init__(master, bg=bg, **kwargs)
+class DefaultEntry(CustomWidget, Entry):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'bg': self.primary_color,
+            'fg': self.foreground_color
+        }
+        CustomWidget.__init__(self, master, **kwargs)        
 
-class DefaultFrame(Frame):
-    def __init__(self, master, bg=primary_color, **kwargs):
-        super().__init__(master, bg=bg, **kwargs)
+        
 
-class DefaultTextFrame(Frame):
-    def __init__(self, master, bg=primary_color, **kwargs):
-        super().__init__(master, bg=bg, **kwargs)
+class DefaultToplevel(CustomWidget, Toplevel):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'bg': self.secondary_color
+        }
+        CustomWidget.__init__(self, master, **kwargs)
+
+
+class DefaultFrame(CustomWidget, Frame):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'bg': self.primary_color
+        }
+
+        CustomWidget.__init__(self, master, **kwargs)
+
+
+class DefaultTextFrame(CustomWidget, Frame):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'bg': self.primary_color
+        }
+        CustomWidget.__init__(self, master, **kwargs)
 
 
         # Frame containing Text + Scrollbars
-        self.plus_scrollbar_frame = DefaultFrame(self, bg=primary_color)
+        self.plus_scrollbar_frame = DefaultFrame(self, bg=self.primary_color)
         self.plus_scrollbar_frame.pack(side=TOP, fill=BOTH, expand=True)
 
         # Text widget
         self.text_widget = Text(
             self.plus_scrollbar_frame,
             padx=10,
-            bg=primary_color,
-            fg=foreground_color,
+            bg=self.primary_color,
+            fg=self.foreground_color,
             bd=0,
             wrap="none",
-            insertbackground=foreground_color,
+            insertbackground=self.foreground_color,
             selectbackground="#6F6F6F",
             tabs="40",
 
@@ -169,6 +240,8 @@ class DefaultTextFrame(Frame):
         # Scrollbar <-> text widget communication
         self.text_widget.configure(xscrollcommand=self.horizontal_scrollbar.set)
         self.text_widget.configure(yscrollcommand=self.vertical_scrollbar.set)
+
+
 
     def on_control_backspace(self):
         #CHATGPT HELP (VIBE CODED)
@@ -237,12 +310,31 @@ class DefaultTextFrame(Frame):
             pass
 
             
-class DefaultCheckbutton(Checkbutton):
-    def __init__(self, master, bg=secondary_color, selectcolor=primary_color, fg=foreground_color, activebackground=secondary_color, activeforeground=foreground_color, onvalue = 1, offvalue = 0,  **kwargs):
-        super().__init__(master, bg=bg, selectcolor=selectcolor,fg=fg, activebackground=activebackground, activeforeground=activeforeground, onvalue = onvalue, offvalue = offvalue, **kwargs)
-        
-class SettingsCheckbutton(Checkbutton):
-    def __init__(self, master, root_var_name, bg=secondary_color, selectcolor=primary_color, fg=foreground_color, activebackground=secondary_color, activeforeground=foreground_color, onvalue = 1, offvalue = 0,  **kwargs):
+class DefaultCheckbutton(CustomWidget, Checkbutton):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'bg': self.secondary_color,
+            'selectcolor': self.primary_color,
+            'fg': self.foreground_color,
+            'activebackground': self.secondary_color,
+            'activeforeground': self.foreground_color,
+            'onvalue': 1,
+            'offvalue': 0
+        }
+        CustomWidget.__init__(self, master, **kwargs)
+
+
+class SettingsCheckbutton(CustomWidget, Checkbutton):
+    def __init__(self, master, root_var_name, **kwargs):
+        self.defaults = {
+            'bg': self.secondary_color,
+            'selectcolor': self.primary_color,
+            'fg': self.foreground_color,
+            'activebackground': self.secondary_color,
+            'activeforeground': self.foreground_color,
+            'onvalue': 1,
+            'offvalue': 0
+        }
         self.root_var_name = root_var_name
         from gui import root
         self.root = root
@@ -254,8 +346,8 @@ class SettingsCheckbutton(Checkbutton):
             self.var.set(1)
         else:
             self.var.set(0)
-        super().__init__(master, bg=bg, variable=self.var, selectcolor=selectcolor,fg=fg, activebackground=activebackground, activeforeground=activeforeground, onvalue = onvalue, offvalue = offvalue, **kwargs)
-        self.pack()
+        CustomWidget.__init__(self, master, variable=self.var, **kwargs)
+
 
     def apply(self):
         if self.var.get() == 1:
@@ -284,14 +376,45 @@ def path_from_relative_path(relative_path):
 
 
 class FileLabel(DefaultLabel):
-    def __init__(self, master, directory, padx=10, pady=5, bg=secondary_color, fg=foreground_color, activeforeground=foreground_color, **kwargs):
-        super().__init__(master, bg=bg, fg=fg, padx=padx, pady=pady,activeforeground=activeforeground, **kwargs)
+    def __init__(self, master, directory, **kwargs):
+        self.defaults = {
+            'padx': 10,
+            'pady': 5,
+            'bg': self.secondary_color,
+            'fg': self.foreground_color,
+            'activeforeground': self.foreground_color
+        }
+        CustomWidget.__init__(self, master, **kwargs)
         self.directory = directory
-        self.pack()
+
 
     def pack(self, side="left", **kwargs):
-        super().pack(side=side, **kwargs)
+        DefaultLabel.pack(self, side=side, **kwargs)
 
-class DefaultMenu(Menu):
-    def __init__(self, master, bd=0, activebackground=primary_color, activeborderwidth=0, bg=secondary_color, fg=foreground_color, activeforeground=foreground_color, **kwargs):
-        super().__init__(master, bd=bd, activebackground=activebackground, activeborderwidth=activeborderwidth, bg=bg, fg=fg, activeforeground=activeforeground, **kwargs)
+class DefaultMenu(CustomWidget, Menu):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'bd': 0,
+            'activebackground': self.primary_color,
+            'activeborderwidth': 0,
+            'bg': self.secondary_color,
+            'fg': self.foreground_color,
+            'activeforeground': self.foreground_color
+        }
+        CustomWidget.__init__(self, master, **kwargs)
+
+
+class DefaultScale(CustomWidget, Scale):
+    def __init__(self, master, **kwargs):
+        self.defaults = {
+            'from_': 1,
+            'to': 100,
+            'orient': HORIZONTAL,
+            'length': 200,
+            'bg': self.secondary_color,
+            'activebackground': self.secondary_color,
+            'highlightbackground': self.secondary_color,
+            'fg': self.foreground_color,
+            'troughcolor': self.primary_color
+        }
+        CustomWidget.__init__(self, master, **kwargs)

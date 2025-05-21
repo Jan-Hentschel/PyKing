@@ -3,6 +3,7 @@ from tkinter import ttk
 from tkinter import *
 from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
+import jedi
 
 from utility import *
 from settings_handler import *
@@ -24,7 +25,7 @@ class CodeEditor:
         self.labels = []
         
 
-        self.line_number_frame = DefaultFrame(self.first_frame, bg=secondary_color, padx=2, highlightbackground=primary_color)
+        self.line_number_frame = DefaultFrame(self.first_frame, bg=root.secondary_color, padx=2, highlightbackground=root.primary_color)
         self.line_number_frame.pack(side=LEFT, fill=Y)
 
         
@@ -44,11 +45,11 @@ class CodeEditor:
             state="disabled",
             padx=10,
             width=4,
-            bg=primary_color,
-            fg=foreground_color,
+            bg=root.primary_color,
+            fg=root.foreground_color,
             bd=0,
             wrap="none",
-            insertbackground=foreground_color,
+            insertbackground=root.foreground_color,
             selectbackground="#6F6F6F",
             tabs="40"
         )
