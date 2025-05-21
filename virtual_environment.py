@@ -5,22 +5,22 @@ import json
 
 from utility import *
 from settings_handler import settings_handler
-
+from gui import Root
 
 class GridManager:
-    def __init__(self, root, master: DefaultFrame, grid_width: int, grid_height: int):
-        self.root = root
+    def __init__(self, root: Root, master: DefaultFrame, grid_width: int, grid_height: int):
+        self.root: Root = root
 
         self.label_frame = DefaultFrame(master, bg=root.secondary_color)
         self.label_frame.pack(side=TOP, fill=X)
 
-        self.labels = [FileLabel]
+        self.labels: list[GridCell] = []
 
         self.grid_frame = DefaultFrame(master, bg=self.root.secondary_color)
         self.grid_frame.pack(anchor=NW)
         self.grid_width: int = grid_width
         self.grid_height: int = grid_height
-        self.cells = [GridCell]
+        self.cells: list[GridCell] = []
         self.link: str = ""
         self.editing: str = None
 
@@ -102,7 +102,7 @@ class GridManager:
 
 
     def get_grid_dict(self):
-        new_cells = [str]
+        new_cells: list[str] = []
         for cell in self.cells:
             if cell.type == "wall":
                 new_cells.append("wall")
@@ -178,8 +178,8 @@ class GridManager:
     
 
 class GridCell:
-    def __init__(self, root, grid_manager: GridManager, x: int, y: int, type: str):
-        self.root = root
+    def __init__(self, root: Root, grid_manager: GridManager, x: int, y: int, type: str):
+        self.root: Root = root
 
         if settings_handler.get_variable("gore") == "False":
             self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
@@ -189,7 +189,7 @@ class GridCell:
         self.x: int = x
         self.y: int = y
         self.type: str = type
-        self.canvas = Canvas(grid_manager.grid_frame, width=100, height=100, background=self.root.primary_color, highlightthickness=0)
+        self.canvas: Canvas = Canvas(grid_manager.grid_frame, width=100, height=100, background=self.root.primary_color, highlightthickness=0)
         self.hamsters: int = 0
         self.canvas.hamster_number_text = None
 
@@ -260,10 +260,10 @@ class GridCell:
 
 class Snake:
 
-    snakes = []
+    snakes: ClassVar[list['Snake']] = []
 
     def __init__(self, x: int=0, y: int=0, direction: str="N", name: str=None):
-        from gui import root, Root
+        from gui import root
         self.root: Root = root
         try:
             self.x = int(x)

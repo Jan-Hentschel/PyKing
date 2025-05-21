@@ -4,6 +4,7 @@ from tkinter import *
 from tkinter.font import Font
 import os
 import sys
+from typing import ClassVar
 
 from settings_handler import settings_handler
 
@@ -14,7 +15,7 @@ from settings_handler import settings_handler
 #https://stackoverflow.com/questions/41095385/autohide-tkinter-canvas-scrollbar-with-pack-geometry 
 
 class CustomWidget:
-    widget_list = []
+    widget_list: ClassVar[list['CustomWidget']] = []
 
     @staticmethod
     def print_widgets():
@@ -22,8 +23,11 @@ class CustomWidget:
             print(widget.__class__.__name__)
 
     def __init__(self, *args, **kwargs):
-        kwargs = self.apply_default_style(kwargs)
+        # self.defaults: dict = None
+        kwargs: dict = self.apply_default_style(kwargs)
+
         super().__init__(*args, **kwargs)  
+
         CustomWidget.widget_list.append(self)
         try:
             self.pack()
@@ -56,9 +60,7 @@ class CustomWidget:
 
 class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
     def __init__(self, master, target_widget, **kwargs):
-        self.defaults = {
-
-        }
+        self.defaults: dict = {}
         CustomWidget.__init__(self, master, **kwargs)
         self.target_widget = target_widget
         self.grid_info_cache = None  # Store grid options for reuse

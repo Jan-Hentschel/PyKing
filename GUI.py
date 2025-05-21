@@ -98,10 +98,10 @@ class Root(tk.Tk):
 
         self.vertically_pained_window = PanedWindow(self.horizontally_paned_window, orient=tk.VERTICAL, bg=self.secondary_color, sashwidth=10)
 
-        self.top_right_frame = Frame(self.vertically_pained_window, bg=self.secondary_color)
-        self.bottom_right_frame = Frame(self.vertically_pained_window, bg=self.secondary_color)
-        self.leftest_frame = Frame(self.horizontally_paned_window, bg=self.secondary_color)
-        self.left_frame = Frame(self.horizontally_paned_window, bg=self.secondary_color)
+        self.top_right_frame = DefaultFrame(self.vertically_pained_window, bg=self.secondary_color)
+        self.bottom_right_frame = DefaultFrame(self.vertically_pained_window, bg=self.secondary_color)
+        self.leftest_frame = DefaultFrame(self.horizontally_paned_window, bg=self.secondary_color)
+        self.left_frame = DefaultFrame(self.horizontally_paned_window, bg=self.secondary_color)
         
 
         from terminal import Terminal # needs nothing

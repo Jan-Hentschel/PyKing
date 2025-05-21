@@ -4,18 +4,17 @@ import webbrowser
 
 from utility import *
 from settings_handler import settings_handler
+from gui import Root
 
 
 class Toolbar:
-    def __init__(self, root):
-        
-        self.excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
-        self.stop_excecute_code_icon = tk.PhotoImage(file=resource_path('Assets\\stop_execute_icon.png'))
+    def __init__(self, root: Root):
+        self.excecute_code_icon: PhotoImage = PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
+        self.stop_excecute_code_icon: PhotoImage = PhotoImage(file=resource_path('Assets\\stop_execute_icon.png'))
+        self.linked_false_image: PhotoImage = PhotoImage(file=resource_path('Assets\\linked_false_image.png'))
+        self.linked_true_image: PhotoImage = PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
 
-        self.linked_false_image = tk.PhotoImage(file=resource_path('Assets\\linked_false_image.png'))
-        self.linked_true_image = tk.PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
-
-        self.frame = Frame(root, height=68, bg=root.secondary_color, pady=5)
+        self.frame = DefaultFrame(root, height=68, bg=root.secondary_color, pady=5)
         
         self.filemenu_button = DefaultMenuButton(self.frame, text="File", command=lambda: self.open_filemenu(), padx=50)
         self.filemenu = DefaultMenu(self.frame, tearoff=0)
@@ -25,7 +24,6 @@ class Toolbar:
         self.filemenu.add_command(label="Save", command=root.file_manager.save_python_file)
         self.filemenu.add_command(label="Open", command=root.file_manager.open_python_file_dialog)
         
-
         self.gridmenu_button = DefaultMenuButton(self.frame, text="Grid", command=lambda: self.open_gridmenu(), padx=50)
         self.gridmenu = DefaultMenu(self.frame, tearoff=0)
         self.gridmenu.add_command(label="New", command=root.file_manager.new_grid)
@@ -33,8 +31,6 @@ class Toolbar:
         self.gridmenu.add_command(label="Save", command=root.file_manager.save_grid)
         self.gridmenu.add_command(label="Open", command=root.file_manager.open_grid_dialog)
         
-
-
         self.excecute_code_button = DefaultButton(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread)
         self.stop_code_execution_button = DefaultButton(self.frame, image=self.stop_excecute_code_icon, command = root.code_executor.stop_execute_code_thread)
         self.pause_btn = DefaultButton(self.frame, text="Pause", command=root.code_executor.pause_debugger)
@@ -57,23 +53,26 @@ class Toolbar:
         self.help_button = DefaultButton(self.frame, text="GitHub", command=self.show_github)
         self.help_button.pack(side="right")
 
-    def update_linked_status(self, linked):
+
+    def update_linked_status(self, linked: bool):
         if linked:
             self.is_linked.configure(image=self.linked_true_image)
         else:
             self.is_linked.configure(image=self.linked_false_image)
 
+
     def open_filemenu(self):
-        x = self.filemenu_button.winfo_rootx()
-        y = self.filemenu_button.winfo_rooty() + self.filemenu_button.winfo_height()
+        x: int = self.filemenu_button.winfo_rootx()
+        y: int = self.filemenu_button.winfo_rooty() + self.filemenu_button.winfo_height()
         self.filemenu.post(x, y)
 
 
     def open_gridmenu(self):
-        x = self.gridmenu_button.winfo_rootx()
-        y = self.gridmenu_button.winfo_rooty() + self.gridmenu_button.winfo_height()
+        x: int = self.gridmenu_button.winfo_rootx()
+        y: int = self.gridmenu_button.winfo_rooty() + self.gridmenu_button.winfo_height()
         print(x, y)
         self.gridmenu.post(x, y)
-    
+
+
     def show_github(self):
         webbrowser.open('https://github.com/Jan-Hentschel/PyKing')  # Go to example.com

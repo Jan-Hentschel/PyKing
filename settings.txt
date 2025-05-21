@@ -10,8 +10,8 @@ remember_last_file = True
 remember_last_grid = True
 remember_last_directory = True
 
-show_snake_actions_in_terminal = True
-show_debugger_prints = True
+show_snake_actions_in_terminal = False
+show_debugger_prints = False
 
 gore = False
 

@@ -7,17 +7,18 @@ import time
 import linecache
 import os
 import builtins
-
+import traceback
 
 from settings_handler import settings_handler
 
+from gui import Root
 from virtual_environment import Snake
 
 #help from chatgpt to get everything working
 def print_to_terminal_widget(*args):
     try:
         from gui import root
-        output = " ".join(map(str, args))
+        output: str = " ".join(map(str, args))
         root.terminal.print(output)
     except ImportError:
         pass
@@ -49,8 +50,9 @@ class StoppableThread(threading.Thread):
 class Debugger(bdb.Bdb):
     def __init__(self, target_path):
         super().__init__()
-        self.target_path = os.path.abspath(target_path)
         from gui import root
+        self.root: Root = root
+        self.target_path = os.path.abspath(target_path)
         self._quit_event  = threading.Event()
         self._pause_event = threading.Event()
         
@@ -60,8 +62,8 @@ class Debugger(bdb.Bdb):
     @property
     def wait_time(self):
         # Always invert the current slider value
-        from gui import root
-        tickrate = root.toolbar.tick_rate_slider.get()
+
+        tickrate = self.root.toolbar.tick_rate_slider.get()
         # Avoid division by zero
         return 1.0 / tickrate if tickrate else 0.01
     
@@ -74,8 +76,6 @@ class Debugger(bdb.Bdb):
         if os.path.abspath(frame.f_code.co_filename) != self.target_path:
             self.set_step()
             return
-        
-        from gui import root
         # Block here when paused
         self._pause_event.wait()
 
@@ -92,17 +92,16 @@ class Debugger(bdb.Bdb):
 
         # Now display only the remaining names
         
-        if root.settings_variables["show_debugger_prints"] == "True":
+        if self.root.settings_variables["show_debugger_prints"] == "True":
             print_to_terminal_widget(f"▶ {filename}:{lineno} — {src}")
             print_to_terminal_widget(f"📦 Locals: {user_locals}")
             
 
         # Delay
         # report line & locals …
-        timeout = self.wait_time
         # This will wake if unpaused (pause_event) or after timeout:
         
-        time.sleep(timeout)
+        time.sleep(self.wait_time)
 
         self.set_step()
 
@@ -111,13 +110,13 @@ class Debugger(bdb.Bdb):
             self._pause_event.clear()  # block next
             self._one_step = False
 
-    def run_file(self, filename, custom_globals):
+    def run_file(self, filename, custom_globals: dict):
         folder = os.path.dirname(os.path.abspath(filename))
         if folder not in sys.path:
             sys.path.insert(0, folder)
 
         with open(filename, "r", encoding="utf-8") as f:
-            source = f.read()
+            source: str = f.read()
 
         # Compile with filename so co_filename matches
         code_obj = compile(source, filename, "exec")
@@ -147,9 +146,9 @@ class Debugger(bdb.Bdb):
 
 class CodeExecution:
     def __init__(self, root):
-        self.root = root
-        self.debugger = None
-        self.exec_thread = None
+        self.root: Root = root
+        self.debugger: Debugger = None
+        self.exec_thread: StoppableThread = None
 
     def execute_code(self):
         sys.stdout = TerminalWriter()
@@ -163,18 +162,21 @@ class CodeExecution:
 
         builtins.Snake = Snake
 
-        cursor_position = self.root.code_editor.frame.text_widget.index("insert")
+        cursor_position: str = self.root.code_editor.frame.text_widget.index("insert")
+
         self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory"))
         self.root.code_editor.frame.text_widget.mark_set("insert", cursor_position)
         self.root.update_idletasks()
 
         # Instantiate debugger
         self.debugger = Debugger(settings_handler.get_variable("current_file_directory"))
+
         try:
             self.debugger.run_file(settings_handler.get_variable("current_file_directory"), PyKing_globals)
         except Exception:
-            import traceback
+            
             print_to_terminal_widget(traceback.format_exc())
+        
         sys.stdout = sys.__stdout__
 
     def start_execute_code_thread(self):
