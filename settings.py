@@ -1,10 +1,10 @@
 from utility import *
 from settings_handler import settings_handler
-
+from gui import Root
 
 class Settings:
-    def __init__(self, root):
-        self.root = root
+    def __init__(self, root: Root):
+        self.root: Root = root
 
     def open_settings(self):
         self.settings_toplevel = DefaultToplevel(self.root)
@@ -12,7 +12,6 @@ class Settings:
         self.settings_toplevel.title("Settings")
         self.settings_toplevel.iconbitmap(resource_path("Assets\\Icon.ico"))
 
-        # self.github_link_label = DefaultLabel(self.settings_toplevel, text="Click here for my GitHub")
 
         self.ask_to_save_on_close_check = SettingsCheckbutton(self.settings_toplevel, "ask_to_save_on_close", text = "Ask to Save on Close")
 
@@ -90,6 +89,8 @@ class Settings:
         self.show_debugger_prints_check.apply()
 
         self.gore_check.apply()
+
+        
         self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory"))
 
         if foreground_color:

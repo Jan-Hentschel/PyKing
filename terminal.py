@@ -1,12 +1,10 @@
-import tkinter as tk
-from tkinter import *
-from utility import *
+from utility import * # type: ignore 
 
 from settings_handler import settings_handler
 from gui import Root
 
 class Terminal:
-    def __init__(self, root: Root, master: DefaultFrame):
+    def __init__(self, root: Root, master: DefaultSecondaryFrame):
         self.status_seperator: str = "_"
         self.frame = DefaultTextFrame(master, bg=root.primary_color, bd=0,)
         self.frame.pack(fill=BOTH, expand=True)

@@ -1,11 +1,9 @@
-import tkinter as tk
-from tkinter import *
 from ctypes import windll
 from tkinter import ttk
 from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
 
-from utility import *
+from utility import *  # type: ignore 
 from settings_handler import settings_handler
 
 
@@ -98,10 +96,10 @@ class Root(tk.Tk):
 
         self.vertically_pained_window = PanedWindow(self.horizontally_paned_window, orient=tk.VERTICAL, bg=self.secondary_color, sashwidth=10)
 
-        self.top_right_frame = DefaultFrame(self.vertically_pained_window, bg=self.secondary_color)
-        self.bottom_right_frame = DefaultFrame(self.vertically_pained_window, bg=self.secondary_color)
-        self.leftest_frame = DefaultFrame(self.horizontally_paned_window, bg=self.secondary_color)
-        self.left_frame = DefaultFrame(self.horizontally_paned_window, bg=self.secondary_color)
+        self.top_right_frame = DefaultSecondaryFrame(self.vertically_pained_window)
+        self.bottom_right_frame = DefaultSecondaryFrame(self.vertically_pained_window)
+        self.leftest_frame = DefaultSecondaryFrame(self.horizontally_paned_window)
+        self.left_frame = DefaultSecondaryFrame(self.horizontally_paned_window)
         
 
         from terminal import Terminal # needs nothing
@@ -199,21 +197,7 @@ class Root(tk.Tk):
             self.close()
 
     def ask_if_save_on_close(self):
-        self.popup = DefaultToplevel(self, padx=10, pady=10)
-        self.popup.geometry("325x120")
-        self.popup.title("Are you sure?")
-        self.popup.iconbitmap(resource_path("Assets\\Icon.ico"))
-
-        self.popup.are_you_sure_label = DefaultLabel(self.popup, text="Are you sure you want to close?\nDo you want to save the current file and grid?")
-        
-        self.popup.save_button = DefaultButton(self.popup, text="Save", command=lambda: self.save_before_closing(), padx=50)
-        self.popup.save_button.pack()
-
-        self.popup.dont_save_button = DefaultButton(self.popup, text="Don't Save", command=lambda: self.close(), padx=10)
-        self.popup.dont_save_button.pack()
-
-        self.popup.cancel_button = DefaultButton(self.popup, text="Cancel", command= lambda: self.cancel_closing(), padx=10)
-        self.popup.cancel_button.pack()
+        self.popup = SavePopup(self, self, padx=10, pady=10)
 
     def save_before_closing(self):
         self.file_manager.save_python_file_and_grid()
@@ -231,6 +215,22 @@ class Root(tk.Tk):
     def cancel_closing(self):
         self.popup.destroy()
         
+class SavePopup(Toplevel):
+    def __init__(self, master: Root, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.geometry("325x120")
+        self.title("Are you sure?")
+        self.iconbitmap(resource_path("Assets\\Icon.ico"))
+        self.ask_if_save_label = DefaultLabel(self, text="Are you sure you want to close?\nDo you want to save the current file and grid?")
+
+        self.save_button = DefaultButton(self, text="Save", command=lambda: master.save_before_closing(), padx=50)
+        self.save_button.pack()
+
+        self.dont_save_button = DefaultButton(self, text="Don't Save", command=lambda: master.close(), padx=10)
+        self.dont_save_button.pack()
+
+        self.cancel_button = DefaultButton(self, text="Cancel", command= lambda: master.cancel_closing(), padx=10)
+        self.cancel_button.pack()
 
 root: Root = Root()
 

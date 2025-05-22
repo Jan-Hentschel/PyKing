@@ -1,5 +1,3 @@
-import tkinter as tk
-from tkinter import *
 import threading
 import sys
 import bdb
@@ -147,8 +145,8 @@ class Debugger(bdb.Bdb):
 class CodeExecution:
     def __init__(self, root):
         self.root: Root = root
-        self.debugger: Debugger = None
-        self.exec_thread: StoppableThread = None
+        self.debugger: Debugger = None # type: ignore 
+        self.exec_thread: StoppableThread = None # type: ignore 
 
     def execute_code(self):
         sys.stdout = TerminalWriter()
@@ -160,7 +158,7 @@ class CodeExecution:
         PyKing_globals["__builtins__"]["print"] = print_to_terminal_widget
         
 
-        builtins.Snake = Snake
+        setattr(builtins, "Snake", Snake)
 
         cursor_position: str = self.root.code_editor.frame.text_widget.index("insert")
 

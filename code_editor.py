@@ -1,44 +1,35 @@
-import tkinter as tk
-from tkinter import ttk
-from tkinter import *
 from idlelib.percolator import Percolator
 from idlelib.colorizer import ColorDelegator
 import jedi
 
-from utility import *
+from utility import * # type: ignore 
 from settings_handler import *
-
+from gui import Root
 
 class CodeEditor:
-    def __init__(self, root, master):
-        self.root=root
+    def __init__(self, root: Root, master):
+        self.root: Root = root
 
-        self.first_frame = DefaultFrame(master)
+        self.first_frame = DefaultPrimaryFrame(master)
         self.first_frame.pack(side=LEFT, fill=Y)
 
         self.spacer = Canvas(self.first_frame, height=30, width=60, bg=root.secondary_color, highlightbackground=root.secondary_color)
         self.spacer.pack(anchor=NW)
 
-        self.label_frame = DefaultFrame(master, bg=root.secondary_color)
+        self.label_frame = DefaultSecondaryFrame(master)
         self.label_frame.pack(side=TOP, fill=X)
 
         self.labels = []
         
 
-        self.line_number_frame = DefaultFrame(self.first_frame, bg=root.secondary_color, padx=2, highlightbackground=root.primary_color)
+        self.line_number_frame = DefaultPrimaryFrame(self.first_frame, bg=root.secondary_color, padx=2, highlightbackground=root.primary_color)
         self.line_number_frame.pack(side=LEFT, fill=Y)
 
         
         self.frame = DefaultTextFrame(master, bg=root.primary_color, bd=0,)
         self.frame.text_widget.configure(undo=True, maxundo=-1, autoseparators=True)
         self.frame.text_widget.bind("<Control-Shift-Z>", lambda event: self.frame.text_widget.edit_redo())
-
-
-
-
         #help from ChatGPT
-        
-
 
         self.line_number_text_widget = Text(
             self.line_number_frame,
@@ -147,10 +138,10 @@ class CodeEditor:
                 self.open_label(label)
                 return
         name = directory.split("/")[-1]
-        file_label = FileLabel(self.label_frame, directory, text=name, bg=self.root.primary_color, )
-        file_label.bind("<Button-1>", lambda e: self.open_label(file_label))
-        self.labels.append(file_label)
-        self.open_label(file_label)
+        self.file_label = FileLabel(self.label_frame, directory, text=name, bg=self.root.primary_color, )
+        self.file_label.bind("<Button-1>", lambda e: self.open_label(self.file_label))
+        self.labels.append(self.file_label)
+        self.open_label(self.file_label)
         
     
     def open_label(self, opened_label):

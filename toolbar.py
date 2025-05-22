@@ -1,8 +1,7 @@
-import tkinter as tk
-from tkinter import *
 import webbrowser
+from typing import Literal
 
-from utility import *
+from utility import * # type: ignore 
 from settings_handler import settings_handler
 from gui import Root
 
@@ -14,7 +13,7 @@ class Toolbar:
         self.linked_false_image: PhotoImage = PhotoImage(file=resource_path('Assets\\linked_false_image.png'))
         self.linked_true_image: PhotoImage = PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
 
-        self.frame = DefaultFrame(root, height=68, bg=root.secondary_color, pady=5)
+        self.frame = DefaultSecondaryFrame(root, height=68, pady=5)
         
         self.filemenu_button = DefaultMenuButton(self.frame, text="File", command=lambda: self.open_filemenu(), padx=50)
         self.filemenu = DefaultMenu(self.frame, tearoff=0)

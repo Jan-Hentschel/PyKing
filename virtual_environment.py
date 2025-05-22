@@ -1,28 +1,25 @@
-from tkinter import *
-import tkinter as tk
-import time
 import json
 
-from utility import *
+from utility import * # type: ignore 
 from settings_handler import settings_handler
 from gui import Root
 
 class GridManager:
-    def __init__(self, root: Root, master: DefaultFrame, grid_width: int, grid_height: int):
+    def __init__(self, root: Root, master: DefaultSecondaryFrame, grid_width: int, grid_height: int):
         self.root: Root = root
 
-        self.label_frame = DefaultFrame(master, bg=root.secondary_color)
+        self.label_frame = DefaultSecondaryFrame(master)
         self.label_frame.pack(side=TOP, fill=X)
 
-        self.labels: list[GridCell] = []
+        self.labels: list[FileLabel] = []
 
-        self.grid_frame = DefaultFrame(master, bg=self.root.secondary_color)
+        self.grid_frame = DefaultSecondaryFrame(master)
         self.grid_frame.pack(anchor=NW)
         self.grid_width: int = grid_width
         self.grid_height: int = grid_height
         self.cells: list[GridCell] = []
         self.link: str = ""
-        self.editing: str = None
+        self.editing: str = "#"
 
         if settings_handler.get_variable("gore") == "False":
             self.hamster_image = PhotoImage(file=resource_path('Assets\\Hamster.png'))
@@ -111,7 +108,7 @@ class GridManager:
             else:
                 new_cells.append(f"hamster {cell.hamsters}")
 
-        dictionary = {
+        dictionary: dict = {
             "link": self.link,
             "columns": self.grid_width,
             "rows": self.grid_height,
@@ -142,12 +139,12 @@ class GridManager:
 
     def edit_clear_all_cells(self):
         self.clear_all_cells()
-        self.editing = None
+        self.editing = ""
         self.delete_all_clickables()
         self.root.terminal.show_current_directories(f"cleared all cells and cancelled editing grid")
 
     def cancel_editing_grid(self):
-        self.editing = None
+        self.editing = ""
         self.delete_all_clickables()
         self.root.terminal.show_current_directories(f"cancelled editing grid")
         
@@ -164,13 +161,13 @@ class GridManager:
                     label.configure(bg=self.root.primary_color)
                 return
         grid_name: str = directory.split("/")[-1]
-        file_label: FileLabel = FileLabel(self.label_frame, directory, text=grid_name, bg=self.root.primary_color, )
-        file_label.bind("<Button-1>", lambda e: self.open_label(file_label))
-        self.labels.append(file_label)
-        self.open_label(file_label)
+        self.file_label: FileLabel = FileLabel(self.label_frame, directory, text=grid_name, bg=self.root.primary_color, )
+        self.file_label.bind("<Button-1>", lambda e: self.open_label(self.file_label))
+        self.labels.append(self.file_label)
+        self.open_label(self.file_label)
         
     
-    def open_label(self, opened_label):
+    def open_label(self, opened_label: FileLabel):
         for label in self.labels:
             label.configure(bg=self.root.secondary_color)
         opened_label.configure(bg=self.root.primary_color)
@@ -191,7 +188,7 @@ class GridCell:
         self.type: str = type
         self.canvas: Canvas = Canvas(grid_manager.grid_frame, width=100, height=100, background=self.root.primary_color, highlightthickness=0)
         self.hamsters: int = 0
-        self.canvas.hamster_number_text = None
+        self.hamster_number_text: int = None # type: ignore 
 
     def edit(self):
         if self.root.grid_manager.editing == "add_hamster":
@@ -233,10 +230,10 @@ class GridCell:
         self.type = "hamster"
         self.display_image(self.hamster_image)
         self.hamsters += 1
-        if self.canvas.hamster_number_text:
-            self.canvas.itemconfigure(self.canvas.hamster_number_text, text=str(self.hamsters))
+        if self.hamster_number_text:
+            self.canvas.itemconfigure(self.hamster_number_text, text=str(self.hamsters))
         else:
-            self.canvas.hamster_number_text = self.canvas.create_text(
+            self.hamster_number_text = self.canvas.create_text(
                 91, 84,  # x, y position
                 text=str(self.hamsters),
                 fill="white",
@@ -249,9 +246,9 @@ class GridCell:
         if self.hamsters < 1:
             self.type = "empty"
             self.clear()
-            self.canvas.hamster_number_text = None
-        else:
-            self.canvas.itemconfigure(self.canvas.hamster_number_text, text=str(self.hamsters))
+            self.hamster_number_text = None # type: ignore 
+        self.canvas.itemconfigure(self.hamster_number_text, text=str(self.hamsters))
+            
 
     def clear(self):
         self.type = "empty"
@@ -262,7 +259,7 @@ class Snake:
 
     snakes: ClassVar[list['Snake']] = []
 
-    def __init__(self, x: int=0, y: int=0, direction: str="N", name: str=None):
+    def __init__(self, x: int=0, y: int=0, direction: str="N", name: str=""):
         from gui import root
         self.root: Root = root
         try:
@@ -467,7 +464,7 @@ class Snake:
             self.cell.clear()
             self.cell.type = "hamster"
             self.cell.display_image(root.grid_manager.hamster_image)
-            self.cell.canvas.hamster_number_text = self.cell.canvas.create_text(
+            self.cell.hamster_number_text = self.cell.canvas.create_text(
                 91, 84,  # x, y position
                 text=str(self.cell.hamsters),
                 fill="white",

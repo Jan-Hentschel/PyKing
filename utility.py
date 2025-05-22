@@ -4,7 +4,7 @@ from tkinter import *
 from tkinter.font import Font
 import os
 import sys
-from typing import ClassVar
+from typing import ClassVar, Literal
 
 from settings_handler import settings_handler
 
@@ -23,17 +23,12 @@ class CustomWidget:
             print(widget.__class__.__name__)
 
     def __init__(self, *args, **kwargs):
-        # self.defaults: dict = None
-        kwargs: dict = self.apply_default_style(kwargs)
-
         super().__init__(*args, **kwargs)  
-
         CustomWidget.widget_list.append(self)
         try:
             self.pack()
         except Exception:
             pass
-
 
     @property
     def foreground_color(self):
@@ -46,22 +41,20 @@ class CustomWidget:
     @property
     def secondary_color(self):
         return settings_handler.get_variable("secondary_color")
-    
-    
-    def apply_default_style(self, kwargs: dict):
-        for key, value in self.defaults.items():
-            kwargs.setdefault(key, value)
-        return kwargs
-    
+
     def update_color(self):
-        if hasattr(self, 'defaults') and self.winfo_exists():
-            self.configure(**self.defaults)
+        # always pull a fresh dict
+        style = self.build_style()
+        if self.winfo_exists():
+            self.configure(**style) 
+    
             
 
 class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
     def __init__(self, master, target_widget, **kwargs):
-        self.defaults: dict = {}
-        CustomWidget.__init__(self, master, **kwargs)
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
         self.target_widget = target_widget
         self.grid_info_cache = None  # Store grid options for reuse
         
@@ -101,41 +94,52 @@ class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
     def restore_grid(self):
         if self.grid_info_cache:
             super().grid(**self.grid_info_cache)
-    
+
+    def build_style(self):
+        return {}
+
 class DefaultButton(CustomWidget, Button):
     def __init__(self, master,**kwargs):
-        self.defaults = {
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+        if not self.cget("image"):
+            self.configure(height=2)
+
+    def build_style(self):
+        return {
             'bd': 2,
             'bg': self.primary_color,
             'activebackground': self.secondary_color,
             'fg': self.foreground_color,
             'activeforeground': self.foreground_color,
         }
-        CustomWidget.__init__(self, master, **kwargs)
-        if not self.cget("image"):
-            self.configure(height=2)
-
-    def pack(self, side="left", **kwargs):
+    
+    def pack(self, side: Literal["left", "right", "top", "bottom"]="left", **kwargs):
         super().pack(side=side, **kwargs)
 
 class DefaultMenuButton(CustomWidget, Button):
     def __init__(self, master, **kwargs):
-        self.defaults = {
-            'bd': 0,
-            'bg': self.secondary_color,
-            'activebackground': self.primary_color,
-            'fg': self.foreground_color,
-            'activeforeground': self.foreground_color,
-        }
-        CustomWidget.__init__(self, master, **kwargs)
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
         if not self.cget("image"):
             self.configure(height=2)
         self.bind("<Enter>", self.on_enter)
         self.bind("<Leave>", self.on_leave)
 
+    def build_style(self):
+        return {
+            'bd':               0,
+            'bg':               self.secondary_color,
+            'activebackground': self.primary_color,
+            'fg':               self.foreground_color,
+            'activeforeground': self.foreground_color,
+        }
+    
 
 
-    def pack(self, side="left", **kwargs):
+    def pack(self, side: Literal["left", "right", "top", "bottom"]="left", **kwargs):
         super().pack(side=side, **kwargs)
 
     def on_enter(self, e):
@@ -144,53 +148,80 @@ class DefaultMenuButton(CustomWidget, Button):
     def on_leave(self, e):
         self['background'] = self.secondary_color
 
+
+
+
 class DefaultLabel(CustomWidget, Label):
-    def __init__(self, master, **kwargs):
-        self.defaults = {
+    def build_style(self):
+        return {
             'bg': self.secondary_color,
             'fg': self.foreground_color,
             'activeforeground': self.foreground_color
         }
-        CustomWidget.__init__(self, master, **kwargs)
 
+    def __init__(self, master, **kwargs):
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
 
 class DefaultEntry(CustomWidget, Entry):
-    def __init__(self, master, **kwargs):
-        self.defaults = {
+    def build_style(self):
+        return {
             'bg': self.primary_color,
             'fg': self.foreground_color
         }
-        CustomWidget.__init__(self, master, **kwargs)        
 
-        
+    def __init__(self, master, **kwargs):
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
 
 class DefaultToplevel(CustomWidget, Toplevel):
-    def __init__(self, master, **kwargs):
-        self.defaults = {
+    def build_style(self):
+        return {
             'bg': self.secondary_color
         }
-        CustomWidget.__init__(self, master, **kwargs)
 
-
-class DefaultFrame(CustomWidget, Frame):
     def __init__(self, master, **kwargs):
-        self.defaults = {
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+
+
+class DefaultPrimaryFrame(CustomWidget, Frame):
+    def build_style(self):
+        return {
             'bg': self.primary_color
         }
 
-        CustomWidget.__init__(self, master, **kwargs)
+    def __init__(self, master, **kwargs):
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+
+class DefaultSecondaryFrame(CustomWidget, Frame):
+    def build_style(self):
+        return {
+            'bg': self.secondary_color
+        }
+
+    def __init__(self, master, **kwargs):
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+
+
 
 
 class DefaultTextFrame(CustomWidget, Frame):
     def __init__(self, master, **kwargs):
-        self.defaults = {
-            'bg': self.primary_color
-        }
-        CustomWidget.__init__(self, master, **kwargs)
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
 
 
         # Frame containing Text + Scrollbars
-        self.plus_scrollbar_frame = DefaultFrame(self, bg=self.primary_color)
+        self.plus_scrollbar_frame = DefaultPrimaryFrame(self, bg=self.primary_color)
         self.plus_scrollbar_frame.pack(side=TOP, fill=BOTH, expand=True)
 
         # Text widget
@@ -243,7 +274,10 @@ class DefaultTextFrame(CustomWidget, Frame):
         self.text_widget.configure(xscrollcommand=self.horizontal_scrollbar.set)
         self.text_widget.configure(yscrollcommand=self.vertical_scrollbar.set)
 
-
+    def build_style(self):
+        return {
+            'bg': self.primary_color
+        }
 
     def on_control_backspace(self):
         #CHATGPT HELP (VIBE CODED)
@@ -314,7 +348,12 @@ class DefaultTextFrame(CustomWidget, Frame):
             
 class DefaultCheckbutton(CustomWidget, Checkbutton):
     def __init__(self, master, **kwargs):
-        self.defaults = {
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+
+    def build_style(self):
+        return {
             'bg': self.secondary_color,
             'selectcolor': self.primary_color,
             'fg': self.foreground_color,
@@ -323,42 +362,48 @@ class DefaultCheckbutton(CustomWidget, Checkbutton):
             'onvalue': 1,
             'offvalue': 0
         }
-        CustomWidget.__init__(self, master, **kwargs)
 
 
 class SettingsCheckbutton(CustomWidget, Checkbutton):
-    def __init__(self, master, root_var_name, **kwargs):
-        self.defaults = {
-            'bg': self.secondary_color,
-            'selectcolor': self.primary_color,
-            'fg': self.foreground_color,
-            'activebackground': self.secondary_color,
-            'activeforeground': self.foreground_color,
-            'onvalue': 1,
-            'offvalue': 0
-        }
-        self.root_var_name = root_var_name
-        from gui import root
-        self.root = root
+    def __init__(self, master: DefaultToplevel, root_var_name: str, **kwargs):
+        self.root_var_name: str = root_var_name
 
-        self.var= IntVar()
+        from gui import root, Root
+        self.root: Root = root
+
+        self.var = IntVar()
 
         self.root_var = self.root.settings_variables[self.root_var_name]
+
         if self.root_var == "True":
             self.var.set(1)
         else:
             self.var.set(0)
-        CustomWidget.__init__(self, master, variable=self.var, **kwargs)
+        style = self.build_style()
+        for k, v in style.items():
+            kwargs.setdefault(k, v)
+        kwargs["variable"] = self.var
+        super().__init__(master, **kwargs)
 
 
     def apply(self):
         if self.var.get() == 1:
-            settings_handler.set_variable(self.root_var_name, True)
+            settings_handler.set_variable(self.root_var_name, "True")
             self.root.settings_variables[self.root_var_name] = "True"
         else:
-            settings_handler.set_variable(self.root_var_name, False)
+            settings_handler.set_variable(self.root_var_name, "False")
             self.root.settings_variables[self.root_var_name] = "False"        
 
+    def build_style(self):
+        return {
+            'bg': self.secondary_color,
+            'selectcolor': self.primary_color,
+            'fg': self.foreground_color,
+            'activebackground': self.secondary_color,
+            'activeforeground': self.foreground_color,
+            'onvalue': 1,
+            'offvalue': 0
+        }
 #https://www.youtube.com/watch?v=p3tSLatmGvU
 #https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
 #vor jeden relative path diese funktion setzen um pyinstaller zu helfen alle dateien zu finden
@@ -379,23 +424,31 @@ def path_from_relative_path(relative_path):
 
 class FileLabel(DefaultLabel):
     def __init__(self, master, directory: str, **kwargs):
-        self.defaults = {
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+        self.directory: str = directory
+
+    def build_style(self):
+        return {
             'padx': 10,
             'pady': 5,
             'bg': self.secondary_color,
             'fg': self.foreground_color,
             'activeforeground': self.foreground_color
         }
-        CustomWidget.__init__(self, master, **kwargs)
-        self.directory: str = directory
-
 
     def pack(self, side="left", **kwargs):
         DefaultLabel.pack(self, side=side, **kwargs)
 
 class DefaultMenu(CustomWidget, Menu):
     def __init__(self, master, **kwargs):
-        self.defaults = {
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+
+    def build_style(self):
+        return {
             'bd': 0,
             'activebackground': self.primary_color,
             'activeborderwidth': 0,
@@ -403,12 +456,15 @@ class DefaultMenu(CustomWidget, Menu):
             'fg': self.foreground_color,
             'activeforeground': self.foreground_color
         }
-        CustomWidget.__init__(self, master, **kwargs)
-
 
 class DefaultScale(CustomWidget, Scale):
     def __init__(self, master, **kwargs):
-        self.defaults = {
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+
+    def build_style(self):
+        return {
             'from_': 1,
             'to': 100,
             'orient': HORIZONTAL,
@@ -419,4 +475,3 @@ class DefaultScale(CustomWidget, Scale):
             'fg': self.foreground_color,
             'troughcolor': self.primary_color
         }
-        CustomWidget.__init__(self, master, **kwargs)

@@ -1,14 +1,14 @@
-from tkinter import *
 from tkinter import filedialog
 import json
 
-from utility import *
+from utility import * # type: ignore 
 from settings_handler import settings_handler
+from gui import Root
 
 
 class FileManager:
-    def __init__(self, root):
-        self.root = root
+    def __init__(self, root: Root):
+        self.root: Root = root
         
 
     def save_text_widget_content_to_directory(self, directory):
@@ -41,9 +41,10 @@ class FileManager:
         
     
     def link_grid_to_python_file(self):
+        
+        grid_directory: str = settings_handler.get_variable("current_grid_directory")
+        python_directory: str = settings_handler.get_variable("current_file_directory")
         try:
-            grid_directory = settings_handler.get_variable("current_grid_directory")
-            python_directory = settings_handler.get_variable("current_file_directory")
             with open(grid_directory, "r", encoding="utf-8") as file:
                 content = file.read()
                 dict = json.loads(content)
@@ -136,7 +137,7 @@ class FileManager:
             content: str = file.read()
 
         grid_dictionary = json.loads(content)
-        
+
         columns: int = grid_dictionary["columns"]
         rows: int = grid_dictionary["rows"]
         new_cells: list[str] = grid_dictionary["cells"]
