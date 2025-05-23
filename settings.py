@@ -58,17 +58,17 @@ class Settings:
         self.change_secondary_color("#333333")
         self.settings_toplevel.destroy()
 
-    def change_foreground_color(self, color):
+    def change_foreground_color(self, color: str):
         self.root.foreground_color = color
         settings_handler.set_variable("foreground_color", color)
         self.root.update_colors()
 
-    def change_primary_color(self, color):
+    def change_primary_color(self, color: str):
         self.root.primary_color = color
         settings_handler.set_variable("primary_color", color)
         self.root.update_colors()
 
-    def change_secondary_color(self, color):
+    def change_secondary_color(self, color: str):
         self.root.secondary_color = color
         settings_handler.set_variable("secondary_color", color)
         self.root.update_colors()

@@ -1,13 +1,12 @@
 from idlelib.percolator import Percolator
-from idlelib.colorizer import ColorDelegator
-import jedi
+
 
 from utility import * # type: ignore 
 from settings_handler import *
 from gui import Root
 
 class CodeEditor:
-    def __init__(self, root: Root, master):
+    def __init__(self, root: Root, master: DefaultSecondaryFrame):
         self.root: Root = root
 
         self.first_frame = DefaultPrimaryFrame(master)
@@ -19,7 +18,7 @@ class CodeEditor:
         self.label_frame = DefaultSecondaryFrame(master)
         self.label_frame.pack(side=TOP, fill=X)
 
-        self.labels = []
+        self.labels: list[FileLabel] = []
         
 
         self.line_number_frame = DefaultPrimaryFrame(self.first_frame, bg=root.secondary_color, padx=2, highlightbackground=root.primary_color)
@@ -72,9 +71,9 @@ class CodeEditor:
         self.frame.text_widget.bind("<Shift-MouseWheel>", self.on_shift_mousewheel)
         
         self.percolator = Percolator(self.frame.text_widget)
-        self.percolator.insertfilter(root.color_delegator)
+        self.percolator.insertfilter(root.color_delegator) # type: ignore
 
-    def load_into_editor(self, content):
+    def load_into_editor(self, content: str):
         self.frame.text_widget.configure(undo=False) #clears the undo stack
         self.frame.text_widget.delete(1.0,END)
         self.frame.text_widget.insert(tk.END, content)
@@ -84,10 +83,10 @@ class CodeEditor:
     def get_text_widget_content(self):
         return self.frame.text_widget.get("1.0",END)
     
-    def update_line_numbers(self, event=None):
+    def update_line_numbers(self, event: Any=None) -> None:
         self.frame.after_idle(self._sync_line_numbers)
 
-    def on_textscroll(self, *args):
+    def on_textscroll(self, *args: Any):
         try:
             first = float(args[0])
             if 0.0 <= first <= 1.0:
@@ -97,20 +96,20 @@ class CodeEditor:
         self.frame.vertical_scrollbar.set(*args)
 
 
-    def on_mousewheel(self, event):
+    def on_mousewheel(self, event: Any=None) -> str:
         # This scrolls the main text
         self.frame.text_widget.yview_scroll(int(-1 * (event.delta / 120)), "units")
         
         # Manually sync the line number widget
-        self.line_number_text_widget.yview_moveto(self.frame.text_widget.yview()[0])
+        self.line_number_text_widget.yview_moveto(self.frame.text_widget.yview()[0]) # type: ignore
         
         return "break"  # Prevent default scrolling from duplicating
     
-    def on_shift_mousewheel(self, event):
+    def on_shift_mousewheel(self, event: Any=None) -> str:
         self.frame.text_widget.xview_scroll(int(-1 * (event.delta / 120)), "units")
         return "break"
             
-    def handle_mousewheel_and_update(self, event):
+    def handle_mousewheel_and_update(self, event: Any=None) -> str:
         self.on_mousewheel(event)
         self.update_line_numbers()
         return "break"
@@ -124,7 +123,7 @@ class CodeEditor:
         for i in range(1, num_lines + 1):
             self.line_number_text_widget.insert("end", f"{i}\n", "right")
 
-        self.line_number_text_widget.yview_moveto(self.frame.text_widget.yview()[0])
+        self.line_number_text_widget.yview_moveto(self.frame.text_widget.yview()[0]) # type: ignore
         self.line_number_text_widget.configure(state="disabled")
 
     def update_label(self):
@@ -132,7 +131,7 @@ class CodeEditor:
         current_file = current_file.split("/")[-1]
         self.file_label.configure(text=current_file)
 
-    def add_label(self, directory):
+    def add_label(self, directory: str):
         for label in self.labels:
             if directory == label.directory:
                 self.open_label(label)
@@ -144,8 +143,9 @@ class CodeEditor:
         self.open_label(self.file_label)
         
     
-    def open_label(self, opened_label):
+    def open_label(self, opened_label: FileLabel) -> None:
         for label in self.labels:
             label.configure(bg=self.root.secondary_color)
         opened_label.configure(bg=self.root.primary_color)
         self.root.file_manager.open_file(opened_label.directory, label_opened=True)
+    

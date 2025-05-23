@@ -1,20 +1,20 @@
-from tkinter import *
+from tkinter import PhotoImage, BOTH
 from tkinter import ttk
 import os
 from tkinter import filedialog
 
-from utility import DefaultButton, resource_path, path_from_relative_path
+from utility import DefaultButton, DefaultSecondaryFrame, resource_path, path_from_relative_path
 from settings_handler import settings_handler
-
+from gui import Root
 
 
 
 class Filetree:
-    def __init__(self, root, master):
-        self.root = root
-        self.frame = Frame(master, bg=root.secondary_color)
+    def __init__(self, root: Root, master):
+        self.root: Root = root
+        self.frame = DefaultSecondaryFrame(master)
         self.frame.pack(fill=BOTH)
-        self.start_path = settings_handler.get_variable("current_filetree_directory")
+        self.start_path: str = settings_handler.get_variable("current_filetree_directory")
 
         self.file_icon = PhotoImage(file=resource_path('Assets\\file_icon.png'))
         self.python_file_icon = PhotoImage(file=resource_path('Assets\\python_file_icon.png'))
@@ -41,7 +41,7 @@ class Filetree:
         name = self.treeview.item(iid)["text"]
 
         added_path = f"/{name}"
-        base_path = self.start_path
+        base_path: str = self.start_path
 
         cur_iid = iid
         parent_names= []
@@ -71,7 +71,7 @@ class Filetree:
     def open_directory(self):
         self.treeview.delete(*self.treeview.get_children())
         temporary_start_path = self.start_path
-        self.start_path = None
+        self.start_path = None # type: ignore
         self.start_path = filedialog.askdirectory(initialdir=path_from_relative_path("Files"), title="Open a Directory")
         if self.start_path:
             settings_handler.set_variable("current_filetree_directory", self.start_path)
@@ -85,7 +85,7 @@ class Filetree:
 
     def display_treeview(self):
         start_dir_entries = os.listdir(self.start_path)
-        parent_iid = self.treeview.insert(parent='', index='0', text=os.path.basename(self.start_path), open=True, image=self.folder_icon)
+        parent_iid = self.treeview.insert(parent='', index = 0, text=os.path.basename(self.start_path), open=True, image=self.folder_icon)
         # inserting items to the treeview
         self.add_directory_to_treeview(self.start_path, start_dir_entries, parent_iid)
 

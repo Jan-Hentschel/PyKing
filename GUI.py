@@ -1,22 +1,21 @@
 from ctypes import windll
 from tkinter import ttk
-from idlelib.percolator import Percolator
-from idlelib.colorizer import ColorDelegator
+from idlelib.colorizer import ColorDelegator  
 
-from utility import *  # type: ignore 
+from utility import *  
 from settings_handler import settings_handler
 
 
 
 class Root(tk.Tk):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
 
         windll.shcore.SetProcessDpiAwareness(2) #damit text nicht blurry ist
 
         super().__init__(*args, **kwargs)
 
         self.title("PyKing")
-        self.iconbitmap(resource_path("Assets\\Icon.ico"))
+        self.iconbitmap(resource_path("Assets\\Icon.ico")) #type: ignore
 
         self.screen_height = self.winfo_screenheight()
         self.screen_width = self.winfo_screenwidth()
@@ -166,7 +165,7 @@ class Root(tk.Tk):
         self.style.configure("My.Vertical.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor=self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF")
 
         #CustomWidget.print_widgets()
-        for widget in CustomWidget.widget_list:
+        for widget in CustomWidgetMixin.widget_list:
             try:
                 widget.update_color()
             except AttributeError:
@@ -230,7 +229,7 @@ class SavePopup(Toplevel):
         self.dont_save_button.pack()
 
         self.cancel_button = DefaultButton(self, text="Cancel", command= lambda: master.cancel_closing(), padx=10)
-        self.cancel_button.pack()
+        self.cancel_button.pack(side="top")
 
 root: Root = Root()
 

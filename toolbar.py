@@ -1,7 +1,6 @@
 import webbrowser
-from typing import Literal
 
-from utility import * # type: ignore 
+from utility import * 
 from settings_handler import settings_handler
 from gui import Root
 
@@ -36,7 +35,7 @@ class Toolbar:
         self.resume_btn = DefaultButton(self.frame, text="Resume", command=root.code_executor.resume_debugger)
         self.step_btn   = DefaultButton(self.frame, text="Step",   command=root.code_executor.step_debugger)
         self.tick_rate_slider = DefaultScale(self.frame)
-        self.tick_rate_slider.set(settings_handler.get_variable("default_tick_rate"))
+        self.tick_rate_slider.set(settings_handler.get_variable("default_tick_rate")) #type: ignore
         self.tick_rate_slider.pack(side="left")
         self.pick_add_hamster_button = DefaultButton(self.frame, text ="Add Hamster", command = root.grid_manager.pick_add_hamster)
         self.pick_subtract_hamster_button = DefaultButton(self.frame, text ="Subtract Hamster", command = root.grid_manager.pick_subtract_hamster)

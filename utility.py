@@ -1,32 +1,47 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import *
+from tkinter import Widget, Button, Label, Entry, Toplevel, Frame, Text, Checkbutton, IntVar, HORIZONTAL, VERTICAL, N, E, S, W, END, BOTH, RIGHT, LEFT, Y, X, TOP, Canvas, NW, Menu, Scale, Scrollbar, PhotoImage, PanedWindow #type: ignore
 from tkinter.font import Font
 import os
 import sys
-from typing import ClassVar, Literal
+from typing import Any, ClassVar, Literal, cast
 
 from settings_handler import settings_handler
 
+#https://www.youtube.com/watch?v=p3tSLatmGvU
+#https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
+#vor jeden relative path diese funktion setzen um pyinstaller zu helfen alle dateien zu finden
+
+def resource_path(relative_path: str) -> str:
+    base_path = getattr(sys, '_MEIPASS', os.path.abspath("."))
+    return os.path.join(base_path, relative_path)
+
+def path_from_relative_path(relative_path: str) -> str:
+    base_path = os.path.abspath(".")
+    return os.path.join(base_path, relative_path)
 
 
 
 #https://www.geeksforgeeks.org/autohiding-scrollbars-using-python-tkinter/
 #https://stackoverflow.com/questions/41095385/autohide-tkinter-canvas-scrollbar-with-pack-geometry 
 
-class CustomWidget:
-    widget_list: ClassVar[list['CustomWidget']] = []
+class CustomWidgetMixin:
+    widget_list: ClassVar[list['CustomWidgetMixin']] = []
+
+    def build_style(self) -> dict[str, Any]:
+        return {}
 
     @staticmethod
     def print_widgets():
-        for widget in CustomWidget.widget_list:
+        for widget in CustomWidgetMixin.widget_list:
             print(widget.__class__.__name__)
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)  
-        CustomWidget.widget_list.append(self)
+        CustomWidgetMixin.widget_list.append(self)
+        widget = cast(Widget, self)
         try:
-            self.pack()
+            widget.pack()
         except Exception:
             pass
 
@@ -43,15 +58,15 @@ class CustomWidget:
         return settings_handler.get_variable("secondary_color")
 
     def update_color(self):
-        # always pull a fresh dict
+        widget = cast(Widget, self)
         style = self.build_style()
-        if self.winfo_exists():
-            self.configure(**style) 
+        if widget.winfo_exists():
+            widget.configure(**style) 
     
             
 
-class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
-    def __init__(self, master, target_widget, **kwargs):
+class AutoHiddenScrollbar(CustomWidgetMixin, ttk.Scrollbar):
+    def __init__(self, master: Widget, target_widget: Text, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -59,7 +74,7 @@ class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
         self.grid_info_cache = None  # Store grid options for reuse
         
 
-    def set(self, low, high):
+    def set(self, first: float | str, last: float | str):
         is_horizontal = self.cget("orient") == "horizontal"
 
         if is_horizontal:
@@ -68,12 +83,12 @@ class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
             else:
                 self.grid_remove()
         else:
-            if float(low) <= 0.0 and float(high) >= 1.0:
+            if float(first) <= 0.0 and float(last) >= 1.0:
                 self.grid_remove()
             else:
                 self.restore_grid()
 
-        Scrollbar.set(self, low, high)
+        Scrollbar.set(self, first, last)
 
     def has_horizontal_overflow(self):
         widget_width = self.target_widget.winfo_width()
@@ -86,7 +101,7 @@ class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
                 return True
         return False
 
-    def grid(self, **kwargs):
+    def grid(self, **kwargs: Any):
         # Store the grid info once for reuse in restore_grid
         self.grid_info_cache = kwargs
         super().grid(**kwargs)
@@ -95,18 +110,19 @@ class AutoHiddenScrollbar(CustomWidget, ttk.Scrollbar):
         if self.grid_info_cache:
             super().grid(**self.grid_info_cache)
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {}
 
-class DefaultButton(CustomWidget, Button):
-    def __init__(self, master,**kwargs):
+
+class DefaultButton(CustomWidgetMixin, Button):
+    def __init__(self, master: Any,**kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
         if not self.cget("image"):
             self.configure(height=2)
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bd': 2,
             'bg': self.primary_color,
@@ -115,11 +131,12 @@ class DefaultButton(CustomWidget, Button):
             'activeforeground': self.foreground_color,
         }
     
-    def pack(self, side: Literal["left", "right", "top", "bottom"]="left", **kwargs):
+    def pack(self, side: Literal["left", "right", "top", "bottom"]="left", **kwargs: Any) -> None:
         super().pack(side=side, **kwargs)
 
-class DefaultMenuButton(CustomWidget, Button):
-    def __init__(self, master, **kwargs):
+
+class DefaultMenuButton(CustomWidgetMixin, Button):
+    def __init__(self, master: Widget, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -128,7 +145,7 @@ class DefaultMenuButton(CustomWidget, Button):
         self.bind("<Enter>", self.on_enter)
         self.bind("<Leave>", self.on_leave)
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bd':               0,
             'bg':               self.secondary_color,
@@ -139,82 +156,81 @@ class DefaultMenuButton(CustomWidget, Button):
     
 
 
-    def pack(self, side: Literal["left", "right", "top", "bottom"]="left", **kwargs):
+    def pack(self, side: Literal["left", "right", "top", "bottom"]="left", **kwargs: Any):
         super().pack(side=side, **kwargs)
 
-    def on_enter(self, e):
+    def on_enter(self, e: Any):
         self['background'] = self.primary_color
 
-    def on_leave(self, e):
+    def on_leave(self, e: Any):
         self['background'] = self.secondary_color
 
 
-
-
-class DefaultLabel(CustomWidget, Label):
-    def build_style(self):
+class DefaultLabel(CustomWidgetMixin, Label):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.secondary_color,
             'fg': self.foreground_color,
             'activeforeground': self.foreground_color
         }
 
-    def __init__(self, master, **kwargs):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
 
-class DefaultEntry(CustomWidget, Entry):
-    def build_style(self):
+
+class DefaultEntry(CustomWidgetMixin, Entry):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.primary_color,
             'fg': self.foreground_color
         }
 
-    def __init__(self, master, **kwargs):
+    def __init__(self, master: Widget, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
 
-class DefaultToplevel(CustomWidget, Toplevel):
-    def build_style(self):
+
+class DefaultToplevel(CustomWidgetMixin, Toplevel):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.secondary_color
         }
 
-    def __init__(self, master, **kwargs):
+    def __init__(self, master: Widget, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
 
 
-class DefaultPrimaryFrame(CustomWidget, Frame):
-    def build_style(self):
+class DefaultPrimaryFrame(CustomWidgetMixin, Frame):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.primary_color
         }
 
-    def __init__(self, master, **kwargs):
+    def __init__(self, master: Widget, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
 
-class DefaultSecondaryFrame(CustomWidget, Frame):
-    def build_style(self):
+
+class DefaultSecondaryFrame(CustomWidgetMixin, Frame):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.secondary_color
         }
 
-    def __init__(self, master, **kwargs):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
 
 
-
-
-class DefaultTextFrame(CustomWidget, Frame):
-    def __init__(self, master, **kwargs):
+class DefaultTextFrame(CustomWidgetMixin, Frame):
+    def __init__(self, master: Widget, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -222,7 +238,7 @@ class DefaultTextFrame(CustomWidget, Frame):
 
         # Frame containing Text + Scrollbars
         self.plus_scrollbar_frame = DefaultPrimaryFrame(self, bg=self.primary_color)
-        self.plus_scrollbar_frame.pack(side=TOP, fill=BOTH, expand=True)
+        self.plus_scrollbar_frame.pack(side="top", fill="both", expand=True)
 
         # Text widget
         self.text_widget = Text(
@@ -266,7 +282,7 @@ class DefaultTextFrame(CustomWidget, Frame):
             style="My.Horizontal.TScrollbar",
             orient=HORIZONTAL,
             cursor="arrow",
-            command=self.text_widget.xview
+            command=self.text_widget.xview # type: ignore
         )
         self.horizontal_scrollbar.grid(row=1, column=0, sticky="ew")
 
@@ -274,7 +290,7 @@ class DefaultTextFrame(CustomWidget, Frame):
         self.text_widget.configure(xscrollcommand=self.horizontal_scrollbar.set)
         self.text_widget.configure(yscrollcommand=self.vertical_scrollbar.set)
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.primary_color
         }
@@ -337,22 +353,17 @@ class DefaultTextFrame(CustomWidget, Frame):
         self.text_widget.delete(cursor_index, index)
         return "break"
 
-    def on_scrollbar_scroll(self, *args):
-        self.text_widget.yview(*args)
-        try: 
-            if self.line_numbers:
-                self.line_number_text_widget.yview(*args)
-        except AttributeError:
-            pass
+    def on_scrollbar_scroll(self, *args: Any) -> None:
+        self.text_widget.yview(*args) # type: ignore
 
             
-class DefaultCheckbutton(CustomWidget, Checkbutton):
-    def __init__(self, master, **kwargs):
+class DefaultCheckbutton(CustomWidgetMixin, Checkbutton):
+    def __init__(self, master: Widget, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.secondary_color,
             'selectcolor': self.primary_color,
@@ -364,8 +375,8 @@ class DefaultCheckbutton(CustomWidget, Checkbutton):
         }
 
 
-class SettingsCheckbutton(CustomWidget, Checkbutton):
-    def __init__(self, master: DefaultToplevel, root_var_name: str, **kwargs):
+class SettingsCheckbutton(CustomWidgetMixin, Checkbutton):
+    def __init__(self, master: Widget, root_var_name: str, **kwargs: Any):
         self.root_var_name: str = root_var_name
 
         from gui import root, Root
@@ -394,7 +405,7 @@ class SettingsCheckbutton(CustomWidget, Checkbutton):
             settings_handler.set_variable(self.root_var_name, "False")
             self.root.settings_variables[self.root_var_name] = "False"        
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.secondary_color,
             'selectcolor': self.primary_color,
@@ -404,32 +415,16 @@ class SettingsCheckbutton(CustomWidget, Checkbutton):
             'onvalue': 1,
             'offvalue': 0
         }
-#https://www.youtube.com/watch?v=p3tSLatmGvU
-#https://stackoverflow.com/questions/31836104/pyinstaller-and-onefile-how-to-include-an-image-in-the-exe-file
-#vor jeden relative path diese funktion setzen um pyinstaller zu helfen alle dateien zu finden
-
-
-def resource_path(relative_path):
-    try:
-        base_path = sys._MEIPASS
-    except Exception:
-        base_path = os.path.abspath(".")
-
-    return os.path.join(base_path, relative_path)
-
-def path_from_relative_path(relative_path):
-    base_path = os.path.abspath(".")
-    return os.path.join(base_path, relative_path)
 
 
 class FileLabel(DefaultLabel):
-    def __init__(self, master, directory: str, **kwargs):
+    def __init__(self, master: Widget, directory: str, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
         self.directory: str = directory
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {
             'padx': 10,
             'pady': 5,
@@ -438,16 +433,17 @@ class FileLabel(DefaultLabel):
             'activeforeground': self.foreground_color
         }
 
-    def pack(self, side="left", **kwargs):
+    def pack(self, side: Literal["left", "right", "top", "bottom"]="left", **kwargs: Any):
         DefaultLabel.pack(self, side=side, **kwargs)
 
-class DefaultMenu(CustomWidget, Menu):
-    def __init__(self, master, **kwargs):
+
+class DefaultMenu(CustomWidgetMixin, Menu):
+    def __init__(self, master: Widget, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {
             'bd': 0,
             'activebackground': self.primary_color,
@@ -457,13 +453,14 @@ class DefaultMenu(CustomWidget, Menu):
             'activeforeground': self.foreground_color
         }
 
-class DefaultScale(CustomWidget, Scale):
-    def __init__(self, master, **kwargs):
+
+class DefaultScale(CustomWidgetMixin, Scale):
+    def __init__(self, master: Widget, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
 
-    def build_style(self):
+    def build_style(self) -> dict[str, Any]:
         return {
             'from_': 1,
             'to': 100,

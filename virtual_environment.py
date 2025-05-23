@@ -65,7 +65,7 @@ class GridManager:
             elif cell.type == "hamster":
                 cell.clear()
                 cell.type = "hamster"
-                cell.display_image(self.hamster_image)
+                cell.display_image(self.hamster_image) # type: ignore
 
     def remove_all_cells(self):
         for cell in self.cells:
@@ -108,7 +108,7 @@ class GridManager:
             else:
                 new_cells.append(f"hamster {cell.hamsters}")
 
-        dictionary: dict = {
+        dictionary: dict[str, Any] = {
             "link": self.link,
             "columns": self.grid_width,
             "rows": self.grid_height,
@@ -219,8 +219,8 @@ class GridCell:
             id = self.canvas_image
         self.canvas.tag_bind(id, "<Button-1>", lambda _: self.edit())
 
-    def display_image(self, image):
-        self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW)
+    def display_image(self, image: PhotoImage):
+        self.canvas_image = self.canvas.create_image(18, 18, image=image, anchor=NW) # type: ignore
 
     def change_to_wall(self):
         self.type = "wall"
@@ -269,7 +269,7 @@ class Snake:
             del self
             raise Exception("x and y are the first two parameters and must be integers")
 
-        if name is not None:
+        if name is not "":
             self.name: str = name
         else:
             self.name: str = f"Snake Nr.{len(Snake.snakes)+1}"
@@ -294,6 +294,8 @@ class Snake:
                 self.image = root.grid_manager.down_image
             case "W":
                 self.image = root.grid_manager.left_image
+            case _:
+                pass
 
         self.cell.display_image(self.image)
         self.root.update_idletasks()
@@ -327,6 +329,8 @@ class Snake:
             case "W":
                 self.direction="N"
                 self.image = self.root.grid_manager.up_image
+            case _:
+                pass
 
         self.show_snake()
         self.root.update_idletasks()
@@ -364,6 +368,9 @@ class Snake:
                     self.x -=1
                 else:
                     self.root.terminal.print(f"{self.name} ran into a wall...")
+            case _:
+                pass
+
         self.update_cell()
         self.show_snake()
         self.root.update_idletasks()
@@ -413,7 +420,8 @@ class Snake:
                 new_y -= 1  
             case "W":
                 new_x -= 1 
-        
+            case _:
+                pass        
         for cell in root.grid_manager.cells:
             if cell.x == new_x and cell.y == new_y:
                 if cell.type == "wall":

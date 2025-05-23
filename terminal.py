@@ -9,7 +9,7 @@ class Terminal:
         self.frame = DefaultTextFrame(master, bg=root.primary_color, bd=0,)
         self.frame.pack(fill=BOTH, expand=True)
 
-    def calculate_seperator_length(self, status):
+    def calculate_seperator_length(self, status: str) -> int:
         longest_line: int = len(status)
 
         if len(status.splitlines()) > 1:
@@ -19,7 +19,7 @@ class Terminal:
 
         return longest_line
 
-    def show_current_directories(self, status: str):
+    def show_current_directories(self, status: str) -> None:
         seperator: str = self.status_seperator * self.calculate_seperator_length(status)
 
         self.frame.text_widget.delete('1.0', END)
@@ -30,5 +30,5 @@ class Terminal:
                     f"Grid: {settings_handler.get_variable('current_grid_directory')}\n"
                     f"{seperator}\n\n")
 
-    def print(self, string):
+    def print(self, string: str) -> None:
         self.frame.text_widget.insert(tk.END, string + "\n")   
