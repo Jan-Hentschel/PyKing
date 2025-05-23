@@ -1,6 +1,6 @@
 import json
 
-from utility import * # type: ignore 
+from utility import DefaultSecondaryFrame, resource_path, FileLabel, X, TOP, NW, Canvas, PhotoImage, N, E, S, W, tk, Any, ClassVar
 from settings_handler import settings_handler
 from gui import Root
 

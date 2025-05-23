@@ -66,7 +66,7 @@ class CustomWidgetMixin:
             
 
 class AutoHiddenScrollbar(CustomWidgetMixin, ttk.Scrollbar):
-    def __init__(self, master: Widget, target_widget: Text, **kwargs: Any):
+    def __init__(self, master: Any, target_widget: Text, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -136,7 +136,7 @@ class DefaultButton(CustomWidgetMixin, Button):
 
 
 class DefaultMenuButton(CustomWidgetMixin, Button):
-    def __init__(self, master: Widget, **kwargs: Any):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -187,7 +187,7 @@ class DefaultEntry(CustomWidgetMixin, Entry):
             'fg': self.foreground_color
         }
 
-    def __init__(self, master: Widget, **kwargs: Any):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -199,7 +199,7 @@ class DefaultToplevel(CustomWidgetMixin, Toplevel):
             'bg': self.secondary_color
         }
 
-    def __init__(self, master: Widget, **kwargs: Any):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -211,7 +211,7 @@ class DefaultPrimaryFrame(CustomWidgetMixin, Frame):
             'bg': self.primary_color
         }
 
-    def __init__(self, master: Widget, **kwargs: Any):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -230,7 +230,7 @@ class DefaultSecondaryFrame(CustomWidgetMixin, Frame):
 
 
 class DefaultTextFrame(CustomWidgetMixin, Frame):
-    def __init__(self, master: Widget, **kwargs: Any):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -358,7 +358,7 @@ class DefaultTextFrame(CustomWidgetMixin, Frame):
 
             
 class DefaultCheckbutton(CustomWidgetMixin, Checkbutton):
-    def __init__(self, master: Widget, **kwargs: Any):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -376,7 +376,7 @@ class DefaultCheckbutton(CustomWidgetMixin, Checkbutton):
 
 
 class SettingsCheckbutton(CustomWidgetMixin, Checkbutton):
-    def __init__(self, master: Widget, root_var_name: str, **kwargs: Any):
+    def __init__(self, master: Any, root_var_name: str, **kwargs: Any):
         self.root_var_name: str = root_var_name
 
         from gui import root, Root
@@ -418,7 +418,7 @@ class SettingsCheckbutton(CustomWidgetMixin, Checkbutton):
 
 
 class FileLabel(DefaultLabel):
-    def __init__(self, master: Widget, directory: str, **kwargs: Any):
+    def __init__(self, master: Any, directory: str, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -438,7 +438,7 @@ class FileLabel(DefaultLabel):
 
 
 class DefaultMenu(CustomWidgetMixin, Menu):
-    def __init__(self, master: Widget, **kwargs: Any):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -455,7 +455,7 @@ class DefaultMenu(CustomWidgetMixin, Menu):
 
 
 class DefaultScale(CustomWidgetMixin, Scale):
-    def __init__(self, master: Widget, **kwargs: Any):
+    def __init__(self, master: Any, **kwargs: Any):
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
