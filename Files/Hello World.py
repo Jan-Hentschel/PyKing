@@ -1,9 +1,9 @@
 from mySnake import MySnake
-=======
+
 print("Hello World")
 
  
-candy = Snake(0,0,"N","candy")
+candy = MySnake(0, 0, "N")
 candy.move()
 candy.turn_right()
 candy.eat()

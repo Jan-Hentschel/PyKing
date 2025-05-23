@@ -1,14 +1,14 @@
-from tkinter import *
 from tkinter import filedialog
 import json
 
-from utility import *
+from utility import * # type: ignore 
 from settings_handler import settings_handler
+from gui import Root
 
 
 class FileManager:
-    def __init__(self, root):
-        self.root = root
+    def __init__(self, root: Root):
+        self.root: Root = root
         
 
     def save_text_widget_content_to_directory(self, directory):
@@ -41,9 +41,10 @@ class FileManager:
         
     
     def link_grid_to_python_file(self):
+        
+        grid_directory: str = settings_handler.get_variable("current_grid_directory")
+        python_directory: str = settings_handler.get_variable("current_file_directory")
         try:
-            grid_directory = settings_handler.get_variable("current_grid_directory")
-            python_directory = settings_handler.get_variable("current_file_directory")
             with open(grid_directory, "r", encoding="utf-8") as file:
                 content = file.read()
                 dict = json.loads(content)
@@ -56,7 +57,7 @@ class FileManager:
             self.root.terminal.show_current_directories(f"failed to link grid: {grid_directory} to python file: {python_directory}\n\n")
 
 
-    def open_file(self, directory, check_if_linked=True, label_opened=False):
+    def open_file(self, directory: str, check_if_linked: bool=True, label_opened: bool=False):
         self.root.code_editor.load_into_editor(self.read_file(directory))
         settings_handler.set_variable("current_file_directory", directory)
         if not label_opened:
@@ -114,7 +115,7 @@ class FileManager:
                 
 
 
-    def has_valid_link(self, directory):
+    def has_valid_link(self, directory: str) -> bool:
         with open(directory, "r", encoding="utf-8") as file:
             content = file.read()
             dict = json.loads(content)
@@ -131,14 +132,17 @@ class FileManager:
                 
         
 
-    def open_grid(self, directory, check_if_linked=True, label_opened=False):
+    def open_grid(self, directory: str, check_if_linked: bool=True, label_opened: bool=False):
         with open(directory, "r", encoding="utf-8") as file:
-            content = file.read()
+            content: str = file.read()
+
         grid_dictionary = json.loads(content)
-        columns = grid_dictionary["columns"]
-        rows = grid_dictionary["rows"]
-        new_cells = grid_dictionary["cells"]
-        link = grid_dictionary["link"].replace("\\", "/")
+
+        columns: int = grid_dictionary["columns"]
+        rows: int = grid_dictionary["rows"]
+        new_cells: list[str] = grid_dictionary["cells"]
+        link:str = grid_dictionary["link"].replace("\\", "/")
+
         self.root.grid_manager.change_grid(columns, rows, new_cells, link)
         settings_handler.set_variable("current_grid_directory", directory)
 
@@ -189,25 +193,7 @@ class FileManager:
 
 
     def new_grid(self):
-        popup = DefaultToplevel(self.root)
-        popup.geometry("400x200")
-        popup.title("Input Grid Height and Width")
-        popup.iconbitmap(resource_path("Assets\\Icon.ico"))
-
-        column_label = DefaultLabel(popup, text="Columns:")
-        popup.column_entry = DefaultEntry(popup)
-        popup.column_entry.pack()
-
-        row_label = DefaultLabel(popup, text="Rows:")
-        popup.row_entry = DefaultEntry(popup)
-        popup.row_entry.pack()
-        
-        ok_button = DefaultButton(popup, text="OK", command=lambda: self.create_grid(popup))
-        ok_button.pack(side="left")
-
-        cancel_button = DefaultButton(popup, text="Cancel", command= lambda: popup.destroy())
-        cancel_button.pack(side="right")
-   
+        popup = GridSizeSelectionPopup(self.root, self)
 
     def save_python_file_and_grid(self):
         self.save_python_file()
@@ -225,3 +211,21 @@ class FileManager:
             pass
         self.root.terminal.show_current_directories(f"loaded python file: {settings_handler.get_variable('current_file_directory')}\nloaded grid: {settings_handler.get_variable('current_grid_directory')}")
 
+class GridSizeSelectionPopup(Toplevel):
+    def __init__(self, root: Root, file_manager: FileManager):
+        super().__init__(root)
+        self.geometry("400x200")
+        self.title("Input Grid Height and Width")
+        self.iconbitmap(resource_path("Assets\\Icon.ico"))
+
+        column_label = DefaultLabel(self, text="Columns:")
+        self.column_entry = DefaultEntry(self)
+
+        row_label = DefaultLabel(self, text="Rows:")
+        self.row_entry = DefaultEntry(self)
+        
+        ok_button = DefaultButton(self, text="OK", command=lambda: file_manager.create_grid(self))
+        ok_button.pack(side="left")
+
+        cancel_button = DefaultButton(self, text="Cancel", command= lambda: self.destroy())
+        cancel_button.pack(side="right")

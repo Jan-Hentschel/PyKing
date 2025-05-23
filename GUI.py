@@ -1,24 +1,21 @@
-import tkinter as tk
-from tkinter import *
 from ctypes import windll
 from tkinter import ttk
-from idlelib.percolator import Percolator
-from idlelib.colorizer import ColorDelegator
+from idlelib.colorizer import ColorDelegator  
 
-from utility import *
+from utility import *  
 from settings_handler import settings_handler
 
 
 
 class Root(tk.Tk):
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
 
         windll.shcore.SetProcessDpiAwareness(2) #damit text nicht blurry ist
 
         super().__init__(*args, **kwargs)
 
         self.title("PyKing")
-        self.iconbitmap(resource_path("Assets\\Icon.ico"))
+        self.iconbitmap(resource_path("Assets\\Icon.ico")) #type: ignore
 
         self.screen_height = self.winfo_screenheight()
         self.screen_width = self.winfo_screenwidth()
@@ -36,6 +33,7 @@ class Root(tk.Tk):
             "remember_last_directory" : settings_handler.get_variable("remember_last_directory"),
             
             "show_snake_actions_in_terminal" : settings_handler.get_variable("show_snake_actions_in_terminal"),
+            "show_debugger_prints" : settings_handler.get_variable("show_debugger_prints"),
 
             "gore" : settings_handler.get_variable("gore")
 
@@ -97,35 +95,35 @@ class Root(tk.Tk):
 
         self.vertically_pained_window = PanedWindow(self.horizontally_paned_window, orient=tk.VERTICAL, bg=self.secondary_color, sashwidth=10)
 
-        self.top_right_frame = Frame(self.vertically_pained_window, bg=self.secondary_color)
-        self.bottom_right_frame = Frame(self.vertically_pained_window, bg=self.secondary_color)
-        self.leftest_frame = Frame(self.horizontally_paned_window, bg=self.secondary_color)
-        self.left_frame = Frame(self.horizontally_paned_window, bg=self.secondary_color)
+        self.top_right_frame = DefaultSecondaryFrame(self.vertically_pained_window)
+        self.bottom_right_frame = DefaultSecondaryFrame(self.vertically_pained_window)
+        self.leftest_frame = DefaultSecondaryFrame(self.horizontally_paned_window)
+        self.left_frame = DefaultSecondaryFrame(self.horizontally_paned_window)
         
 
         from terminal import Terminal # needs nothing
-        self.terminal = Terminal(self, self.bottom_right_frame)
+        self.terminal: Terminal = Terminal(self, self.bottom_right_frame)
 
         from code_editor import CodeEditor # needs nothing
-        self.code_editor = CodeEditor(self, self.left_frame)
+        self.code_editor: CodeEditor = CodeEditor(self, self.left_frame)
 
         from settings import Settings # needs nothing
-        self.settings = Settings(self)
+        self.settings: Settings = Settings(self)
 
         from virtual_environment import GridManager # NEEDS terminal
-        self.grid_manager = GridManager(self, self.top_right_frame, 0, 0)
+        self.grid_manager: GridManager = GridManager(self, self.top_right_frame, 0, 0)
 
         from file_management import FileManager # NEEDS grid_manager, code_editor, terminal
-        self.file_manager = FileManager(self)
+        self.file_manager: FileManager = FileManager(self)
 
         from filetree import Filetree # NEEDS file_manager
-        self.filetree = Filetree(self, self.leftest_frame) 
+        self.filetree: Filetree = Filetree(self, self.leftest_frame) 
 
         from code_execution import CodeExecution #NEEDS Snake 
-        self.code_executor = CodeExecution(self)
+        self.code_executor: CodeExecution = CodeExecution(self)
 
         from toolbar import Toolbar # NEEDS grid_manager AND file_manager AND code_executor AND settings
-        self.toolbar = Toolbar(self) 
+        self.toolbar: Toolbar = Toolbar(self) 
         self.toolbar.frame.pack(side="top", fill="x")
 
 
@@ -150,8 +148,9 @@ class Root(tk.Tk):
         self.file_manager.open_python_file_and_grid_from_options()
         self.code_editor.update_line_numbers()        
         self.bind("<Control-s>", lambda event: self.file_manager.save_python_file_and_grid())
-
         self.protocol("WM_DELETE_WINDOW", self.on_closing)
+        #CustomWidget.print_widgets()
+
         
     def update_colors(self):
         self.configure(bg=self.secondary_color)
@@ -165,27 +164,11 @@ class Root(tk.Tk):
         self.style.configure("My.Horizontal.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor =self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF") 
         self.style.configure("My.Vertical.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor=self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF")
 
-        self.code_editor.frame.configure(bg=self.primary_color)
-        self.code_editor.frame.plus_scrollbar_frame.configure(bg=self.primary_color)
-        self.code_editor.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
-        self.code_editor.frame.line_number_text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
-        self.code_editor.frame.line_number_frame.configure(bg=self.secondary_color, highlightbackground=self.primary_color)
-
- 
-        self.terminal.frame.configure(bg=self.primary_color)
-        self.terminal.frame.plus_scrollbar_frame.configure(bg=self.primary_color)
-        self.terminal.frame.text_widget.configure(bg=self.primary_color, fg=self.foreground_color, insertbackground=self.foreground_color, selectbackground="#6F6F6F")
-
-        self.filetree.frame.configure(bg=self.secondary_color)
-
-        self.toolbar.frame.configure(bg=self.secondary_color)
-
-        self.toolbar.tick_rate_slider.configure(bg=self.secondary_color, activebackground=self.secondary_color, highlightbackground=self.secondary_color, fg=self.foreground_color, troughcolor=self.primary_color)
-
-        for button in button_list:
+        #CustomWidget.print_widgets()
+        for widget in CustomWidgetMixin.widget_list:
             try:
-                button.configure(bg=self.primary_color, activebackground=self.secondary_color, fg=self.foreground_color, activeforeground=self.foreground_color)
-            except tk.TclError:
+                widget.update_color()
+            except AttributeError:
                 pass
         for cell in self.grid_manager.cells:
             if cell.type == "hamster" or cell.type == "empty":
@@ -213,21 +196,7 @@ class Root(tk.Tk):
             self.close()
 
     def ask_if_save_on_close(self):
-        self.popup = DefaultToplevel(self, padx=10, pady=10)
-        self.popup.geometry("325x120")
-        self.popup.title("Are you sure?")
-        self.popup.iconbitmap(resource_path("Assets\\Icon.ico"))
-
-        self.popup.are_you_sure_label = DefaultLabel(self.popup, text="Are you sure you want to close?\nDo you want to save the current file and grid?")
-        
-        self.popup.save_button = DefaultButton(self.popup, text="Save", command=lambda: self.save_before_closing(), padx=50)
-        self.popup.save_button.pack()
-
-        self.popup.dont_save_button = DefaultButton(self.popup, text="Don't Save", command=lambda: self.close(), padx=10)
-        self.popup.dont_save_button.pack()
-
-        self.popup.cancel_button = DefaultButton(self.popup, text="Cancel", command= lambda: self.cancel_closing(), padx=10)
-        self.popup.cancel_button.pack()
+        self.popup = SavePopup(self, self, padx=10, pady=10)
 
     def save_before_closing(self):
         self.file_manager.save_python_file_and_grid()
@@ -245,8 +214,24 @@ class Root(tk.Tk):
     def cancel_closing(self):
         self.popup.destroy()
         
+class SavePopup(Toplevel):
+    def __init__(self, master: Root, *args, **kwargs):
+        super().__init__(master, *args, **kwargs)
+        self.geometry("325x120")
+        self.title("Are you sure?")
+        self.iconbitmap(resource_path("Assets\\Icon.ico"))
+        self.ask_if_save_label = DefaultLabel(self, text="Are you sure you want to close?\nDo you want to save the current file and grid?")
 
-root = Root()
+        self.save_button = DefaultButton(self, text="Save", command=lambda: master.save_before_closing(), padx=50)
+        self.save_button.pack()
+
+        self.dont_save_button = DefaultButton(self, text="Don't Save", command=lambda: master.close(), padx=10)
+        self.dont_save_button.pack()
+
+        self.cancel_button = DefaultButton(self, text="Cancel", command= lambda: master.cancel_closing(), padx=10)
+        self.cancel_button.pack(side="top")
+
+root: Root = Root()
 
 
 

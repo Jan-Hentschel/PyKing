@@ -10,12 +10,13 @@ remember_last_file = True
 remember_last_grid = True
 remember_last_directory = True
 
-show_snake_actions_in_terminal = True
+show_snake_actions_in_terminal = False
+show_debugger_prints = False
 
 gore = False
 
 foreground_color = #FFFFFF
-primary_color = #3F3F3F
+primary_color = #3f3f3f
 secondary_color = #333333
 
 
