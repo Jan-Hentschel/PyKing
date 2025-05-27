@@ -1,6 +1,6 @@
 from idlelib.percolator import Percolator
 import re
-import jedi
+from jedi.api import Script
 
 from utility import * # type: ignore 
 from settings_handler import *
@@ -30,7 +30,7 @@ class CodeEditor:
         self.frame = CodeEditorFrame(master, self, bg=root.primary_color, bd=0,)
         self.text = self.frame.text_widget
 
-        #help from ChatGPT
+
         
         self._job = None
         self.listbox = None
@@ -115,7 +115,9 @@ class CodeEditor:
         self.line_number_text_widget.delete("1.0", "end")
 
         num_lines = int(self.frame.text_widget.index("end-1c").split(".")[0])
+        print(f"Total number of lines: {num_lines}")
         for i in range(1, num_lines + 1):
+            print(f"Adding line number: {i}")
             self.line_number_text_widget.insert("end", f"{i}\n", "right")
 
         self.line_number_text_widget.yview_moveto(self.frame.text_widget.yview()[0]) # type: ignore
@@ -210,8 +212,8 @@ class CodeEditorText(CustomWidgetMixin, Text):
     def __init__(self, master: DefaultPrimaryFrame, code_editor: CodeEditor, **kwargs: Any):
         self.code_editor = code_editor
         self._job = None
-        self.listbox = None
-        
+        self.listbox: tk.Listbox = None # type: ignore
+
         style = self.build_style()
         kwargs.update(style)
         super().__init__(master, **kwargs)
@@ -311,8 +313,8 @@ class CodeEditorText(CustomWidgetMixin, Text):
         self.delete(cursor_index, index)
         return "break"
     
-    def _on_keyrelease(self, event):
-        self.code_editor.update_line_numbers
+    def _on_keyrelease(self, event: Any):
+        self.code_editor.update_line_numbers()
         # Only debounce real typing keys
         if event.keysym in ("Up","Down","Left","Right","Return","Escape"):
             return
@@ -320,7 +322,7 @@ class CodeEditorText(CustomWidgetMixin, Text):
             self.after_cancel(self._job)
         self._job = self.after(50, self._autocomplete)
 
-    def _autocomplete(self):
+    def _autocomplete(self) -> None:
         
         code = self.get("1.0", "end-1c")
         row, col = map(int, self.index("insert").split('.'))
@@ -328,28 +330,28 @@ class CodeEditorText(CustomWidgetMixin, Text):
         prefix = self.get(f"{row}.0", f"{row}.{col}")
         # if only whitespace—no token—hide and return
         if not prefix.strip():
-            return self._hide_listbox()
+            return self._hide_listbox() # type:ignore
         try:
-            script = jedi.Script(code, path="__main__.py")
+            script = Script(code, path="__main__.py")
             comps = script.complete(line=row, column=col)
             words = [c.name for c in comps]
         except Exception:
             words = []
 
-        words = [n for n in words if n != prefix]
+        words: list[str] = [n for n in words if n != prefix]
         if not words:
-            return self._hide_listbox()
+            return self._hide_listbox() # type:ignore
         
         if not words:
-            return self._hide_listbox()
+            return self._hide_listbox() # type:ignore
 
         if not self.listbox:
-            self.listbox = tk.Listbox(self.master, height=6)
-            self.listbox.bind("<<ListboxSelect>>", self._on_listbox_select)
+            self.listbox: tk.Listbox = tk.Listbox(self.master, height=6)
+            self.listbox.bind("<<ListboxSelect>>", lambda e: self._on_listbox_select(e))
 
         self.listbox.delete(0, tk.END)
-        for w in words:
-            self.listbox.insert(tk.END, w)
+        for word in words:
+            self.listbox.insert(tk.END, word)
 
         # place under cursor
         bbox = self.bbox("insert")
@@ -364,7 +366,7 @@ class CodeEditorText(CustomWidgetMixin, Text):
         self.listbox.selection_set(0)
         self.listbox.see(0)
 
-    def _on_down(self, event):
+    def _on_down(self, event: Any):
         if self.listbox:
             idx = self.listbox.curselection()[0]
             if idx < self.listbox.size() - 1:
@@ -374,35 +376,35 @@ class CodeEditorText(CustomWidgetMixin, Text):
                 self.listbox.see(new)
             return "break"
 
-    def _on_up(self, event):
+    def _on_up(self, event: Any):
         if self.listbox:
             idx = self.listbox.curselection()[0]
             if idx > 0:
-                new = idx - 1
+                new: int = idx - 1
                 self.listbox.selection_clear(0, tk.END)
                 self.listbox.selection_set(new)
                 self.listbox.see(new)
             return "break"
         
-    def _on_tab(self, event):
+    def _on_tab(self, event: Any) -> None | str:
         if self.listbox:
             self._insert_selection()
             return "break"    # prevent tab from inserting a tab character
 
-    def _on_return(self, event):
+    def _on_return(self, event: Any) -> None | str:
         self.code_editor.update_line_numbers
         if self.listbox:
             self._insert_selection()
             return "break"
 
-    def _on_listbox_select(self, event):
+    def _on_listbox_select(self, event: Any):
         self._insert_selection()
 
-    def _insert_selection(self):
+    def _insert_selection(self) -> None:
         if not self.listbox:
             return
         # 1. Which item?
-        idxs = self.listbox.curselection()
+        idxs= self.listbox.curselection()
         if not idxs:
             return
         completion = self.listbox.get(idxs[0])
@@ -425,7 +427,7 @@ class CodeEditorText(CustomWidgetMixin, Text):
         self.insert(start_index, completion)
         self._hide_listbox()
 
-    def _hide_listbox(self, event=None):
+    def _hide_listbox(self, event: Any = None):
         if self.listbox:
             self.listbox.destroy()
-            self.listbox = None
+            self.listbox = None # type: ignore

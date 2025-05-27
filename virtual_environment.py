@@ -254,6 +254,8 @@ class GridCell:
         self.type = "empty"
         self.canvas.delete("all")
         self.canvas.configure(background=self.root.primary_color)
+        self.hamster_number_text = None # type: ignore 
+        self.hamsters= 0
 
 class Snake:
 
@@ -269,7 +271,7 @@ class Snake:
             del self
             raise Exception("x and y are the first two parameters and must be integers")
 
-        if name is not "":
+        if name != "":
             self.name: str = name
         else:
             self.name: str = f"Snake Nr.{len(Snake.snakes)+1}"

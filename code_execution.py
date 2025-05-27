@@ -6,6 +6,8 @@ import linecache
 import os
 import builtins
 import traceback
+from typing import Any
+from types import FrameType
 
 from settings_handler import settings_handler
 
@@ -13,7 +15,7 @@ from gui import Root
 from virtual_environment import Snake
 
 #help from chatgpt to get everything working
-def print_to_terminal_widget(*args):
+def print_to_terminal_widget(*args: Any):
     try:
         from gui import root
         output: str = " ".join(map(str, args))
@@ -22,7 +24,7 @@ def print_to_terminal_widget(*args):
         pass
 
 class TerminalWriter:
-    def write(self, text):
+    def write(self, text: str):
         print_to_terminal_widget(text.rstrip("\n"))
     def flush(self):
         pass
@@ -35,7 +37,7 @@ class StoppableThread(threading.Thread):
     """Thread class with a stop() method. The thread itself has to check
     regularly for the stopped() condition."""
 
-    def __init__(self,  *args, **kwargs):
+    def __init__(self,  *args: Any, **kwargs: Any):
         super(StoppableThread, self).__init__(*args, **kwargs)
         self._stop_event = threading.Event()
 
@@ -46,11 +48,11 @@ class StoppableThread(threading.Thread):
         return self._stop_event.is_set()
 
 class Debugger(bdb.Bdb):
-    def __init__(self, target_path):
+    def __init__(self, target_path: str):
         super().__init__()
         from gui import root
         self.root: Root = root
-        self.target_path = os.path.abspath(target_path)
+        self.target_path: str = os.path.abspath(target_path)
         self._quit_event  = threading.Event()
         self._pause_event = threading.Event()
         
@@ -65,7 +67,7 @@ class Debugger(bdb.Bdb):
         # Avoid division by zero
         return 1.0 / tickrate if tickrate else 0.01
     
-    def user_line(self, frame):
+    def user_line(self, frame: FrameType):
         # Handle quit
         if self._quit_event.is_set():
             self.set_quit()
@@ -108,7 +110,7 @@ class Debugger(bdb.Bdb):
             self._pause_event.clear()  # block next
             self._one_step = False
 
-    def run_file(self, filename, custom_globals: dict):
+    def run_file(self, filename: str, custom_globals: dict[str, Any]):
         folder = os.path.dirname(os.path.abspath(filename))
         if folder not in sys.path:
             sys.path.insert(0, folder)
@@ -143,7 +145,7 @@ class Debugger(bdb.Bdb):
         self._pause_event.set()
 
 class CodeExecution:
-    def __init__(self, root):
+    def __init__(self, root: Root):
         self.root: Root = root
         self.debugger: Debugger = None # type: ignore 
         self.exec_thread: StoppableThread = None # type: ignore 
@@ -151,7 +153,7 @@ class CodeExecution:
     def execute_code(self):
         sys.stdout = TerminalWriter()
         # Prepare globals
-        PyKing_globals = {
+        PyKing_globals: dict[str, Any] = {
             "__builtins__": dict(__builtins__),
             "__name__": "__main__"
         }

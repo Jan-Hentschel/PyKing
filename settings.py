@@ -10,7 +10,7 @@ class Settings:
         self.settings_toplevel = DefaultToplevel(self.root)
         self.settings_toplevel.geometry("400x800")
         self.settings_toplevel.title("Settings")
-        self.settings_toplevel.iconbitmap(resource_path("Assets\\Icon.ico"))
+        self.settings_toplevel.iconbitmap(resource_path("Assets\\Icon.ico"))  # type: ignore
 
 
         self.ask_to_save_on_close_check = SettingsCheckbutton(self.settings_toplevel, "ask_to_save_on_close", text = "Ask to Save on Close")
