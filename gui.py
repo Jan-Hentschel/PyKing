@@ -79,10 +79,34 @@ class Root(tk.Tk):
                     [('Horizontal.Scrollbar.grip', {'sticky': ''})],
                 'sticky': 'nswe'})],
             'sticky': 'we'})])
+        self.style.map("My.Vertical.TScrollbar",
+            background=[('active', "#666666")]
+        )
+
+        self.style.map("My.Horizontal.TScrollbar",
+            background=[('active', "#666666")]
+)
         
-        self.style.configure("My.Horizontal.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor =self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF") 
-        self.style.configure("My.Vertical.TScrollbar", troughcolor=self.secondary_color, background=self.primary_color, width=20, bordercolor=self.secondary_color, arrowsize="20")#, arrowcolor="FFFFFF")
- 
+        self.style.configure("My.Vertical.TScrollbar",
+            troughcolor=self.primary_color,
+            background="#555555",
+            activebackground=self.primary_color,
+            width=20,
+            borderwidth=0,          # No border
+            relief="flat",          # Flat relief
+            arrowsize=20
+        )
+
+        
+        self.style.configure("My.Horizontal.TScrollbar",
+            troughcolor=self.primary_color,
+            background="#555555",
+            activebackground=self.primary_color,
+            width=20,
+            borderwidth=0,          # No border
+            relief="flat",          # Flat relief
+            arrowsize=20
+        )
         self.color_delegator = ColorDelegator()
         self.color_delegator.tagdefs['COMMENT'] = {'foreground': '#AAAAAA', 'background': self.primary_color} #example: #, """, '''
         self.color_delegator.tagdefs['KEYWORD'] = {'foreground': '#D67CBC', 'background': self.primary_color} #example: def, class, if, else, etc.
