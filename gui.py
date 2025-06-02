@@ -160,7 +160,10 @@ class Root(tk.Tk):
 
         self.vertically_pained_window.add(self.top_right_frame)  
         self.vertically_pained_window.add(self.bottom_right_frame)  
+        
+        self.horizontally_paned_window.configure(opaqueresize=False)
 
+        self.vertically_pained_window.configure(opaqueresize=False)
 
         # Alle widgets updaten, um die screen_width/screen_height zu updaten
         self.update_idletasks()
