@@ -115,9 +115,7 @@ class CodeEditor:
         self.line_number_text_widget.delete("1.0", "end")
 
         num_lines = int(self.frame.text_widget.index("end-1c").split(".")[0])
-        print(f"Total number of lines: {num_lines}")
         for i in range(1, num_lines + 1):
-            print(f"Adding line number: {i}")
             self.line_number_text_widget.insert("end", f"{i}\n", "right")
 
         self.line_number_text_widget.yview_moveto(self.frame.text_widget.yview()[0]) # type: ignore
