@@ -418,15 +418,30 @@ class SettingsCheckbutton(CustomWidgetMixin, Checkbutton):
 
 
 class FileLabel(DefaultLabel):
-    def __init__(self, master: Any, directory: str, isFile: bool, labels,**kwargs: Any):
-
-        style = self.build_style()
-        kwargs.update(style)
-        super().__init__(master, **kwargs)
+    def __init__(self, master: Any, directory: str, isFile: bool, labels, root, **kwargs: Any):
         self.directory: str = directory
         self.label_frame = master
         self.labels = labels
         self.isFile = isFile
+        self.root = root
+
+        for label in self.labels:
+            if directory == label.directory:
+                for label_ in self.labels:
+                    label_.configure(bg=self.secondary_color)
+                label.configure(bg=self.primary_color)
+                return
+            
+        style = self.build_style()
+        kwargs.update(style)
+        super().__init__(master, **kwargs)
+
+        self.bind("<Button-1>", lambda e: self.open())
+        self.labels.append(self)
+        self.open()
+
+
+
     def build_style(self) -> dict[str, Any]:
         return {
             'padx': 10,
@@ -445,43 +460,18 @@ class FileLabel(DefaultLabel):
     #     current_grid_or_file = current_grid_or_file.split("/")[-1]        
     #     self.file_label.configure(text=current_grid_or_file)
 
-
-
-    def add_label(self, directory: str):
-        for label in self.labels:
-            if directory == label.directory:
-                for label_ in self.labels:
-                    label_.configure(bg=self.secondary_color)
-                    label.configure(bg=self.primary_color)
-                return
-        self.bind("<Button-1>", lambda e: self.open_label(self))
-        self.labels.append(self)
-        self.open_label(self)
-        self.file_label = self
         
     
-    def open_label(self, opened_label):
+    def open(self):
         for label in self.labels:
             label.configure(bg=self.secondary_color)
-        opened_label.configure(bg=self.primary_color)
-        from gui import root
-        self.root = root
+        self.configure(bg=self.primary_color)        
         if self.isFile:
-            self.root.file_manager.open_file(opened_label.directory, label_opened=True)
+            self.root.file_manager.open_file(self.directory, label_opened=True)
         else:
-            self.root.file_manager.open_grid(opened_label.directory, label_opened=True) 
+            self.root.file_manager.open_grid(self.directory, label_opened=True) 
 
-    # def add_label(self, directory: str):
-    #     for label in self.labels:
-    #         if directory == label.directory:
-    #             self.open_label(label)
-    #             return
-    #     name = directory.split("/")[-1]
-    #     file_label = FileLabel(self.label_frame, directory, text=name, bg=self.root.primary_color, )
-    #     file_label.bind("<Button-1>", lambda e: self.open_label(file_label))
-    #     self.labels.append(file_label)
-    #     self.open_label(file_label)
-    #     self.file_label = file_label
+
         
     
 
