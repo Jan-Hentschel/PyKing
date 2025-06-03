@@ -2,8 +2,8 @@ default_tick_rate = 2
 
 ask_to_save_on_close = False
 
-current_file_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/Hello World.py
-current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/Hello World.json
+current_file_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/er.py
+current_grid_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files/jdf.json
 current_filetree_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files
 
 remember_last_file = True
@@ -16,7 +16,7 @@ show_debugger_prints = False
 gore = False
 
 foreground_color = #FFFFFF
-primary_color = #3f3f3f
+primary_color = #3F3F3F
 secondary_color = #333333
 
 

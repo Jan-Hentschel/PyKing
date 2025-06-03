@@ -1,21 +1,22 @@
-from gui import root
+
 import tkinter as tk
-#ChatGPT
-# Define the path to the embedded Python executable
+from tkinter import ttk
+import ttkbootstrap as tb
+from ttkbootstrap.scrolled import ScrolledText
 import subprocess
 import sys
 import os
 
-from utility import resource_path
-# Path to embedded Python executable
-PYTHON_EXECUTABLE = resource_path(".\\dist\\Python313\\python.exe")
+# from utility import resource_path
+# # Path to embedded Python executable
+# PYTHON_EXECUTABLE = resource_path(".\\dist\\Python313\\python.exe")
 
-def install_package(package_name):
-    try:
-        subprocess.run([PYTHON_EXECUTABLE, "-m", "pip", "install", package_name], check=True)
-        print(f"Package {package_name} installed successfully.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error occurred while installing {package_name}: {e}")
+# def install_package(package_name):
+#     try:
+#         subprocess.run([PYTHON_EXECUTABLE, "-m", "pip", "install", package_name], check=True)
+#         print(f"Package {package_name} installed successfully.")
+#     except subprocess.CalledProcessError as e:
+#         print(f"Error occurred while installing {package_name}: {e}")
 
 
 
@@ -43,3 +44,9 @@ def install_package(package_name):
 # paul.turn_right()
 # paul.move()
 # paul.spit()
+
+root = tk.Tk()
+
+text = ScrolledText(root, wrap=None, hbar=True)
+text.pack()
+root.mainloop()

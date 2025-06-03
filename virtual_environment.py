@@ -161,10 +161,11 @@ class GridManager:
                     label.configure(bg=self.root.primary_color)
                 return
         grid_name: str = directory.split("/")[-1]
-        self.file_label: FileLabel = FileLabel(self.label_frame, directory, text=grid_name, bg=self.root.primary_color, )
-        self.file_label.bind("<Button-1>", lambda e: self.open_label(self.file_label))
-        self.labels.append(self.file_label)
-        self.open_label(self.file_label)
+        file_label: FileLabel = FileLabel(self.label_frame, directory, text=grid_name, bg=self.root.primary_color, )
+        file_label.bind("<Button-1>", lambda e: self.open_label(file_label))
+        self.labels.append(file_label)
+        self.open_label(file_label)
+        self.file_label = file_label
         
     
     def open_label(self, opened_label: FileLabel):
