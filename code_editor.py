@@ -121,10 +121,10 @@ class CodeEditor:
         self.line_number_text_widget.yview_moveto(self.frame.text_widget.yview()[0]) # type: ignore
         self.line_number_text_widget.configure(state="disabled")
 
-    def update_label(self):
-        current_file = settings_handler.get_variable("current_file_directory")
-        current_file = current_file.split("/")[-1]
-        self.file_label.configure(text=current_file)
+    # def update_label(self):
+    #     current_file = settings_handler.get_variable("current_file_directory")
+    #     current_file = current_file.split("/")[-1]
+    #     self.file_label.configure(text=current_file)
 
     def add_label(self, directory: str):
         for label in self.labels:
@@ -132,7 +132,7 @@ class CodeEditor:
                 self.open_label(label)
                 return
         name = directory.split("/")[-1]
-        file_label = FileLabel(self.label_frame, directory, text=name, bg=self.root.primary_color, )
+        file_label = FileLabel(master=self.label_frame, directory=directory, isFile=True, labels=self.labels, text=name, bg=self.root.primary_color)
         file_label.bind("<Button-1>", lambda e: self.open_label(file_label))
         self.labels.append(file_label)
         self.open_label(file_label)

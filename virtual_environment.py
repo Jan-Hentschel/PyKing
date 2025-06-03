@@ -148,10 +148,10 @@ class GridManager:
         self.delete_all_clickables()
         self.root.terminal.show_current_directories(f"cancelled editing grid")
         
-    def update_label(self):
-        current_grid: str = settings_handler.get_variable("current_grid_directory")
-        current_grid = current_grid.split("/")[-1]
-        self.file_label.configure(text=current_grid)
+    # def update_label(self):
+    #     current_grid: str = settings_handler.get_variable("current_grid_directory")
+    #     current_grid = current_grid.split("/")[-1]
+    #     self.file_label.configure(text=current_grid)
 
     def add_label(self, directory: str):
         for label in self.labels:
@@ -161,7 +161,7 @@ class GridManager:
                     label.configure(bg=self.root.primary_color)
                 return
         grid_name: str = directory.split("/")[-1]
-        file_label: FileLabel = FileLabel(self.label_frame, directory, text=grid_name, bg=self.root.primary_color, )
+        file_label: FileLabel = FileLabel(self.label_frame, directory, False, self.labels, text=grid_name, bg=self.root.primary_color, )
         file_label.bind("<Button-1>", lambda e: self.open_label(file_label))
         self.labels.append(file_label)
         self.open_label(file_label)
