@@ -48,7 +48,9 @@ class FileManager:
             with open(grid_directory, "r", encoding="utf-8") as file:
                 content = file.read()
                 dict = json.loads(content)
-                dict["link"] = python_directory
+                base_dir = os.path.dirname(grid_directory)
+                relative_path = os.path.relpath(python_directory, base_dir)
+                dict["link"] = relative_path.replace("\\", "/")
             with open(grid_directory, "w", encoding="utf-8") as file:
                 file.write(json.dumps(dict, indent=4))
             self.root.terminal.show_current_directories(f"linked grid: {grid_directory}\nto python file: {python_directory}")
@@ -66,7 +68,6 @@ class FileManager:
             
         if not check_if_linked:
             return
-        
         all_grid_file_paths = self.root.filetree.all_grid_file_paths()
         for grid_path in all_grid_file_paths:
             if self.has_valid_link(grid_path):
@@ -74,9 +75,12 @@ class FileManager:
                     content = file.read()
                     dict = json.loads(content)
                     link = dict["link"].replace("\\", "/")
-                    if link == directory:
+                    base_dir = os.path.dirname(grid_path)
+                    absolute_link = os.path.abspath(os.path.join(base_dir, link)).replace("\\", "/")
+                    if absolute_link == directory:
+                        self.root.toolbar.update_linked_status(True)
                         self.open_grid(grid_path, False)
-                        self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {grid_path}\n\npython file was linked to grid")
+                        self.root.terminal.show_current_directories(f"loaded python file: {absolute_link}\nloaded grid: {grid_path}\n\npython file was linked to grid")
                         return
         self.root.toolbar.update_linked_status(False)
         self.root.terminal.show_current_directories(f"loaded python file: {directory}")
@@ -119,17 +123,19 @@ class FileManager:
     def has_valid_link(self, directory: str) -> bool:
         with open(directory, "r", encoding="utf-8") as file:
             content = file.read()
-            dict = json.loads(content)
-            link = None
+            data = json.loads(content)
             try:
-                link = dict["link"]        
-                if os.path.isfile(link) and link[-3:] == ".py":
-                    return True 
-                else:
-                    return False
+                link = data["link"]
             except KeyError:
                 return False
-
+            # Convert relative path to absolute path
+            base_dir = os.path.dirname(directory)
+            absolute_link = os.path.abspath(os.path.join(base_dir, link))
+            # Check validity
+            if os.path.isfile(absolute_link) and absolute_link.endswith(".py"):
+                return True
+            else:
+                return False
                 
         
 
@@ -151,10 +157,17 @@ class FileManager:
         if not label_opened:
             self.root.grid_manager.add_label(directory)
 
+        if check_if_linked == False:
+            return
+
         if self.has_valid_link(directory) and check_if_linked:
-            self.open_file(grid_dictionary["link"], check_if_linked=False)
-            settings_handler.set_variable("current_file_directory", link)
-            self.root.terminal.show_current_directories(f"loaded python file: {link}\nloaded grid: {directory}\n\npython file was linked to grid")
+            base_dir = os.path.dirname(directory)
+            absolute_link = os.path.abspath(os.path.join(base_dir, link)).replace("\\", "/")
+            self.open_file(absolute_link, check_if_linked=False)
+            settings_handler.set_variable("current_file_directory", absolute_link)
+            self.root.toolbar.update_linked_status(True)
+            self.root.terminal.show_current_directories(f"loaded python file: {absolute_link}\nloaded grid: {directory}\n\npython file was linked to grid")
+            return
 
         elif check_if_linked:
             if link:
@@ -162,10 +175,7 @@ class FileManager:
             else:
                 self.root.terminal.show_current_directories(f"loaded grid: {directory}")
 
-        if self.has_valid_link(directory) and link==settings_handler.get_variable("current_file_directory"):
-            self.root.toolbar.update_linked_status(True)
-        else:
-            self.root.toolbar.update_linked_status(False)
+        self.root.toolbar.update_linked_status(False)
 
 
     def open_grid_dialog(self):
