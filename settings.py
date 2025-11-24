@@ -90,8 +90,8 @@ class Settings:
 
         self.gore_check.apply()
 
-        
-        self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory"))
+        if settings_handler.get_variable("current_grid_directory"):
+            self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory"))
 
         if foreground_color:
             self.change_foreground_color(foreground_color)

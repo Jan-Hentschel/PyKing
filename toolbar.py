@@ -68,7 +68,6 @@ class Toolbar:
     def open_gridmenu(self):
         x: int = self.gridmenu_button.winfo_rootx()
         y: int = self.gridmenu_button.winfo_rooty() + self.gridmenu_button.winfo_height()
-        print(x, y)
         self.gridmenu.post(x, y)
 
 

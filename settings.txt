@@ -4,10 +4,10 @@ ask_to_save_on_close = False
 
 current_file_directory = 
 current_grid_directory = 
-current_filetree_directory = 
+current_filetree_directory = C:/Users/jmast/OneDrive/Seminararbeit/Seminararbeits Projekt/PyKing/Files
 
-remember_last_file = False
-remember_last_grid = False
+remember_last_file = True
+remember_last_grid = True
 remember_last_directory = True
 
 show_snake_actions_in_terminal = False

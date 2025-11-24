@@ -13,7 +13,8 @@ class Filetree:
     def __init__(self, root: Root, master):
         self.root: Root = root
         self.frame = DefaultSecondaryFrame(master)
-        self.frame.pack(fill=BOTH)
+        self.frame.pack(fill=BOTH, expand=True)
+        
         if settings_handler.get_variable("current_filetree_directory"):
             self.start_path: str = settings_handler.get_variable("current_filetree_directory")
         else:

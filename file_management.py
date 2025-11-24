@@ -38,6 +38,7 @@ class FileManager:
             self.root.terminal.show_current_directories(f"created new grid as: {directory}")
             self.root.filetree.refresh_treeview()
             self.root.toolbar.update_linked_status(False)
+            self.open_grid(directory, label_opened=False)
         
     
     def link_grid_to_python_file(self):
@@ -115,7 +116,6 @@ class FileManager:
             settings_handler.set_variable("current_file_directory", directory)
             self.root.terminal.show_current_directories(f"created new python file as: {directory}")
             self.open_file(directory)
-            
             self.root.filetree.refresh_treeview()
                 
 
@@ -225,7 +225,7 @@ class FileManager:
 
 class GridSizeSelectionPopup(Toplevel):
     def __init__(self, root: Root, file_manager: FileManager):
-        super().__init__(root)
+        super().__init__(root, background=root.secondary_color)
         self.geometry("400x200")
         self.title("Input Grid Height and Width")
         self.iconbitmap(resource_path("Assets\\Icon.ico"))
