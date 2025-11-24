@@ -58,6 +58,7 @@ class FileManager:
 
 
     def open_file(self, directory: str, check_if_linked: bool=True, label_opened: bool=False):
+        directory = directory.replace("\\", "/")
         self.root.code_editor.load_into_editor(self.read_file(directory))
         settings_handler.set_variable("current_file_directory", directory)
         if not label_opened:
@@ -133,6 +134,7 @@ class FileManager:
         
 
     def open_grid(self, directory: str, check_if_linked: bool=True, label_opened: bool=False):
+        directory = directory.replace("\\", "/")
         with open(directory, "r", encoding="utf-8") as file:
             content: str = file.read()
 
@@ -141,7 +143,7 @@ class FileManager:
         columns: int = grid_dictionary["columns"]
         rows: int = grid_dictionary["rows"]
         new_cells: list[str] = grid_dictionary["cells"]
-        link:str = grid_dictionary["link"].replace("\\", "/")
+        link: str = grid_dictionary["link"].replace("\\", "/")
 
         self.root.grid_manager.change_grid(columns, rows, new_cells, link)
         settings_handler.set_variable("current_grid_directory", directory)

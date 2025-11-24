@@ -198,8 +198,11 @@ class GridCell:
             id = self.canvas.create_rectangle((0, 0, 101, 101), fill=self.root.primary_color, outline="")
         elif self.type == "wall":
             id = self.canvas.create_rectangle((0, 0, 101, 101), fill=self.root.secondary_color, outline="")
-        else:
+        elif self.type == "hamster":
+            self.canvas.configure(background=self.root.primary_color)
             id = self.canvas_image
+        else:
+            raise Exception("Unknown cell type")
         self.canvas.tag_bind(id, "<Button-1>", lambda _: self.edit())
 
     def display_image(self, image: PhotoImage):
@@ -207,10 +210,15 @@ class GridCell:
 
     def change_to_wall(self):
         self.type = "wall"
+        self.hamsters = 0
+        self.hamster_number_text = None # type: ignore 
         self.canvas.configure(background=self.root.secondary_color)
 
     def add_hamster(self):
+        if self.type == "wall":
+            self.clear()
         self.type = "hamster"
+        self.canvas.configure(background=self.root.primary_color)
         self.display_image(self.hamster_image)
         self.hamsters += 1
         if self.hamster_number_text:

@@ -14,8 +14,10 @@ class Filetree:
         self.root: Root = root
         self.frame = DefaultSecondaryFrame(master)
         self.frame.pack(fill=BOTH)
-        self.start_path: str = settings_handler.get_variable("current_filetree_directory")
-
+        if settings_handler.get_variable("current_filetree_directory"):
+            self.start_path: str = settings_handler.get_variable("current_filetree_directory")
+        else:
+            self.start_path: str = path_from_relative_path("Files")
         self.file_icon = PhotoImage(file=resource_path('Assets\\file_icon.png'))
         self.python_file_icon = PhotoImage(file=resource_path('Assets\\python_file_icon.png'))
         self.json_file_icon = PhotoImage(file=resource_path('Assets\\json_file_icon.png'))

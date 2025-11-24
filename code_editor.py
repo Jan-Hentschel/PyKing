@@ -246,38 +246,43 @@ class CodeEditorText(CustomWidgetMixin, Text):
             "selectbackground": "#6F6F6F",
             "tabs": "40",
             }    
-    
-
     def on_control_backspace(self):
-        #CHATGPT HELP (VIBE CODED)
         cursor_index = self.index(tk.INSERT)
-        prev_index = self.index(f"{cursor_index} -1c")
 
-        if self.compare(prev_index, "<", "1.0"):
-            return "break"  # Already at start of text
-
-        char = self.get(prev_index)
+        # Stop if already at start
+        if self.compare(cursor_index, "<=", "1.0"):
+            return "break"
 
         break_chars = set(" \n\t()[]{}:;.,'\"#=+-*/%<>!&|^~\\")
 
-        # If previous character is a break character, delete just one
+        # Compute previous character safely
+        prev_index = self.index(f"{cursor_index} -1c")
+        char = self.get(prev_index)
+
+        # If previous char is a break character, delete just one
         if char in break_chars:
             self.delete(prev_index, cursor_index)
             return "break"
 
-        # Otherwise, delete until a break character is found
+        # Otherwise, delete until a break character or start of text
         index = cursor_index
         while True:
             prev_index = self.index(f"{index} -1c")
-            if self.compare(prev_index, "<", "1.0"):
-                break
+            if self.compare(prev_index, "<=", "1.0"):
+                break  # stop before going past start
             char = self.get(prev_index)
             if char in break_chars:
                 break
             index = prev_index
 
         self.delete(index, cursor_index)
+
+        # If deletion reached the very first letter, simulate a single backspace
+        if self.compare(index, "<=", "1.1"):
+            self.event_generate("<BackSpace>")
+
         return "break"
+
 
     def on_control_delete(self):
         cursor_index = self.index(tk.INSERT)

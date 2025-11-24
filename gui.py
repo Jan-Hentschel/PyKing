@@ -67,7 +67,7 @@ class Root(tk.Tk):
                 ('Vertical.Scrollbar.thumb', {'unit': '1', 'children':
                     [('Vertical.Scrollbar.grip', {'sticky': ''})],
                 'sticky': 'nswe'})],
-            'sticky': 'ns'})])
+            'sticky': 'ns'})]) # type: ignore
 
 
         self.style.element_create("My.Horizontal.Scrollbar.trough", "from", "default")
@@ -78,7 +78,7 @@ class Root(tk.Tk):
                 ('Horizontal.Scrollbar.thumb', {'unit': '1', 'children':
                     [('Horizontal.Scrollbar.grip', {'sticky': ''})],
                 'sticky': 'nswe'})],
-            'sticky': 'we'})])
+            'sticky': 'we'})]) # type: ignore
         self.style.map("My.Vertical.TScrollbar",
             background=[('active', "#666666")]
         )
