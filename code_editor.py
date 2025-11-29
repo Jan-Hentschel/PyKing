@@ -17,7 +17,7 @@ class CodeEditor:
         self.spacer = Canvas(self.first_frame, height=30, width=60, bg=root.secondary_color, highlightbackground=root.secondary_color)
         self.spacer.pack(anchor=NW)
 
-        self.label_frame = DefaultSecondaryFrame(master)
+        self.label_frame = DefaultSecondaryFrame(master, height=34)
         self.label_frame.pack(side=TOP, fill=X)
 
         self.labels: list[FileLabel] = []
