@@ -128,14 +128,22 @@ class CodeEditor:
 
     def add_label(self, directory: str):
         name = directory.split("/")[-1]
+        for label in self.labels:
+            if label.directory == directory:
+                return
         file_label = FileLabel(master=self.label_frame, directory=directory, isFile=True, labels=self.labels, root=self.root, text=name, bg=self.root.primary_color)
+        
 
-        self.file_label = file_label
+        
+        
         
     
     def open_label(self, opened_label: FileLabel) -> None:
         for label in self.labels:
             label.configure(bg=self.root.secondary_color)
+            label.close_button.configure(bg=self.root.secondary_color)
+
+        opened_label.close_button.configure(bg=self.root.primary_color)
         opened_label.configure(bg=self.root.primary_color)
         self.root.file_manager.open_file(opened_label.directory, label_opened=True)
     

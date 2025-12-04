@@ -424,6 +424,7 @@ class FileLabel(DefaultLabel):
         self.labels = labels
         self.isFile = isFile
         self.root = root
+        
 
         for label in self.labels:
             if directory == label.directory:
@@ -438,6 +439,10 @@ class FileLabel(DefaultLabel):
 
         self.bind("<Button-1>", lambda e: self.open())
         self.labels.append(self)
+        if isFile:
+            self.close_button: LabelCloseButton = LabelCloseButton(master=self.label_frame, label=self, type="file",command=lambda: self.close_button.close())
+        else:
+            self.close_button: LabelCloseButton = LabelCloseButton(master=self.label_frame, label=self, type="grid",command=lambda: self.close_button.close())
         self.open()
 
 
@@ -465,15 +470,55 @@ class FileLabel(DefaultLabel):
     def open(self):
         for label in self.labels:
             label.configure(bg=self.secondary_color)
+            label.close_button.configure(bg=self.root.secondary_color)
         self.configure(bg=self.primary_color)        
+        self.close_button.configure(bg=self.root.primary_color)
         if self.isFile:
             self.root.file_manager.open_file(self.directory, label_opened=True)
         else:
             self.root.file_manager.open_grid(self.directory, label_opened=True) 
 
+class LabelCloseButton(DefaultButton):
+    
+    def build_style(self) -> dict[str, Any]:
+        return {
+            'bg': self.primary_color,
+            'fg': self.foreground_color,
+            'activeforeground': self.foreground_color
+        }
+
+    def __init__(self, master: Any, label: FileLabel, type: str, **kwargs: Any):
+        self.type: str = type
+        self.cross_image: PhotoImage = PhotoImage(file=resource_path('Assets\\cross.png'))
+        style = self.build_style()
+        kwargs.update(style)
+        self.label: FileLabel = label
+        super().__init__(master, image=self.cross_image, border=0, **kwargs)
+        
+    def pack(self, side: Literal["left", "right", "top", "bottom"]="left", **kwargs: Any):
+        DefaultButton.pack(self, side="left", expand=False, fill=None, **kwargs)
+
+    def close(self):
+        self.label.labels.remove(self.label)
+        self.label.destroy()
+        self.destroy()
+        from gui import root
+        if self.type == "file":
+            temp_directory: str = settings_handler.get_variable("current_file_directory")
+            settings_handler.set_variable("current_file_directory", "")
+            root.code_editor.load_into_editor("")
+            root.terminal.show_current_directories(f"closed file: {temp_directory}")
+            root.toolbar.update_linked_status(False)
+        if self.type == "grid":
+            temp_directory: str = settings_handler.get_variable("current_grid_directory")
+            settings_handler.set_variable("current_grid_directory", "")
+            root.grid_manager.change_grid(0, 0, [], "")
+            root.terminal.show_current_directories(f"closed file: {temp_directory}")
+            root.toolbar.update_linked_status(False)
 
         
-    
+
+
 
 
 class DefaultMenu(CustomWidgetMixin, Menu):
