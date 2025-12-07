@@ -1,4 +1,3 @@
-from mySnake import MySnake
 print("Hello World")
 
 
