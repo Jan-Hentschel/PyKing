@@ -67,6 +67,11 @@ class CodeEditor:
         
         self.percolator = Percolator(self.text)
         self.percolator.insertfilter(root.color_delegator) # type: ignore
+    def update_color(self):
+        self.frame.update_color()
+        self.line_number_frame.configure(bg=self.root.secondary_color)
+        self.line_number_text_widget.configure(bg=self.root.primary_color, fg=self.root.foreground_color)
+        self.spacer.configure(bg=self.root.secondary_color, highlightbackground=self.root.secondary_color)
 
     def load_into_editor(self, content: str):
         self.text.configure(undo=False) #clears the undo stack

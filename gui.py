@@ -197,6 +197,7 @@ class Root(tk.Tk):
                 widget.update_color()
             except AttributeError:
                 pass
+        self.code_editor.update_color()
         for cell in self.grid_manager.cells:
             if cell.type == "hamster" or cell.type == "empty":
                 cell.canvas.configure(bg=self.primary_color)

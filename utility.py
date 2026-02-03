@@ -251,8 +251,6 @@ class DefaultTextFrame(CustomWidgetMixin, Frame):
             insertbackground=self.foreground_color,
             selectbackground="#6F6F6F",
             tabs="40",
-
-
         )
         
         self.text_widget.grid(row=0, column=0, sticky="nsew")
@@ -290,6 +288,10 @@ class DefaultTextFrame(CustomWidgetMixin, Frame):
         self.text_widget.configure(xscrollcommand=self.horizontal_scrollbar.set)
         self.text_widget.configure(yscrollcommand=self.vertical_scrollbar.set)
 
+    def update_color(self):
+        super().update_color()
+        self.text_widget.configure(bg=self.primary_color, fg=self.foreground_color)
+    
     def build_style(self) -> dict[str, Any]:
         return {
             'bg': self.primary_color

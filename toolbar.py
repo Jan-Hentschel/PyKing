@@ -11,6 +11,20 @@ class Toolbar:
         self.stop_excecute_code_icon: PhotoImage = PhotoImage(file=resource_path('Assets\\stop_execute_icon.png'))
         self.linked_false_image: PhotoImage = PhotoImage(file=resource_path('Assets\\linked_false_image.png'))
         self.linked_true_image: PhotoImage = PhotoImage(file=resource_path('Assets\\linked_true_image.png'))
+        self.pause_image: PhotoImage = PhotoImage(file=resource_path('Assets\\pause.png'))
+        self.resume_image: PhotoImage = PhotoImage(file=resource_path('Assets\\play.png'))
+        self.step_image: PhotoImage = PhotoImage(file=resource_path('Assets\\priority-arrow.png'))
+        self.add_hamster_image: PhotoImage = PhotoImage(file=resource_path('Assets\\add_hamster.png'))
+        self.subtract_hamster_image: PhotoImage = PhotoImage(file=resource_path('Assets\\subtract_hamster.png'))
+        self.make_wall_image: PhotoImage = PhotoImage(file=resource_path('Assets\\block-brick.png'))
+        self.clear_cell_image: PhotoImage = PhotoImage(file=resource_path('Assets\\cross-small.png'))
+        self.clear_all_cells_image: PhotoImage = PhotoImage(file=resource_path('Assets\\trash.png'))
+        self.cancel_editing_grid_image: PhotoImage = PhotoImage(file=resource_path('Assets\\ban.png'))
+        self.link_grid_to_python_file_image: PhotoImage = PhotoImage(file=resource_path('Assets\\link.png'))
+
+
+
+
 
         self.frame = DefaultSecondaryFrame(root, height=68, pady=5)
         
@@ -31,19 +45,19 @@ class Toolbar:
         
         self.excecute_code_button = DefaultButton(self.frame, image=self.excecute_code_icon, command = root.code_executor.start_execute_code_thread)
         self.stop_code_execution_button = DefaultButton(self.frame, image=self.stop_excecute_code_icon, command = root.code_executor.stop_execute_code_thread)
-        self.pause_btn = DefaultButton(self.frame, text="Pause", command=root.code_executor.pause_debugger)
-        self.resume_btn = DefaultButton(self.frame, text="Resume", command=root.code_executor.resume_debugger)
-        self.step_btn   = DefaultButton(self.frame, text="Step",   command=root.code_executor.step_debugger)
+        self.pause_btn = DefaultButton(self.frame, text="Pause", image=self.pause_image, command=root.code_executor.pause_debugger)
+        self.resume_btn = DefaultButton(self.frame, text="Resume", image=self.resume_image, command=root.code_executor.resume_debugger)
+        self.step_btn   = DefaultButton(self.frame, text="Step",   image=self.step_image, command=root.code_executor.step_debugger)
         self.tick_rate_slider = DefaultScale(self.frame)
         self.tick_rate_slider.set(settings_handler.get_variable("default_tick_rate")) #type: ignore
         self.tick_rate_slider.pack(side="left")
-        self.pick_add_hamster_button = DefaultButton(self.frame, text ="Add Hamster", command = root.grid_manager.pick_add_hamster)
-        self.pick_subtract_hamster_button = DefaultButton(self.frame, text ="Subtract Hamster", command = root.grid_manager.pick_subtract_hamster)
-        self.pick_make_wall_button = DefaultButton(self.frame, text ="Make Wall", command = root.grid_manager.pick_make_wall)
-        self.pick_clear_cell_button = DefaultButton(self.frame, text ="Clear Cell", command = root.grid_manager.clear_cell)
-        self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", command = root.grid_manager.edit_clear_all_cells)
-        self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", command = root.grid_manager.cancel_editing_grid)
-        self.link_grid_to_python_file = DefaultButton(self.frame, text ="Link Grid To Python File", command = root.file_manager.link_grid_to_python_file)
+        self.pick_add_hamster_button = DefaultButton(self.frame, text ="Add Hamster", image=self.add_hamster_image, command = root.grid_manager.pick_add_hamster)
+        self.pick_subtract_hamster_button = DefaultButton(self.frame, text ="Subtract Hamster", image=self.subtract_hamster_image, command = root.grid_manager.pick_subtract_hamster)
+        self.pick_make_wall_button = DefaultButton(self.frame, text ="Make Wall", image=self.make_wall_image, command = root.grid_manager.pick_make_wall)
+        self.pick_clear_cell_button = DefaultButton(self.frame, text ="Clear Cell", image=self.clear_cell_image,command = root.grid_manager.clear_cell)
+        self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", image=self.clear_all_cells_image,command = root.grid_manager.edit_clear_all_cells)
+        self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", image=self.cancel_editing_grid_image,command = root.grid_manager.cancel_editing_grid)
+        self.link_grid_to_python_file = DefaultButton(self.frame, text ="Link Grid To Python File", image=self.link_grid_to_python_file_image, command = root.file_manager.link_grid_to_python_file)
         self.is_linked = DefaultLabel(self.frame, text="Linked", image=self.linked_false_image, compound="left")
         self.is_linked.pack(side="left")
         self.settings_button = DefaultButton(self.frame, text ="Settings", command = root.settings.open_settings)
