@@ -15,8 +15,8 @@ show_debugger_prints = False
 
 gore = False
 
-foreground_color = #ffffff
-primary_color = #3f3f3f
+foreground_color = #FFFFFF
+primary_color = #3F3F3F
 secondary_color = #333333
 
 

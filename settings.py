@@ -1,6 +1,8 @@
+from dist.Python313.Lib.tkinter import colorchooser
 from utility import *
 from settings_handler import settings_handler
 from gui import Root
+from tkinter import ttk
 
 class Settings:
     def __init__(self, root: Root):
@@ -25,23 +27,23 @@ class Settings:
         self.gore_check = SettingsCheckbutton(self.settings_toplevel, "gore", text="GORE MODE")
 
         self.foreground_color_label = DefaultLabel(self.settings_toplevel, text="Foreground Color:")
-
-
-        self.foreground_color_entry = DefaultEntry(self.settings_toplevel)
+        self.pick_foreground_color_button = DefaultButton(self.settings_toplevel, text="Pick Foreground Color", command=lambda: self.change_foreground_color(colorchooser.askcolor(title ="Choose Foreground Color")[1]))
+        self.pick_foreground_color_button.pack(side="top")
+        #self.foreground_color_entry = DefaultEntry(self.settings_toplevel)
 
 
         self.primary_color_label = DefaultLabel(self.settings_toplevel, text="Primary Color:")
-
-
-        self.primary_color_entry = DefaultEntry(self.settings_toplevel)
+        self.pick_primary_color_button = DefaultButton(self.settings_toplevel, text="Pick Primary Color", command=lambda: self.change_primary_color(colorchooser.askcolor(title ="Choose Primary Color")[1]))
+        self.pick_primary_color_button.pack(side="top")
+        #self.primary_color_entry = DefaultEntry(self.settings_toplevel)
 
 
         self.secondary_color_label = DefaultLabel(self.settings_toplevel, text="Secondary Color:")
-
-
-        self.secondary_color_entry = DefaultEntry(self.settings_toplevel)
-
-
+        self.pick_secondary_color_button = DefaultButton(self.settings_toplevel, text="Pick Secondary Color", command=lambda: self.change_secondary_color(colorchooser.askcolor(title ="Choose Secondary Color")[1]))
+        self.pick_secondary_color_button.pack(side="top")
+        #self.secondary_color_entry = DefaultEntry(self.settings_toplevel)
+        self.separator = ttk.Separator(self.settings_toplevel, orient='horizontal')
+        self.separator.pack(fill='x', pady=10, )
         self.reset_to_darkmode_button = DefaultButton(self.settings_toplevel, text="Reset To Darkmode", command=lambda: self.apply_darkmode())
         self.reset_to_darkmode_button.pack(side="top")
         
@@ -74,9 +76,9 @@ class Settings:
         self.root.update_colors()
     
     def apply_settings(self):
-        foreground_color = self.foreground_color_entry.get()
-        primary_color = self.primary_color_entry.get()
-        secondary_color = self.secondary_color_entry.get()
+        # foreground_color = self.foreground_color_entry.get()
+        # primary_color = self.primary_color_entry.get()
+        # secondary_color = self.secondary_color_entry.get()
 
 
         self.ask_to_save_on_close_check.apply()
@@ -93,11 +95,11 @@ class Settings:
         if settings_handler.get_variable("current_grid_directory"):
             self.root.file_manager.open_grid(settings_handler.get_variable("current_grid_directory"))
 
-        if foreground_color:
-            self.change_foreground_color(foreground_color)
-        if primary_color:
-            self.change_primary_color(primary_color)
-        if secondary_color:
-            self.change_secondary_color(secondary_color)
+        # if foreground_color:
+        #     self.change_foreground_color(foreground_color)
+        # if primary_color:
+        #     self.change_primary_color(primary_color)
+        # if secondary_color:
+        #     self.change_secondary_color(secondary_color)
 
         self.settings_toplevel.destroy()

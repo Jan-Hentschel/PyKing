@@ -21,6 +21,8 @@ class Toolbar:
         self.clear_all_cells_image: PhotoImage = PhotoImage(file=resource_path('Assets\\trash.png'))
         self.cancel_editing_grid_image: PhotoImage = PhotoImage(file=resource_path('Assets\\ban.png'))
         self.link_grid_to_python_file_image: PhotoImage = PhotoImage(file=resource_path('Assets\\link.png'))
+        self.settings_image: PhotoImage = PhotoImage(file=resource_path('Assets\\settings.png'))
+        self.github_image: PhotoImage = PhotoImage(file=resource_path('Assets\\github.png'))
 
 
 
@@ -60,9 +62,9 @@ class Toolbar:
         self.link_grid_to_python_file = DefaultButton(self.frame, text ="Link Grid To Python File", image=self.link_grid_to_python_file_image, command = root.file_manager.link_grid_to_python_file)
         self.is_linked = DefaultLabel(self.frame, text="Linked", image=self.linked_false_image, compound="left")
         self.is_linked.pack(side="left")
-        self.settings_button = DefaultButton(self.frame, text ="Settings", command = root.settings.open_settings)
+        self.settings_button = DefaultButton(self.frame, text ="Settings", image=self.settings_image, command = root.settings.open_settings)
         self.settings_button.pack(side="right")
-        self.help_button = DefaultButton(self.frame, text="GitHub", command=self.show_github)
+        self.help_button = DefaultButton(self.frame, text="GitHub", image=self.github_image, command=self.show_github)
         self.help_button.pack(side="right")
 
 
