@@ -9,6 +9,8 @@ class Settings:
         self.root: Root = root
 
     def open_settings(self):
+        self.night_mode_image = PhotoImage(file=resource_path("Assets\\night-mode.png"))
+
         self.settings_toplevel = DefaultToplevel(self.root)
         self.settings_toplevel.geometry("400x800")
         self.settings_toplevel.title("Settings")
@@ -44,7 +46,7 @@ class Settings:
         #self.secondary_color_entry = DefaultEntry(self.settings_toplevel)
         self.separator = ttk.Separator(self.settings_toplevel, orient='horizontal')
         self.separator.pack(fill='x', pady=10, )
-        self.reset_to_darkmode_button = DefaultButton(self.settings_toplevel, text="Reset To Darkmode", command=lambda: self.apply_darkmode())
+        self.reset_to_darkmode_button = DefaultButton(self.settings_toplevel, text="Reset To Darkmode", image=self.night_mode_image, command=lambda: self.apply_darkmode())
         self.reset_to_darkmode_button.pack(side="top")
         
         self.ok_button = DefaultButton(self.settings_toplevel, text="OK", command=lambda: self.apply_settings())
