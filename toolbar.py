@@ -23,7 +23,8 @@ class Toolbar:
         self.link_grid_to_python_file_image: PhotoImage = PhotoImage(file=resource_path('Assets\\link.png'))
         self.settings_image: PhotoImage = PhotoImage(file=resource_path('Assets\\settings.png'))
         self.github_image: PhotoImage = PhotoImage(file=resource_path('Assets\\github.png'))
-
+        self.lock_image: PhotoImage = PhotoImage(file=resource_path('Assets\\lock.png'))
+        self.unlock_image: PhotoImage = PhotoImage(file=resource_path('Assets\\unlock.png'))
 
 
 
@@ -60,8 +61,12 @@ class Toolbar:
         self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", image=self.clear_all_cells_image,command = root.grid_manager.edit_clear_all_cells)
         self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", image=self.cancel_editing_grid_image,command = root.grid_manager.cancel_editing_grid)
         self.link_grid_to_python_file = DefaultButton(self.frame, text ="Link Grid To Python File", image=self.link_grid_to_python_file_image, command = root.file_manager.link_grid_to_python_file)
+        self.lock_grid_button = DefaultButton(self.frame, text="Lock Grid", image=self.lock_image, command=root.file_manager.lock_button)
         self.is_linked = DefaultLabel(self.frame, text="Linked", image=self.linked_false_image, compound="left")
         self.is_linked.pack(side="left")
+        self.is_locked = DefaultLabel(self.frame, text="Unlocked", image=self.unlock_image, compound="left")
+        self.is_locked.pack(side="left")
+
         self.settings_button = DefaultButton(self.frame, text ="Settings", image=self.settings_image, command = root.settings.open_settings)
         self.settings_button.pack(side="right")
         self.help_button = DefaultButton(self.frame, text="GitHub", image=self.github_image, command=self.show_github)

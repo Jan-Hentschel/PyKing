@@ -32,6 +32,7 @@ class FileManager:
             grid_dictionary = self.root.grid_manager.get_grid_dict()
             grid_dictionary = json.loads(grid_dictionary)
             grid_dictionary["link"] = ""
+            grid_dictionary["password"] = ""
             with open(directory, "w", encoding="utf-8") as file:
                 file.write(json.dumps(grid_dictionary, indent=4))
             settings_handler.set_variable("current_grid_directory", directory)
@@ -150,6 +151,13 @@ class FileManager:
         rows: int = grid_dictionary["rows"]
         new_cells: list[str] = grid_dictionary["cells"]
         link: str = grid_dictionary["link"].replace("\\", "/")
+        password: str = grid_dictionary["password"]
+        if password or password != "":
+            self.root.toolbar.is_locked.configure(image=self.root.toolbar.lock_image, text="Locked")
+            self.root.toolbar.lock_grid_button.configure(image=self.root.toolbar.unlock_image, text="Unlock Grid")
+        else:
+            self.root.toolbar.is_locked.configure(image=self.root.toolbar.unlock_image, text="Unlocked")
+            self.root.toolbar.lock_grid_button.configure(image=self.root.toolbar.lock_image, text="Lock Grid")
 
         self.root.grid_manager.change_grid(columns, rows, new_cells, link)
         settings_handler.set_variable("current_grid_directory", directory)
@@ -222,6 +230,69 @@ class FileManager:
         except FileNotFoundError:
             pass
         self.root.terminal.show_current_directories(f"loaded python file: {settings_handler.get_variable('current_file_directory')}\nloaded grid: {settings_handler.get_variable('current_grid_directory')}")
+
+    def lock_button(self):
+        directory = settings_handler.get_variable("current_grid_directory")
+        directory = directory.replace("\\", "/")
+        content = ""
+        with open(directory, "r", encoding="utf-8") as file:
+            content: str = file.read()
+        grid_dictionary = json.loads(content)
+        if grid_dictionary["password"] == "" or grid_dictionary["password"] == None:
+            self.password_popup = DefaultToplevel(self.root)
+            self.password_popup.geometry("400x200")
+            self.password_popup.title("Set Password")
+            self.password_popup.iconbitmap(resource_path("Assets\\Icon.ico"))  # type: ignore
+            self.password_entry = DefaultEntry(self.password_popup)
+            self.ok_button = DefaultButton(self.password_popup, text="OK", command=lambda: self.apply_password_settings())
+            self.ok_button.pack(side="left")
+
+            self.cancel_button = DefaultButton(self.password_popup, text="Cancel", command= lambda: self.password_popup.destroy())
+            self.cancel_button.pack(side="right")
+        else:
+            self.ask_password_popup = DefaultToplevel(self.root)
+            self.ask_password_popup.geometry("400x200")
+            self.ask_password_popup.title("Whats the password?")
+            self.ask_password_popup.iconbitmap(resource_path("Assets\\Icon.ico"))  # type: ignore
+            self.ask_password_entry = DefaultEntry(self.ask_password_popup)
+            self.ok_button = DefaultButton(self.ask_password_popup, text="OK", command=lambda: self.check_password_and_unlock())
+            self.ok_button.pack(side="left")
+
+            self.cancel_button = DefaultButton(self.ask_password_popup, text="Cancel", command= lambda: self.ask_password_popup.destroy())
+            self.cancel_button.pack(side="right")
+
+    def check_password_and_unlock(self):
+        password = self.ask_password_entry.get()
+        self.ask_password_popup.destroy()
+        directory = settings_handler.get_variable("current_grid_directory")
+        directory = directory.replace("\\", "/")
+        content = ""
+        with open(directory, "r", encoding="utf-8") as file:
+            content: str = file.read()
+        grid_dictionary = json.loads(content)
+        if grid_dictionary["password"] == password:
+            grid_dictionary["password"] = ""
+            with open(directory, "w", encoding="utf-8") as file:
+                file.write(json.dumps(grid_dictionary, indent=4))
+            self.root.toolbar.is_locked.configure(image=self.root.toolbar.unlock_image, text="Unlocked")
+            self.root.toolbar.lock_grid_button.configure(image=self.root.toolbar.lock_image, text="Lock Grid")
+        else:
+            self.root.terminal.print(f"wrong password")
+
+    def apply_password_settings(self):
+        password = self.password_entry.get()
+        self.password_popup.destroy()
+        directory = settings_handler.get_variable("current_grid_directory")
+        directory = directory.replace("\\", "/")
+        content = ""
+        with open(directory, "r", encoding="utf-8") as file:
+            content: str = file.read()
+        grid_dictionary = json.loads(content)
+        grid_dictionary["password"] = password
+        with open(directory, "w", encoding="utf-8") as file:
+            file.write(json.dumps(grid_dictionary, indent=4))
+        self.root.toolbar.is_locked.configure(image=self.root.toolbar.lock_image, text="Locked")
+        self.root.toolbar.lock_grid_button.configure(image=self.root.toolbar.unlock_image, text="Unlock Grid")
 
 class GridSizeSelectionPopup(Toplevel):
     def __init__(self, root: Root, file_manager: FileManager):

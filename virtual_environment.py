@@ -117,27 +117,37 @@ class GridManager:
         return json.dumps(dictionary, indent=4)
     
     def pick_add_hamster(self):
+        if self.cancel_if_locked():
+            return
         self.editing = "add_hamster"
         self.add_all_clickables()
         self.root.terminal.show_current_directories(f"adding hamsters...")
         
 
     def pick_subtract_hamster(self):
+        if self.cancel_if_locked():
+            return
         self.editing = "subtract_hamster"
         self.add_all_clickables()
         self.root.terminal.show_current_directories(f"subtracting hamsters...")
 
     def pick_make_wall(self):
+        if self.cancel_if_locked():
+            return
         self.editing = "make_wall"
         self.add_all_clickables()
         self.root.terminal.show_current_directories(f"making walls...")
 
     def clear_cell(self):
+        if self.cancel_if_locked():
+            return
         self.editing = "clear_cell"
         self.add_all_clickables()
         self.root.terminal.show_current_directories(f"clearing cells...")
 
     def edit_clear_all_cells(self):
+        if self.cancel_if_locked():
+            return
         self.clear_all_cells()
         self.editing = ""
         self.delete_all_clickables()
@@ -147,7 +157,16 @@ class GridManager:
         self.editing = ""
         self.delete_all_clickables()
         self.root.terminal.show_current_directories(f"cancelled editing grid")
-        
+
+    def cancel_if_locked(self):
+        directory: str = settings_handler.get_variable("current_grid_directory")
+        with open(directory, "r", encoding="utf-8") as file:
+            content = file.read()
+            data = json.loads(content)
+            if "password" in data and data["password"] != "":
+                self.cancel_editing_grid()
+                self.root.terminal.show_current_directories(f"grid is locked: {directory}, you can unlock it in the toolbar")
+                return True
 
     def add_label(self, directory: str):
         grid_name: str = directory.split("/")[-1]
