@@ -1,3 +1,4 @@
+from logging import root
 import webbrowser
 
 from utility import * 
@@ -7,6 +8,7 @@ from gui import Root
 
 class Toolbar:
     def __init__(self, root: Root):
+        self.root: Root = root
         self.excecute_code_icon: PhotoImage = PhotoImage(file=resource_path('Assets\\excecute_icon.png'))
         self.stop_excecute_code_icon: PhotoImage = PhotoImage(file=resource_path('Assets\\stop_execute_icon.png'))
         self.linked_false_image: PhotoImage = PhotoImage(file=resource_path('Assets\\linked_false_image.png'))
@@ -67,10 +69,14 @@ class Toolbar:
         self.is_locked = DefaultLabel(self.frame, text="Unlocked", image=self.unlock_image, compound="left")
         self.is_locked.pack(side="left")
 
-        self.settings_button = DefaultButton(self.frame, text ="Settings", image=self.settings_image, command = root.settings.open_settings)
+        self.settings_button = DefaultButton(self.frame, text ="Settings", image=self.settings_image, command = self.open_settings)
         self.settings_button.pack(side="right")
         self.help_button = DefaultButton(self.frame, text="GitHub", image=self.github_image, command=self.show_github)
         self.help_button.pack(side="right")
+
+    def open_settings(self):
+        if not(self.root.settings.exists):
+            self.root.settings.open_settings()
 
 
     def update_linked_status(self, linked: bool):

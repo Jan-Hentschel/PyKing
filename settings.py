@@ -7,8 +7,10 @@ from tkinter import ttk
 class Settings:
     def __init__(self, root: Root):
         self.root: Root = root
+        self.exists = False
 
     def open_settings(self):
+        self.exists = True
         self.night_mode_image = PhotoImage(file=resource_path("Assets\\night-mode.png"))
 
         self.settings_toplevel = DefaultToplevel(self.root)
@@ -52,15 +54,20 @@ class Settings:
         self.ok_button = DefaultButton(self.settings_toplevel, text="OK", command=lambda: self.apply_settings())
         self.ok_button.pack(side="left")
 
-        self.cancel_button = DefaultButton(self.settings_toplevel, text="Cancel", command= lambda: self.settings_toplevel.destroy())
+        self.cancel_button = DefaultButton(self.settings_toplevel, text="Cancel", command= lambda: self.destroy_settings())
         self.cancel_button.pack(side="right")
         
+    def destroy_settings(self):
+        self.settings_toplevel.destroy() # type: ignore
+        self.settings_toplevel = None
+        self.exists = False
+
     def apply_darkmode(self):
         self.apply_settings()
         self.change_foreground_color("#FFFFFF")
         self.change_primary_color("#3F3F3F")
         self.change_secondary_color("#333333")
-        self.settings_toplevel.destroy()
+        self.destroy_settings()
 
     def change_foreground_color(self, color: str):
         self.root.foreground_color = color
@@ -104,4 +111,4 @@ class Settings:
         # if secondary_color:
         #     self.change_secondary_color(secondary_color)
 
-        self.settings_toplevel.destroy()
+        self.destroy_settings()
