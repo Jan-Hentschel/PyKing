@@ -1,6 +1,7 @@
 from logging import root
 import webbrowser
 
+import json
 from utility import * 
 from settings_handler import settings_handler
 from gui import Root
@@ -27,7 +28,7 @@ class Toolbar:
         self.github_image: PhotoImage = PhotoImage(file=resource_path('Assets\\github.png'))
         self.lock_image: PhotoImage = PhotoImage(file=resource_path('Assets\\lock.png'))
         self.unlock_image: PhotoImage = PhotoImage(file=resource_path('Assets\\unlock.png'))
-
+        self.message_image: PhotoImage = PhotoImage(file=resource_path('Assets\\message.png'))
 
 
 
@@ -62,6 +63,7 @@ class Toolbar:
         self.pick_clear_cell_button = DefaultButton(self.frame, text ="Clear Cell", image=self.clear_cell_image,command = root.grid_manager.clear_cell)
         self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", image=self.clear_all_cells_image,command = root.grid_manager.edit_clear_all_cells)
         self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", image=self.cancel_editing_grid_image,command = root.grid_manager.cancel_editing_grid)
+        self.message_button = DefaultButton(self.frame, text="Message", image=self.message_image, command=self.set_message)
         self.link_grid_to_python_file = DefaultButton(self.frame, text ="Link Grid To Python File", image=self.link_grid_to_python_file_image, command = root.file_manager.link_grid_to_python_file)
         self.lock_grid_button = DefaultButton(self.frame, text="Lock Grid", image=self.lock_image, command=root.file_manager.lock_button)
         self.is_linked = DefaultLabel(self.frame, text="Linked", image=self.linked_false_image, compound="left")
@@ -78,6 +80,40 @@ class Toolbar:
         if not(self.root.settings.exists):
             self.root.settings.open_settings()
 
+    def set_message(self):
+        self.message_popup = DefaultToplevel(self.root)
+        self.message_popup.geometry("400x200")
+        self.message_popup.title("Set Message")
+        self.message_popup.iconbitmap(resource_path("Assets\\Icon.ico"))  # type: ignore
+        
+
+        self.message_entry = DefaultEntry(self.message_popup)
+        content = ""
+        with open(settings_handler.get_variable('current_grid_directory'), "r", encoding="utf-8") as file:
+            content: str = file.read()
+        grid_dictionary = json.loads(content)
+        message: str = grid_dictionary["message"]
+
+        self.message_entry.insert(0, message)
+        self.ok_button = DefaultButton(self.message_popup, text="OK", command=lambda: self.apply_message())
+        self.ok_button.pack(side="left")
+        self.cancel_button = DefaultButton(self.message_popup, text="Cancel", command= lambda: self.message_popup.destroy())
+        self.cancel_button.pack(side="right")
+
+    def apply_message(self):
+        directory = settings_handler.get_variable("current_grid_directory")
+        directory = directory.replace("\\", "/")
+        message = self.message_entry.get()
+        self.message_popup.destroy()
+        content = ""
+        with open(directory, "r", encoding="utf-8") as file:
+            content: str = file.read()
+        grid_dictionary = json.loads(content)
+        grid_dictionary["message"] = message
+        with open(directory, "w", encoding="utf-8") as file:
+            file.write(json.dumps(grid_dictionary, indent=4))
+        self.root.terminal.show_current_directories("Message Updated")
+        self.root.grid_manager.message=message
 
     def update_linked_status(self, linked: bool):
         if linked:

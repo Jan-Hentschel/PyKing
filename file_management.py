@@ -33,6 +33,7 @@ class FileManager:
             grid_dictionary = json.loads(grid_dictionary)
             grid_dictionary["link"] = ""
             grid_dictionary["password"] = ""
+            grid_dictionary["message"] = ""
             with open(directory, "w", encoding="utf-8") as file:
                 file.write(json.dumps(grid_dictionary, indent=4))
             settings_handler.set_variable("current_grid_directory", directory)
@@ -204,9 +205,17 @@ class FileManager:
     def save_grid(self):
         try:
             directory = settings_handler.get_variable("current_grid_directory")
-            json_dict = self.root.grid_manager.get_grid_dict()
+            content = ""
+            with open(directory, "r", encoding="utf-8") as file:
+                content: str = file.read()
+            grid_dictionary = json.loads(content)
+            json_dict = json.loads(self.root.grid_manager.get_grid_dict())
+            json_dict["password"] = grid_dictionary["password"]
+            json_dict["message"] = grid_dictionary["message"]
+            
             with open(directory, "w", encoding="utf-8") as file:
-                file.write(json_dict)
+                file.write(json.dumps(json_dict, indent=4))
+            
             self.root.terminal.show_current_directories(f"saved grid: {settings_handler.get_variable('current_grid_directory')}")
         except FileNotFoundError:
             self.save_grid_as()
@@ -291,6 +300,7 @@ class FileManager:
         grid_dictionary["password"] = password
         with open(directory, "w", encoding="utf-8") as file:
             file.write(json.dumps(grid_dictionary, indent=4))
+        self.root.grid_manager.password = password
         self.root.toolbar.is_locked.configure(image=self.root.toolbar.lock_image, text="Locked")
         self.root.toolbar.lock_grid_button.configure(image=self.root.toolbar.unlock_image, text="Unlock Grid")
 

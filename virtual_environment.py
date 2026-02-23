@@ -29,7 +29,8 @@ class GridManager:
         self.down_image = PhotoImage(file=resource_path('Assets\\Down.png'))
         self.left_image= PhotoImage(file=resource_path('Assets\\Left.png'))
         self.right_image = PhotoImage(file=resource_path('Assets\\Right.png'))
-
+        self.message = ""
+        self.password = ""
         self.create_cells()
         self.add_cells_to_grid()
 
@@ -112,7 +113,9 @@ class GridManager:
             "link": self.link,
             "columns": self.grid_width,
             "rows": self.grid_height,
-            "cells": new_cells
+            "cells": new_cells,
+            "password": self.password,
+            "message": self.message
         }
         return json.dumps(dictionary, indent=4)
     
