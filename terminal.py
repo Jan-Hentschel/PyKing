@@ -25,10 +25,13 @@ class Terminal:
 
     def show_current_directories(self, status: str) -> None:
         seperator: str = self.status_seperator * self.calculate_seperator_length(status)
-        with open(settings_handler.get_variable('current_grid_directory'), "r", encoding="utf-8") as file:
-            content: str = file.read()
-        grid_dictionary = json.loads(content)
-        message: str = grid_dictionary["message"]
+        try:
+            with open(settings_handler.get_variable('current_grid_directory'), "r", encoding="utf-8") as file:
+                content: str = file.read()
+        except FileNotFoundError:
+            content = ""
+        grid_dictionary = json.loads(content) if content else {}
+        message: str = grid_dictionary["message"] if "message" in grid_dictionary else ""
         if message:
             message += f"\n{seperator}\n\n"
             path = settings_handler.get_variable('current_grid_directory')

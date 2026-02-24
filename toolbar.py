@@ -64,6 +64,7 @@ class Toolbar:
         self.pick_clear_all_cells_button = DefaultButton(self.frame, text ="Clear All Cells", image=self.clear_all_cells_image,command = root.grid_manager.edit_clear_all_cells)
         self.cancel_editing_grid_button = DefaultButton(self.frame, text ="Cancel Editing Grid", image=self.cancel_editing_grid_image,command = root.grid_manager.cancel_editing_grid)
         self.message_button = DefaultButton(self.frame, text="Message", image=self.message_image, command=self.set_message)
+        self.message_button.pack(side="left", padx=(10, 0))
         self.link_grid_to_python_file = DefaultButton(self.frame, text ="Link Grid To Python File", image=self.link_grid_to_python_file_image, command = root.file_manager.link_grid_to_python_file)
         self.lock_grid_button = DefaultButton(self.frame, text="Lock Grid", image=self.lock_image, command=root.file_manager.lock_button)
         self.is_linked = DefaultLabel(self.frame, text="Linked", image=self.linked_false_image, compound="left")
